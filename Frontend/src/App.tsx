@@ -27,7 +27,7 @@ function App() {
   const [Signupbtn, setSignupbtn] = useState(false);
   const [AddTeambtn,setAddTeambtn]=useState(false);
   const [menuOpen, setmenuOpen]=useState(false);
-  const [teamSetting, setteamSetting]=useState(true);
+  const [teamSetting, setteamSetting]=useState(false);
   const [AlertPopUp, setAlertPopUp] = useState<AlertType>({
     alert: false,
     type: "failure",
@@ -124,6 +124,7 @@ function App() {
                       AlertPopUp={AlertPopUp}
                       setAddTeambtn={setAddTeambtn}
                       AddTeambtn={AddTeambtn}
+                      setteamSetting={setteamSetting}
                     />
                   </>
                 )}

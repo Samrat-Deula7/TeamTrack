@@ -17,11 +17,12 @@ import Addbtn from "../assets/add.gif";
 type TasksProps = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
+  setteamSetting: React.Dispatch<React.SetStateAction<boolean>>;
   AlertPopUp: AlertType;
-  AddTeambtn:boolean;
+  AddTeambtn: boolean;
 };
 
-type IndividualTeamTaskElements = {
+export type IndividualTeamTaskElements = {
   Team_Id: number;
   Team_Name: string;
   Team_code: string;
@@ -32,16 +33,16 @@ const Tasks: React.FC<TasksProps> = ({
   AlertPopUp,
   setAddTeambtn,
   AddTeambtn,
+  setteamSetting,
 }) => {
+  useEffect(() => {
+    getTasks();
+    getTeamData();
+  }, []);
 
-    useEffect(() => {
-      getTasks();
-      getTeamData();
-    }, []);
-    
-    useEffect(() => {
-      getTeamData();
-    }, [AddTeambtn]);
+  useEffect(() => {
+    getTeamData();
+  }, [AddTeambtn]);
 
   let TaskInInput = false;
   const [Task, setTask] = useState({ task: "", completed: false });
@@ -80,9 +81,9 @@ const Tasks: React.FC<TasksProps> = ({
     (team, index, self) =>
       index === self.findIndex((t) => t.Team_Name === team.Team_Name),
   );
- 
+
   // const uniqueTeamTask = TeamTasks.filter((team,index,self)=>index===self.findIndex((t)=>t.Team_Tasks != ""))
-  const uniqueTeamTask = TeamTasks.filter((x)=>x.Team_Tasks!="")
+  const uniqueTeamTask = TeamTasks.filter((x) => x.Team_Tasks != "");
 
   const focusOnTeamData = async (
     Team_Id: number,
@@ -179,8 +180,6 @@ const Tasks: React.FC<TasksProps> = ({
       });
     }, 2000);
   };
-
-
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask({ ...Task, [e.target.name]: e.target.value });
@@ -552,7 +551,10 @@ const Tasks: React.FC<TasksProps> = ({
                 &times;
               </button>
               <div className=" h-full ">
-                <h2 className="font-bold text-green-500 mb-4">
+                <h2
+                  className="font-bold text-green-500 mb-4"
+                  onClick={()=>setteamSetting(true)}
+                >
                   {IndividualTeamTask.Team_Name.toUpperCase()}
                 </h2>
 
