@@ -81,6 +81,8 @@ const Tasks: React.FC<TasksProps> = ({
       index === self.findIndex((t) => t.Team_Name === team.Team_Name),
   );
  
+  // const uniqueTeamTask = TeamTasks.filter((team,index,self)=>index===self.findIndex((t)=>t.Team_Tasks != ""))
+  const uniqueTeamTask = TeamTasks.filter((x)=>x.Team_Tasks!="")
 
   const focusOnTeamData = async (
     Team_Id: number,
@@ -579,7 +581,7 @@ const Tasks: React.FC<TasksProps> = ({
 
                 {/* team tasks */}
                 <div className=" h-[80%] overflow-y-scroll">
-                  {TeamTasks.map((tasks: TeamTasks) => (
+                  {uniqueTeamTask.map((tasks: TeamTasks) => (
                     <div
                       key={tasks.Team_Id}
                       className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200 "

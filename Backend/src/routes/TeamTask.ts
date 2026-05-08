@@ -29,7 +29,8 @@ router.post(
     }
     try {
       const pool = await sql.connect(config);
-      let { Team_Name, Team_Tasks, Completed } = req.body;
+      let { Team_Name, Completed } = req.body;
+      let Team_Tasks ="";
       if (Completed == undefined) {
         Completed = 0;
       }
