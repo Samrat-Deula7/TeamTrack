@@ -10,6 +10,7 @@ import FlowtrackState from "../context/FlowtrackState"
 import Background from "./AfterLoggedInComponents/background";
 import Nav from "./AfterLoggedInComponents/Nav"
 import Tasks from "./AfterLoggedInComponents/Tasks";
+import TeamSetting from "./AfterLoggedInComponents/TeamSetting";
 import Collaboration from "./AfterLoggedInComponents/Collaboration";
 import Visualization from "./AfterLoggedInComponents/Visualization";
 import History from "./AfterLoggedInComponents/History";
@@ -26,6 +27,7 @@ function App() {
   const [Signupbtn, setSignupbtn] = useState(false);
   const [AddTeambtn,setAddTeambtn]=useState(false);
   const [menuOpen, setmenuOpen]=useState(false);
+  const [teamSetting, setteamSetting]=useState(true);
   const [AlertPopUp, setAlertPopUp] = useState<AlertType>({
     alert: false,
     type: "failure",
@@ -107,18 +109,24 @@ function App() {
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
                 />
-                <AddTeam
-                  AddTeambtn={AddTeambtn}
-                  setAddTeambtn={setAddTeambtn}
-                  setAlertPopUp={setAlertPopUp}
-                  AlertPopUp={AlertPopUp}
-                />
-                <Tasks
-                  setAlertPopUp={setAlertPopUp}
-                  AlertPopUp={AlertPopUp}
-                  setAddTeambtn={setAddTeambtn}
-                  AddTeambtn={AddTeambtn}
-                />
+                {teamSetting && <TeamSetting setteamSetting={setteamSetting} />}
+
+                {!teamSetting && (
+                  <>
+                    <AddTeam
+                      AddTeambtn={AddTeambtn}
+                      setAddTeambtn={setAddTeambtn}
+                      setAlertPopUp={setAlertPopUp}
+                      AlertPopUp={AlertPopUp}
+                    />
+                    <Tasks
+                      setAlertPopUp={setAlertPopUp}
+                      AlertPopUp={AlertPopUp}
+                      setAddTeambtn={setAddTeambtn}
+                      AddTeambtn={AddTeambtn}
+                    />
+                  </>
+                )}
               </>
             }
           />
