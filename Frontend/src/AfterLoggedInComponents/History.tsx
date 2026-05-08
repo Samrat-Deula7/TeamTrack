@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import Time from "../assets/time.gif"
 interface HistoryItem {
   id: number;
   title: string;
@@ -111,6 +111,15 @@ export default function Timeline() {
   return (
     <>
       <div className="min-h-screen  p-4 sm:p-6 lg:p-8">
+        <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
+          Feature Under work
+          <span className="font-extrabold">!!</span>
+          <img
+            src={Time}
+            alt="time_icon"
+            className="absolute left-40 -bottom-10 w-[80px] h-[80px] rounded-full"
+          />
+        </div>
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">

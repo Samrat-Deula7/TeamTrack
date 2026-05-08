@@ -1,3 +1,4 @@
+import Time from "../assets/time.gif";
 
 export default function Visualization() {
   return (
@@ -9,21 +10,50 @@ export default function Visualization() {
               className="w-full 
                           h-48 sm:h-56 md:h-80 lg:h-96 2xl:h-190
                           bg-white/20 backdrop-blur-md shadow-lg rounded-2xl border border-white/10"
-            ></div>
+            >
+              <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
+                Feature Coming Soon
+                <span className="font-extrabold">!!</span>
+                <img
+                  src={Time}
+                  alt="time_icon"
+                  className="absolute left-40 -bottom-10 w-[80px] h-[80px] rounded-full"
+                />
+              </div>
+            </div>
 
             <div
               className="w-full 
                           h-40 sm:h-48 md:h-56 lg:h-64 2xl:h-190 
                           bg-white/20 backdrop-blur-md shadow-lg rounded-2xl border border-white/10"
-            ></div>
+            >
+              <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
+                Feature Coming Soon
+                <span className="font-extrabold">!!</span>
+                <img
+                  src={Time}
+                  alt="time_icon"
+                  className="absolute left-40 -bottom-10 w-[80px] h-[80px] rounded-full"
+                />
+              </div>
+            </div>
           </div>
 
-          
-            <div
-              className="w-full 
+          <div
+            className="w-full 
                           h-48 sm:h-56 md:h-80 lg:h-96 2xl:h-190
                           bg-white/20 backdrop-blur-md shadow-lg rounded-2xl border border-white/10"
-            ></div>
+          >
+            <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
+              Feature Coming Soon
+              <span className="font-extrabold">!!</span>
+              <img
+                src={Time}
+                alt="time_icon"
+                className="absolute left-40 -bottom-10 w-[80px] h-[80px] rounded-full"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>
