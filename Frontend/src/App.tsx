@@ -4,20 +4,23 @@ import AfterLoggedIn from "./AfterLoggedIn";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Bg from "./LandingPageComponents/Bg";
-import FlowtrackState from "../context/FlowtrackState"
+import FlowtrackState from "../context/FlowtrackState";
 
 // This is after logged in components
 import Background from "./AfterLoggedInComponents/background";
-import Nav from "./AfterLoggedInComponents/Nav"
+import Nav from "./AfterLoggedInComponents/Nav";
 import Tasks from "./AfterLoggedInComponents/Tasks";
 import TeamSetting from "./AfterLoggedInComponents/TeamSetting";
 import Collaboration from "./AfterLoggedInComponents/Collaboration";
 import Visualization from "./AfterLoggedInComponents/Visualization";
 import History from "./AfterLoggedInComponents/History";
 import Iteration from "./AfterLoggedInComponents/Iteration";
-import AddTeam from "./AfterLoggedInComponents/AddTeam"
+import AddTeam from "./AfterLoggedInComponents/AddTeam";
 
-import Alert, {type AlertType} from "./Alert";
+import Alert, { type AlertType } from "./Alert";
+
+import {type IndividualTeamTaskElements} from "./AfterLoggedInComponents/TeamSetting"
+
 
 
 function App() {
@@ -25,15 +28,21 @@ function App() {
   const [Loggedin, setLoggedin] = useState(false);
   const [Loginbtn, setLoginbtn] = useState(false);
   const [Signupbtn, setSignupbtn] = useState(false);
-  const [AddTeambtn,setAddTeambtn]=useState(false);
-  const [menuOpen, setmenuOpen]=useState(false);
-  const [teamSetting, setteamSetting]=useState(false);
+  const [AddTeambtn, setAddTeambtn] = useState(false);
+  const [menuOpen, setmenuOpen] = useState(false);
+  const [teamSetting, setteamSetting] = useState(false);
   const [AlertPopUp, setAlertPopUp] = useState<AlertType>({
     alert: false,
     type: "failure",
     msg: "This is an default alert",
   });
-  
+const [IndividualTeamTask, setIndividualTeamTask] =
+  useState<IndividualTeamTaskElements>({
+    Team_Id: 1,
+    Team_Name: "inisiti data",
+    Team_code: "inisiti data",
+  });
+
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");
   }, [Loggedin]);
@@ -109,7 +118,12 @@ function App() {
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
                 />
-                {teamSetting && <TeamSetting setteamSetting={setteamSetting} />}
+                {teamSetting && (
+                  <TeamSetting
+                    setteamSetting={setteamSetting}
+                    IndividualTeamTask={IndividualTeamTask}
+                  />
+                )}
 
                 {!teamSetting && (
                   <>
@@ -125,6 +139,8 @@ function App() {
                       setAddTeambtn={setAddTeambtn}
                       AddTeambtn={AddTeambtn}
                       setteamSetting={setteamSetting}
+                      IndividualTeamTask={IndividualTeamTask}
+                      setIndividualTeamTask={setIndividualTeamTask}
                     />
                   </>
                 )}

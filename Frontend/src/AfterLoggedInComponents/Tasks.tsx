@@ -13,6 +13,8 @@ import {
   type addTeamTask,
 } from "../../context/FlowtrackState";
 import Addbtn from "../assets/add.gif";
+import Setting from "../assets/settings.png"
+import {type IndividualTeamTaskElements} from "./TeamSetting"
 
 type TasksProps = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,13 +22,10 @@ type TasksProps = {
   setteamSetting: React.Dispatch<React.SetStateAction<boolean>>;
   AlertPopUp: AlertType;
   AddTeambtn: boolean;
+   IndividualTeamTask: IndividualTeamTaskElements;
+    setIndividualTeamTask: React.Dispatch<React.SetStateAction<IndividualTeamTaskElements>>;
 };
 
-export type IndividualTeamTaskElements = {
-  Team_Id: number;
-  Team_Name: string;
-  Team_code: string;
-};
 
 const Tasks: React.FC<TasksProps> = ({
   setAlertPopUp,
@@ -34,6 +33,8 @@ const Tasks: React.FC<TasksProps> = ({
   setAddTeambtn,
   AddTeambtn,
   setteamSetting,
+  IndividualTeamTask,
+  setIndividualTeamTask,
 }) => {
   useEffect(() => {
     getTasks();
@@ -56,12 +57,7 @@ const Tasks: React.FC<TasksProps> = ({
   const TeamCode: Array<number> = [];
   const [AllTasks, setAllTasks] = useState<Data[]>([]);
   const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
-  const [IndividualTeamTask, setIndividualTeamTask] =
-    useState<IndividualTeamTaskElements>({
-      Team_Id: 1,
-      Team_Name: "inisiti data",
-      Team_code: "inisiti data",
-    });
+
   const [TeamTasks, setTeamTasks] = useState<TeamTasks[]>([]);
 
   const {
@@ -551,13 +547,17 @@ const Tasks: React.FC<TasksProps> = ({
                 &times;
               </button>
               <div className=" h-full ">
-                <h2
-                  className="font-bold text-green-500 mb-4"
-                  onClick={()=>setteamSetting(true)}
-                >
-                  {IndividualTeamTask.Team_Name.toUpperCase()}
-                </h2>
-
+                <div className="w-[90%] flex justify-between items-start">
+                  <h2 className="font-bold text-green-500 mb-4">
+                    {IndividualTeamTask.Team_Name.toUpperCase()}
+                  </h2>
+                  <img
+                    src={Setting}
+                    alt="setting"
+                    className="w-5 cursor-pointer"
+                    onClick={() => setteamSetting(true)}
+                  />
+                </div>
                 {/* Input for adding team task */}
                 <div className="flex gap-2 sm:gap-3 mb-5 sm:mb-6">
                   <input
