@@ -1,6 +1,8 @@
 import type React from "react";
 import { type TeamTasks } from "../../context/FlowtrackState";
 import user from "../assets/user.png"
+import FlowTrackContext from "../../context/FlowtrackContext"
+import { useContext, useState } from "react";
 export type IndividualTeamTaskElements = {
   Team_Id: number;
   Team_Name: string;
@@ -8,7 +10,7 @@ export type IndividualTeamTaskElements = {
 };
 type TeamSettingProps = {
   setteamSetting: React.Dispatch<React.SetStateAction<boolean>>;
-  IndividualTeamTask?: IndividualTeamTaskElements;
+  IndividualTeamTask: IndividualTeamTaskElements;
    setTeamTasks: React.Dispatch<React.SetStateAction<TeamTasks[]>>;
     TeamTasks: TeamTasks[];
 };
@@ -26,7 +28,17 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   setTeamTasks,
   TeamTasks,
 }) => {
-  
+  const { addUserToTeam } = useContext(FlowTrackContext);
+  const [AddedUserEmail, setAddedUserEmail]=useState("");
+
+  const onchange=(e:any)=>{
+    setAddedUserEmail(e.target.value)
+  };
+
+  const handleAdd=async ()=>{
+    const apiRes = await addUserToTeam(AddedUserEmail,IndividualTeamTask.Team_Name,IndividualTeamTask.Team_code);
+    console.log(apiRes)
+  };
    const TeamTaskFilter = TeamTasks.filter(
      (team, index, self) =>
        index === self.findIndex((t) => t.Name === team.Name),
@@ -90,12 +102,12 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                     type="text"
                     placeholder="Add member with email ...."
                     // value={searchQuery}
-                    // onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={onchange}
                     // onKeyPress={handleKeyPress}
                     className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base min-w-0"
                   />
                   <button
-                    // onClick={handleSearch}
+                    onClick={handleAdd}
                     className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
                   >
                     Add Member
