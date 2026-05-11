@@ -239,6 +239,30 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
       return [];
     }
   };
+
+  const addUserToTeam = async(Email:string, Team_Name:string, Team_code:string)=>{
+    const url = "http://localhost:3000/api/teamtasks/addUserToTeam";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Email: Email,
+          Team_Name: Team_Name,
+          Team_code: Team_code,
+        }),
+      });
+      const result = await response.json();
+      if (result) {
+        return result;
+      }
+    } catch (error: any) {
+      alert(error.message);
+      return [];
+    }
+  };
   return (
     <FlowtrackContext.Provider
       value={{
@@ -251,6 +275,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
         GetTeamTasks,
         addTeamTask,
         joinTeamWithCode,
+        addUserToTeam,
       }}
     >
       {children}
