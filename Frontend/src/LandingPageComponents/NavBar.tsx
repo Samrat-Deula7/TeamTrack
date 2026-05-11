@@ -34,13 +34,13 @@ const NavBar: React.FC<NavBarProps> = ({ setLoginbtn, setSignupbtn }) => {
 
         <div className="w-47.5 flex justify-center  gap-2  h-15 flex justify-center items-center ">
           <button
-            className="text-[#000000] font-bold text-[13px] bg-green-400 w-19 h-7 rounded-xl hover:-translate-y-1 duration-300 hover:text-green-500 hover:bg-transparent cursor-pointer"
+            className="text-[#000000] font-bold text-[13px] bg-green-400 w-19 h-7 rounded-xl  duration-300 hover:text-green-500 hover:bg-transparent cursor-pointer"
             onClick={() => setLoginbtn?.((prev) => !prev)}
           >
             Sign in
           </button>
           <button
-            className="text-[#000000] font-bold text-[13px] border border-2 border-green-500 text-green-500 w-19 h-7 rounded-xl hover:-translate-y-1 duration-300 hover:border-none hover:bg-transparent cursor-pointer"
+            className="text-[#000000] font-bold text-[13px] border border-2 border-green-500 text-green-500 w-19 h-7 rounded-xl  duration-300 hover:border-none hover:bg-transparent cursor-pointer"
             onClick={() => setSignupbtn?.((prev) => !prev)}
           >
             Sign up
