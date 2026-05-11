@@ -26,8 +26,8 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   setTeamTasks,
   TeamTasks,
 }) => {
-  const TeamTaskFilter1 = TeamTasks.filter((x) => x.Team_Tasks != "");
-   const TeamTaskFilter2 = TeamTaskFilter1.filter(
+  
+   const TeamTaskFilter = TeamTasks.filter(
      (team, index, self) =>
        index === self.findIndex((t) => t.Name === team.Name),
    );
@@ -88,7 +88,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 w-xl mx-auto mt-2">
                   <input
                     type="text"
-                    placeholder="Add member ...."
+                    placeholder="Add member with email ...."
                     // value={searchQuery}
                     // onChange={(e) => setSearchQuery(e.target.value)}
                     // onKeyPress={handleKeyPress}
@@ -103,7 +103,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 </div>
                 <br />
                 <h1 className="mb-2">Team Members :</h1>
-                {TeamTaskFilter2.map((task: TeamTasks) => (
+                {TeamTaskFilter.map((task: TeamTasks) => (
                   <div className="flex items-center" key={task.Team_Id}>
                     <img src={user} alt="user" className="w-6 mr-2" />
                     <span className="text-2 font-normal text-green-500">

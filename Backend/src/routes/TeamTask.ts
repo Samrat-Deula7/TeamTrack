@@ -30,7 +30,7 @@ router.post(
     try {
       const pool = await sql.connect(config);
       let { Team_Name, Completed } = req.body;
-      let Team_Tasks ="";
+      let Team_Tasks = "";
       if (Completed == undefined) {
         Completed = 0;
       }
@@ -119,32 +119,26 @@ router.post(
         .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
         .query("select Team_Name from Team_Table WHERE Team_code = @Team_code");
 
-        if (
-          !Team_Name ||
-          !Team_Name.recordset ||
-          Team_Name.recordset.length === 0
-        ) {
-          // Query failed or result is undefined
-          return res.status(200).send({ fail: "No such team exists" });
-        } else {
-         
-            // Insert query with bound parameters
-            await pool
-              .request()
-              .input("User_Id", sql.Int, id)
-              .input(
-                "Team_Name",
-                sql.VarChar(70),
-                Team_Name.recordset[0].Team_Name,
-              )
-              .input("Team_Tasks", sql.VarChar(150), Team_Tasks)
-              .input("Completed", sql.Bit, Completed)
-              .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
+      if (
+        !Team_Name ||
+        !Team_Name.recordset ||
+        Team_Name.recordset.length === 0
+      ) {
+        // Query failed or result is undefined
+        return res.status(200).send({ fail: "No such team exists" });
+      } else {
+        // Insert query with bound parameters
+        await pool
+          .request()
+          .input("User_Id", sql.Int, id)
+          .input("Team_Name", sql.VarChar(70), Team_Name.recordset[0].Team_Name)
+          .input("Team_Tasks", sql.VarChar(150), Team_Tasks)
+          .input("Completed", sql.Bit, Completed)
+          .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
               INSERT INTO Team_Table VALUES (@User_Id, @Team_Name, @Team_Tasks, @Completed,@Team_code)
             `);
-           res.status(200).send({ success: "Team joined successfully !" });
-          
-        }
+        res.status(200).send({ success: "Team joined successfully !" });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -239,7 +233,6 @@ router.post(
   },
 );
 
-
 // CreateTask API
 router.post(
   "/CreateTeamTask",
@@ -270,8 +263,44 @@ router.post(
     }
   },
 );
+router.post("/addUserToTeam", async (req: Request, res: Response) => {
+  try {
+    const pool = await sql.connect(config);
+    let { Email, Team_Name, TeamTask, Completed, Team_code } = req.body;
+    if (Completed == undefined) {
+      Completed = 0;
+    }
 
+    TeamTask = "";
+    let id = await pool
+      .request()
+      .input("email", sql.VarChar(30), Email)
+      .query("select User_Id from User_Table WHERE Email = @email");
 
+    if (id.recordset.length > 0) {
+      const userId = id.recordset[0].User_Id;
+
+      // Insert query with bound parameters
+      await pool
+        .request()
+        .input("Userid", sql.Int, userId)
+        .input("Team_Name", sql.VarChar(70), Team_Name)
+        .input("TeamTask", sql.VarChar(150), TeamTask)
+        .input("completed", sql.Bit, Completed)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
+        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code)
+      `);
+      res.status(200).send({ success: "User added successfully !" });
+    } else {
+      return res.status(400).json({
+        error: "No user found with that email",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to add User");
+  }
+});
 
 router.delete(
   "/DeleteTeamTask",
@@ -290,14 +319,11 @@ router.delete(
                 delete from Team_Table where Team_Id=@Team_Id and User_Id =@Userid
                 `);
       res.send(sqlResponse.rowsAffected);
-
     } catch (err) {
       res.status(500).send("Failed to add Team Task");
     }
   },
 );
-
-
 
 // // ✅ Fixed
 // router.delete(
@@ -323,8 +349,6 @@ router.delete(
 //     }
 //   },
 // );
-
-
 
 console.log(
   "Registered routes:",
