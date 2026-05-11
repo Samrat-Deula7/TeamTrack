@@ -1,7 +1,6 @@
 import type React from "react";
 import { type TeamTasks } from "../../context/FlowtrackState";
 import user from "../assets/user.png"
-import Tasks from "./Tasks";
 export type IndividualTeamTaskElements = {
   Team_Id: number;
   Team_Name: string;
@@ -32,6 +31,9 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
      (team, index, self) =>
        index === self.findIndex((t) => t.Name === team.Name),
    );
+     const preventDefault = async (e: any) => {
+       e.preventDefault();
+     };
   return (
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">
@@ -61,19 +63,19 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
             <div className="flex lg:flex-col justify-start items-start w-auto  gap-2 sm:gap-3 md:gap-4  p-1 ">
               <button
                 className=" text-sm sm:text-base text-gray-400 md:text-lg lg:text-6 w-auto px-6 font-semibold  rounded-sm border border-transparent hover:border-white/20 hover:bg-green-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
-                onClick={() => handleTabClick("list")}
+                onClick={() => handleTabClick("")}
               >
                 Add Member
               </button>
               <button
                 className=" text-sm sm:text-base md:text-lg lg:text-6 w-auto px-6 font-semibold text-gray-400 rounded-sm border border-transparent hover:border-white/20 hover:bg-red-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
-                onClick={() => handleTabClick("meeting")}
+                onClick={() => handleTabClick("leaveTeam")}
               >
                 Leave Team
               </button>
               <button
                 className=" text-sm sm:text-base md:text-lg lg:text-6 w-auto px-6 font-semibold text-gray-400 rounded-sm border border-transparent hover:border-white/20 hover:bg-red-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
-                onClick={() => handleTabClick("graph")}
+                onClick={() => handleTabClick("deleteTeam")}
               >
                 Delete Team
               </button>
@@ -111,11 +113,31 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                   </div>
                 ))}
               </div>
-              <div className="absolute inset-0 duration-50 scalenone meeting tab-content z-50 flex items-center justify-center bg-red-500 text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-                Leave Team
+              <div className="absolute inset-0 scalenone leaveTeam tab-content z-50 flex  justify-center bg-[#101820] text-white text-xl font-bold">
+                <div className="relative top-50 w-[300px]  xl:w-[350px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
+                  <form onSubmit={preventDefault}>
+                    <p className="mb-2">Write "LEAVE" to leave the team</p>
+                    <input
+                      type="text"
+                      placeholder="..."
+                      name="input"
+                      className="w-[280px] xl:w-[300px] font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
+                    />
+                  </form>
+                </div>
               </div>
-              <div className="absolute inset-0 duration-50 scalenone graph tab-content z-50 flex items-center justify-center bg-yellow-500 text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-                Delete Team
+              <div className="absolute inset-0 scalenone deleteTeam tab-content z-50 flex items-center justify-center bg-[#101820] text-white text-xl font-bold">
+                <div className="relative -top-26 w-[300px]  xl:w-[380px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
+                  <form onSubmit={preventDefault}>
+                    <p className="mb-2">Write "DELETE" to DELETE the team</p>
+                    <input
+                      type="text"
+                      placeholder="..."
+                      name="input"
+                      className="w-[280px] xl:w-[300px] font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
+                    />
+                  </form>
+                </div>
               </div>
             </div>
           </div>

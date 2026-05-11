@@ -527,7 +527,7 @@ const Tasks: React.FC<TasksProps> = ({
               {uniqueTeams.map((Task: TeamData) => (
                 <div
                   key={Task.Team_Id}
-                  className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  hover:-translate-y-1 duration-300 hover:border-none hover:bg-transparent cursor-pointer"
+                  className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300 hover:border-none hover:bg-transparent cursor-pointer"
                   onClick={() => {
                     focusOnTeamData(
                       Task.Team_Id,
