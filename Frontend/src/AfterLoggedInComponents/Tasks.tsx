@@ -160,24 +160,27 @@ const Tasks: React.FC<TasksProps> = ({
     }, 2000);
   };
   const HandleDeleteTeamData = async (id: any) => {
-    let resData = await DeleteTeamTask(id);
-    console.log(resData);
-    setAlertPopUp({
-      ...AlertPopUp,
-      alert: true,
-      type: "success",
-      msg: "Task deleted successfully",
-    });
-
-    setTimeout(() => {
-      getTasks();
+    let deleteResponse:any = await DeleteTeamTask(id);
+    let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
+    setTeamTasks(teamTasks);
+     if (deleteResponse[0] == 0) {
       setAlertPopUp({
         ...AlertPopUp,
-        alert: false,
-        type: "success",
-        msg: "Task deleted successfully",
+        alert: true,
+        type: "failure",
+        msg: "Task Deleted successully !!!",
       });
-    }, 2000);
+
+      setTimeout(() => {
+        getTasks();
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: false,
+          type: "failure",
+          msg: "You can only delete the task that you created !!!",
+        });
+      }, 2000);
+    }
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -521,13 +524,13 @@ const Tasks: React.FC<TasksProps> = ({
                     <h2 className="text-black font-medium">
                       Team:
                       <span className="font-bold text-green-500">
-                        {Task.Team_Name}
+                        {"\n" + Task.Team_Name}
                       </span>
                     </h2>
                     <h3 className="text-black font-medium">
                       Code:
                       <span className="font-bold text-green-500">
-                        {Task.Team_code}
+                        {"\n" + Task.Team_code}
                       </span>
                     </h3>
                   </div>

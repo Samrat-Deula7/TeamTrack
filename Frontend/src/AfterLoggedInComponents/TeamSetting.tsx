@@ -1,6 +1,7 @@
 import type React from "react";
 import { type TeamTasks } from "../../context/FlowtrackState";
 import user from "../assets/user.png"
+import Tasks from "./Tasks";
 export type IndividualTeamTaskElements = {
   Team_Id: number;
   Team_Name: string;
@@ -101,7 +102,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 <br />
                 <h1 className="mb-2">Team Members :</h1>
                 {TeamTaskFilter2.map((task: TeamTasks) => (
-                  <div className="flex items-center">
+                  <div className="flex items-center" key={task.Team_Id}>
                     <img src={user} alt="user" className="w-6 mr-2" />
                     <span className="text-2 font-normal text-green-500">
                       {" "}
