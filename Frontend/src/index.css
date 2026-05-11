@@ -36,8 +36,11 @@ body{
   transform: scale(0);
   opacity: 0;
     transition: transform 0.6s ease, opacity 0.6s ease; 
+  pointer-events: none;
 }
 .scalefull{
   transform: scale(1);
   opacity: 1;
+    pointer-events:all;
+
 }

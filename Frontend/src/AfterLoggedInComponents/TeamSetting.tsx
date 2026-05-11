@@ -66,13 +66,13 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 Add Member
               </button>
               <button
-                className=" text-sm sm:text-base md:text-lg lg:text-6 w-auto px-6 font-semibold text-gray-400 rounded-sm border border-transparent hover:border-white/20 hover:bg-green-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
+                className=" text-sm sm:text-base md:text-lg lg:text-6 w-auto px-6 font-semibold text-gray-400 rounded-sm border border-transparent hover:border-white/20 hover:bg-red-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
                 onClick={() => handleTabClick("meeting")}
               >
                 Leave Team
               </button>
               <button
-                className=" text-sm sm:text-base md:text-lg lg:text-6 w-auto px-6 font-semibold text-gray-400 rounded-sm border border-transparent hover:border-white/20 hover:bg-green-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
+                className=" text-sm sm:text-base md:text-lg lg:text-6 w-auto px-6 font-semibold text-gray-400 rounded-sm border border-transparent hover:border-white/20 hover:bg-red-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
                 onClick={() => handleTabClick("graph")}
               >
                 Delete Team
@@ -111,11 +111,11 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                   </div>
                 ))}
               </div>
-              <div className="absolute inset-0  duration-50 scalenone meeting tab-content z-40 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-                Meeting
+              <div className="absolute inset-0 duration-50 scalenone meeting tab-content z-50 flex items-center justify-center bg-red-500 text-white text-2xl sm:text-3xl md:text-4xl font-bold">
+                Leave Team
               </div>
-              <div className="absolute inset-0  duration-50 scalenone graph tab-content z-30 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-                Graph
+              <div className="absolute inset-0 duration-50 scalenone graph tab-content z-50 flex items-center justify-center bg-yellow-500 text-white text-2xl sm:text-3xl md:text-4xl font-bold">
+                Delete Team
               </div>
             </div>
           </div>
