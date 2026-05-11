@@ -1,5 +1,5 @@
 function HeroSection() {
-  const animation = "duration-500 ease-in-out hover:z-10 transition-all";
+  const animation = "duration-500 ease-in-out  transition-all";
 
   function focus(e: React.MouseEvent<HTMLDivElement>): void {
     const clickedDiv = e.currentTarget;
@@ -16,7 +16,7 @@ function HeroSection() {
 
     setTimeout(() => {
       clickedDiv.classList.remove("focus");
-      clickedDiv.classList.remove("z-100");
+      clickedDiv.classList.remove("z-1000");
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.left = "";
