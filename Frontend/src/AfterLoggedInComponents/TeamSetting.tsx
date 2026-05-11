@@ -84,7 +84,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   return (
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">
-        <div className="w-full h-80 sm:min-h-96 md:h-60 lg:h-128 xl:h-144 2xl:h-200 rounded-xl border border-white/10 p-4 sm:p-4 ">
+        <div className="w-full h-170 sm:min-h-96 md:h-140 lg:h-128 xl:h-154 2xl:h-200 rounded-xl border border-white/10 p-4 sm:p-4 ">
           <div className="flex mb-3">
             <h1 className="font-bold mr-3 text-xl text-gray-400">
               General Setting:{" "}
@@ -100,14 +100,15 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
             onClick={() => {
               setteamSetting(false);
             }}
-            className="absolute top-30 right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
+            className="absolute top-20 right-5 xl:top-30 xl:right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
             aria-label="Close button"
           >
             &times;
           </button>
-          <div className="flex  w-full h-80 sm:min-h-96 md:h-60 lg:h-128 xl:h-144 2xl:h-180 px-0.1">
+
+          <div className="flex flex-col xl:flex-row  w-full h-80 sm:min-h-96 md:h-60 lg:h-128 xl:h-144 2xl:h-180 px-0.1">
             {/* This is the button div */}
-            <div className="flex lg:flex-col justify-start items-start w-auto  gap-2 sm:gap-3 md:gap-4  p-1 ">
+            <div className="flex 2xl:flex-col justify-start items-start w-auto  gap-2 sm:gap-3 md:gap-4  p-1 ">
               <button
                 className=" text-sm sm:text-base text-gray-400 md:text-lg lg:text-6 w-auto px-6 font-semibold  rounded-sm border border-transparent hover:border-white/20 hover:bg-green-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
                 onClick={() => handleTabClick("")}
@@ -127,13 +128,14 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 Delete Team
               </button>
             </div>
-            <div className="w-1 sm:min-h-76 md:h-40 lg:h-108 xl:h-124 2xl:h-160 my-auto bg-white rounded-full "></div>
+            <div className="hidden xl:block w-1 sm:min-h-76 md:h-40 lg:h-108 xl:h-124 2xl:h-160 my-auto bg-white rounded-full "></div>
+
             {/* This is the side div */}
-            <div className="relative w-full lg:flex-1  overflow-hidden">
+            <div className="relative w-full lg:flex">
               <div className="absolute inset-0  duration-50  z-50  text-white text-2xl  font-bold px-5">
                 {/* This is input */}
-                <p className="text-red-500 text-center font-medium">{Error}</p>
-                <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 w-xl mx-auto mt-2">
+                <p className="text-red-500 text-center font-medium text-sm xl:text-xl">{Error}</p>
+                <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 xl:w-xl mx-auto mt-2">
                   <input
                     type="text"
                     placeholder="Add member with email ...."
@@ -162,28 +164,40 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 ))}
               </div>
               <div className="absolute inset-0 scalenone leaveTeam tab-content z-50 flex  justify-center bg-[#101820] text-white text-xl font-bold">
-                <div className="relative top-50 w-[300px]  xl:w-[350px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
+                <div className="relative xl:top-50 w-full bg-[#101820] xl:w-[350px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
                   <form onSubmit={preventDefault}>
-                    <p className="mb-2">Write "LEAVE" to leave the team</p>
+                    <p className="mb-2  text-sm xl:text-xl">Write "LEAVE" to leave the team</p>
                     <input
                       type="text"
                       placeholder="..."
                       name="input"
-                      className="w-[280px] xl:w-[300px] font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
+                      className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
                     />
+                    <button
+                      onClick={() => handleTabClick("")}
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Cancle
+                    </button>
                   </form>
                 </div>
               </div>
               <div className="absolute inset-0 scalenone deleteTeam tab-content z-50 flex items-center justify-center bg-[#101820] text-white text-xl font-bold">
-                <div className="relative -top-26 w-[300px]  xl:w-[380px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
+                <div className="relative top-12 xl:-top-26 w-[490px] bg-[#101820] xl:w-[380px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
                   <form onSubmit={preventDefault}>
-                    <p className="mb-2">Write "DELETE" to DELETE the team</p>
+                    <p className="mb-2 text-sm xl:text-xl">Write "DELETE" to DELETE team</p>
                     <input
                       type="text"
                       placeholder="..."
                       name="input"
-                      className="w-[280px] xl:w-[300px] font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
+                      className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
                     />
+                    <button
+                      onClick={() => handleTabClick("")}
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Cancle
+                    </button>
                   </form>
                 </div>
               </div>

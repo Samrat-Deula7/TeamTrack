@@ -26,7 +26,7 @@ type CollaborationType = {
      <>
        <div className="flex flex-col md:flex-row justify-center items-start gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
          {/* Left Panel - Search Section */}
-         <div className="flex flex-col justify-start items-center w-full md:w-[35%] lg:w-[30%] h-auto md:h-[500px] lg:h-[600px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6">
+         <div className="flex flex-col justify-start items-center w-full md:w-[105%] lg:w-[100%] h-auto md:h-[500px] lg:h-[600px]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6">
            {/* Search Bar */}
            <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 w-full mt-2">
              <img
@@ -51,14 +51,14 @@ type CollaborationType = {
              <img
                src={Add}
                alt="add team"
-               className="w-16 cursor-pointer"
+               className="w-16 cursor-pointer rounded-full"
                onClick={() => setAddTeambtn(true)}
              />
            </div>
          </div>
 
          {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
-         <div className="hidden md:flex items-center justify-center w-full md:w-[60%] lg:w-[65%] h-auto md:h-[500px] lg:h-[600px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10">
+         <div className="hidden xl:flex items-center justify-center w-full md:w-[60%] lg:w-[65%] h-auto md:h-[500px] lg:h-[600px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10">
            <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
              Feature Coming Soon
              <span className="font-extrabold">!!</span>

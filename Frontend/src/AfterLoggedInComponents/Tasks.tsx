@@ -385,7 +385,7 @@ const Tasks: React.FC<TasksProps> = ({
   return (
     <>
       <div className="min-h-auto  w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10  pt-4  ">
-        <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-6 sm:gap-8 lg:gap-10 xl:gap-12 max-w-380` mx-auto">
+        <div className="flex flex-col xl:flex-row justify-center items-center lg:items-start gap-6 sm:gap-8 lg:gap-10 xl:gap-12 max-w-380` mx-auto">
           {/* Tasks Section */}
           <div className="w-full lg:flex-1 lg:max-w-1xl xl:max-w-2xl">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl text-white mb-6 sm:mb-8 font-semibold">
@@ -461,37 +461,25 @@ const Tasks: React.FC<TasksProps> = ({
           </div>
 
           {/* Side Panel */}
-          <div className="w-full lg:w-96 xl:w-140 2xl:w-172  h-80 sm:min-h-96 md:h-60 lg:h-128 xl:h-144 2xl:h-180 bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6 ">
+          <div className="w-full  xl:w-140 2xl:w-172  h-150 md:h-190 lg:h-128 xl:h-144 2xl:h-180 bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6 ">
             <h1 className="text-center font-bold text-white  text-2xl ">
               Your Teams
             </h1>
             <br />
-            <div className="flex justify-around items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 w-full mt-2 mb-10">
-              <h2 className="mr-3 font-medium">Code: </h2>
 
-              <div className="flex outline-none text-gray-700  text-sm sm:text-base min-w-0 space-x-1">
+            {/* This is teh Input */}
+            <div className="flex flex-wrap justify-around items-center bg-white rounded-full shadow-lg px-2 sm:px-4 sm:py-2 w-full mt-2 mb-10">
+              <h2 className="2xl:mr-3 font-medium text-sm sm:text-base">
+                Code:{" "}
+              </h2>
+
+              <div className="flex flex-wrap outline-none text-gray-700 text-sm sm:text-base min-w-0 space-x-1">
                 <div className="flex items-center">
-                  <img src={OpeningB} alt="" className="h-6" />
+                  <img src={OpeningB} alt="" className="h-4 2xl:h-6" />
                   <input
                     type="text"
                     id="TeamCode"
-                    className=" w-8 font-bold text-xl CodeInput"
-                  />
-                  <p className="font-bold">|</p>
-                </div>
-                <div className="flex">
-                  <input
-                    type="text"
-                    id="TeamCode"
-                    className=" w-8 font-bold text-xl CodeInput"
-                  />
-                  <p className="font-bold">|</p>
-                </div>
-                <div className="flex">
-                  <input
-                    type="text"
-                    id="TeamCode"
-                    className=" w-8 font-bold text-xl CodeInput"
+                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
                   />
                   <p className="font-bold">|</p>
                 </div>
@@ -499,35 +487,52 @@ const Tasks: React.FC<TasksProps> = ({
                   <input
                     type="text"
                     id="TeamCode"
-                    className=" w-8 font-bold text-xl CodeInput"
+                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
                   />
-                  <img src={ClosingB} alt="" className="h-6" />
+                  <p className="font-bold">|</p>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    id="TeamCode"
+                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
+                  />
+                  <p className="font-bold">|</p>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    id="TeamCode"
+                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
+                  />
+                  <img src={ClosingB} alt="" className="h-4 xl:h-6" />
                 </div>
               </div>
+
               <button
-                // onClick={handleSearch}
-                className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
-                // onClick={onJoinTeamChanged}
                 onClick={joinWithCode}
+                className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
               >
                 Join
               </button>
+
               <img
                 src={Addbtn}
                 alt="add team"
-                className="w-16 cursor-pointer"
+                className="w-10 rounded-full sm:w-14 lg:w-16 cursor-pointer mt-2 sm:mt-0"
                 onClick={() => {
                   setAddTeambtn(true);
                 }}
               />
             </div>
+
             {/* Add your content here */}
             {/* Task List */}
             <div className="space-y-3 sm:space-y-4 max-h-[60%] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll ">
               {uniqueTeams.map((Task: TeamData) => (
                 <div
                   key={Task.Team_Id}
-                  className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300 hover:border-none hover:bg-transparent cursor-pointer"
+                  className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300  hover:bg-transparent cursor-pointer"
                   onClick={() => {
                     focusOnTeamData(
                       Task.Team_Id,

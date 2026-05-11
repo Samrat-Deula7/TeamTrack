@@ -50,7 +50,7 @@ const NavBar: React.FC<NavProps> = ({
             </div>
 
             <button
-              className="text-[#000000] font-bold text-[13px] border border-2 border-green-500 text-green-500 w-30 h-7 rounded-xl hover:-translate-y-1 duration-300 hover:border-none hover:bg-transparent cursor-pointer"
+              className="text-[#000000] font-bold text-[13px] border border-2 border-green-500 text-green-500 w-30 h-7 rounded-xl duration-300 hover:border-none hover:bg-transparent cursor-pointer"
               onClick={() => {
                 setAlertPopUp({
                   ...AlertPopUp,
@@ -95,7 +95,7 @@ const NavBar: React.FC<NavProps> = ({
                 onClick={() => {
                   setmenuOpen(false);
                 }}
-                className={`absolute top-80 right-20 text-2xl text-white font-bold lg:text-3xl  focus:outline-none cursor-pointer  ${
+                className={`absolute top-40 right-20 text-2xl text-white font-bold lg:text-3xl  focus:outline-none cursor-pointer  ${
                   menuOpen ? "flex" : "hidden"
                 }`}
                 aria-label="Close button"
