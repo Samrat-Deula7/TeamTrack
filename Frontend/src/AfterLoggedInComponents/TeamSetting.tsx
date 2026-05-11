@@ -1,8 +1,10 @@
 import type React from "react";
 import { type TeamTasks } from "../../context/FlowtrackState";
-import user from "../assets/user.png"
-import FlowTrackContext from "../../context/FlowtrackContext"
+import user from "../assets/user.png";
+import FlowTrackContext from "../../context/FlowtrackContext";
 import { useContext, useState } from "react";
+import { type AlertType } from "../Alert";
+
 export type IndividualTeamTaskElements = {
   Team_Id: number;
   Team_Name: string;
@@ -11,8 +13,10 @@ export type IndividualTeamTaskElements = {
 type TeamSettingProps = {
   setteamSetting: React.Dispatch<React.SetStateAction<boolean>>;
   IndividualTeamTask: IndividualTeamTaskElements;
-   setTeamTasks: React.Dispatch<React.SetStateAction<TeamTasks[]>>;
-    TeamTasks: TeamTasks[];
+  setTeamTasks: React.Dispatch<React.SetStateAction<TeamTasks[]>>;
+  TeamTasks: TeamTasks[];
+  setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
+  AlertPopUp: AlertType;
 };
 
 const handleTabClick = (targetClass: string) => {
@@ -27,25 +31,56 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   IndividualTeamTask,
   setTeamTasks,
   TeamTasks,
+  setAlertPopUp,
+  AlertPopUp,
 }) => {
-  const { addUserToTeam } = useContext(FlowTrackContext);
-  const [AddedUserEmail, setAddedUserEmail]=useState("");
+  const { addUserToTeam, GetTeamTasks } = useContext(FlowTrackContext);
+  const [Error, setError] = useState("");
+  const [AddedUserEmail, setAddedUserEmail] = useState("");
 
-  const onchange=(e:any)=>{
-    setAddedUserEmail(e.target.value)
+  const onchange = (e: any) => {
+    setAddedUserEmail(e.target.value);
+    setError("");
   };
 
-  const handleAdd=async ()=>{
-    const apiRes = await addUserToTeam(AddedUserEmail,IndividualTeamTask.Team_Name,IndividualTeamTask.Team_code);
-    console.log(apiRes)
+  const handleAdd = async () => {
+    const apiRes: any = await addUserToTeam(
+      AddedUserEmail,
+      IndividualTeamTask.Team_Name,
+      IndividualTeamTask.Team_code,
+    );
+    console.log(apiRes);
+    if (apiRes.success) {
+      setAddedUserEmail("");
+      let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
+      setTeamTasks(teamTasks);
+      setAlertPopUp({
+        ...AlertPopUp,
+        alert: true,
+        type: "success",
+        msg: apiRes.success,
+      });
+
+      setTimeout(() => {
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: false,
+          type: "success",
+          msg: apiRes.success,
+        });
+      }, 2000);
+    } else {
+      setError(apiRes.error);
+    }
   };
-   const TeamTaskFilter = TeamTasks.filter(
-     (team, index, self) =>
-       index === self.findIndex((t) => t.Name === team.Name),
-   );
-     const preventDefault = async (e: any) => {
-       e.preventDefault();
-     };
+
+  const TeamTaskFilter = TeamTasks.filter(
+    (team, index, self) =>
+      index === self.findIndex((t) => t.Name === team.Name),
+  );
+  const preventDefault = async (e: any) => {
+    e.preventDefault();
+  };
   return (
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">
@@ -97,11 +132,12 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
             <div className="relative w-full lg:flex-1  overflow-hidden">
               <div className="absolute inset-0  duration-50  z-50  text-white text-2xl  font-bold px-5">
                 {/* This is input */}
+                <p className="text-red-500 text-center font-medium">{Error}</p>
                 <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 w-xl mx-auto mt-2">
                   <input
                     type="text"
                     placeholder="Add member with email ...."
-                    // value={searchQuery}
+                    value={AddedUserEmail}
                     onChange={onchange}
                     // onKeyPress={handleKeyPress}
                     className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base min-w-0"

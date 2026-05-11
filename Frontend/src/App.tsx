@@ -124,6 +124,8 @@ function App() {
                     IndividualTeamTask={IndividualTeamTask}
                     setTeamTasks={setTeamTasks}
                     TeamTasks={TeamTasks}
+                    AlertPopUp={AlertPopUp}
+                    setAlertPopUp={setAlertPopUp}
                   />
                 )}
 
