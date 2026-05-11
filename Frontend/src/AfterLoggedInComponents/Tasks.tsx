@@ -13,8 +13,8 @@ import {
   type addTeamTask,
 } from "../../context/FlowtrackState";
 import Addbtn from "../assets/add.gif";
-import Setting from "../assets/settings.png"
-import {type IndividualTeamTaskElements} from "./TeamSetting"
+import Setting from "../assets/settings.png";
+import { type IndividualTeamTaskElements } from "./TeamSetting";
 
 type TasksProps = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,10 +22,13 @@ type TasksProps = {
   setteamSetting: React.Dispatch<React.SetStateAction<boolean>>;
   AlertPopUp: AlertType;
   AddTeambtn: boolean;
-   IndividualTeamTask: IndividualTeamTaskElements;
-    setIndividualTeamTask: React.Dispatch<React.SetStateAction<IndividualTeamTaskElements>>;
+  IndividualTeamTask: IndividualTeamTaskElements;
+  setTeamTasks: React.Dispatch<React.SetStateAction<TeamTasks[]>>;
+  TeamTasks: TeamTasks[];
+  setIndividualTeamTask: React.Dispatch<
+    React.SetStateAction<IndividualTeamTaskElements>
+  >;
 };
-
 
 const Tasks: React.FC<TasksProps> = ({
   setAlertPopUp,
@@ -35,6 +38,8 @@ const Tasks: React.FC<TasksProps> = ({
   setteamSetting,
   IndividualTeamTask,
   setIndividualTeamTask,
+  setTeamTasks,
+  TeamTasks,
 }) => {
   useEffect(() => {
     getTasks();
@@ -57,8 +62,6 @@ const Tasks: React.FC<TasksProps> = ({
   const TeamCode: Array<number> = [];
   const [AllTasks, setAllTasks] = useState<Data[]>([]);
   const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
-
-  const [TeamTasks, setTeamTasks] = useState<TeamTasks[]>([]);
 
   const {
     getAllTask,
@@ -643,4 +646,4 @@ const Tasks: React.FC<TasksProps> = ({
   );
 };
 
-export default Tasks ;
+export default Tasks;

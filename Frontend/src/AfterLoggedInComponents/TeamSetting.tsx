@@ -1,5 +1,6 @@
 import type React from "react";
-
+import { type TeamTasks } from "../../context/FlowtrackState";
+import user from "../assets/user.png"
 export type IndividualTeamTaskElements = {
   Team_Id: number;
   Team_Name: string;
@@ -8,6 +9,8 @@ export type IndividualTeamTaskElements = {
 type TeamSettingProps = {
   setteamSetting: React.Dispatch<React.SetStateAction<boolean>>;
   IndividualTeamTask?: IndividualTeamTaskElements;
+   setTeamTasks: React.Dispatch<React.SetStateAction<TeamTasks[]>>;
+    TeamTasks: TeamTasks[];
 };
 
 const handleTabClick = (targetClass: string) => {
@@ -17,7 +20,17 @@ const handleTabClick = (targetClass: string) => {
   document.querySelector(`.${targetClass}`)?.classList.add("scalefull");
 };
 
-const TeamSetting: React.FC<TeamSettingProps> = ({ setteamSetting,IndividualTeamTask }) => {
+const TeamSetting: React.FC<TeamSettingProps> = ({
+  setteamSetting,
+  IndividualTeamTask,
+  setTeamTasks,
+  TeamTasks,
+}) => {
+  const TeamTaskFilter1 = TeamTasks.filter((x) => x.Team_Tasks != "");
+   const TeamTaskFilter2 = TeamTaskFilter1.filter(
+     (team, index, self) =>
+       index === self.findIndex((t) => t.Name === team.Name),
+   );
   return (
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">
@@ -37,7 +50,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({ setteamSetting,IndividualTeam
             onClick={() => {
               setteamSetting(false);
             }}
-            className="absolute top-4 right-6 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
+            className="absolute top-30 right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
             aria-label="Close button"
           >
             &times;
@@ -67,13 +80,40 @@ const TeamSetting: React.FC<TeamSettingProps> = ({ setteamSetting,IndividualTeam
             <div className="w-1 sm:min-h-76 md:h-40 lg:h-108 xl:h-124 2xl:h-160 my-auto bg-white rounded-full "></div>
             {/* This is the side div */}
             <div className="relative w-full lg:flex-1  overflow-hidden">
-              <div className="absolute inset-0  duration-300 scalenone list tab-content z-50 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-                List
+              <div className="absolute inset-0  duration-50  z-50  text-white text-2xl  font-bold px-5">
+                {/* This is input */}
+                <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 w-xl mx-auto mt-2">
+                  <input
+                    type="text"
+                    placeholder="Add member ...."
+                    // value={searchQuery}
+                    // onChange={(e) => setSearchQuery(e.target.value)}
+                    // onKeyPress={handleKeyPress}
+                    className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base min-w-0"
+                  />
+                  <button
+                    // onClick={handleSearch}
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
+                  >
+                    Add Member
+                  </button>
+                </div>
+                <br />
+                <h1 className="mb-2">Team Members :</h1>
+                {TeamTaskFilter2.map((task: TeamTasks) => (
+                  <div className="flex items-center">
+                    <img src={user} alt="user" className="w-6 mr-2" />
+                    <span className="text-2 font-normal text-green-500">
+                      {" "}
+                      {task.Name}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div className="absolute inset-0  duration-300 scalenone meeting tab-content z-40 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
+              <div className="absolute inset-0  duration-50 scalenone meeting tab-content z-40 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
                 Meeting
               </div>
-              <div className="absolute inset-0  duration-300 scalenone graph tab-content z-30 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
+              <div className="absolute inset-0  duration-50 scalenone graph tab-content z-30 flex items-center justify-center text-white text-2xl sm:text-3xl md:text-4xl font-bold">
                 Graph
               </div>
             </div>

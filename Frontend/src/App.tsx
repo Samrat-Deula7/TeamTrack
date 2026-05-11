@@ -19,10 +19,8 @@ import AddTeam from "./AfterLoggedInComponents/AddTeam";
 
 import Alert, { type AlertType } from "./Alert";
 
-import {type IndividualTeamTaskElements} from "./AfterLoggedInComponents/TeamSetting"
-
-
-
+import { type IndividualTeamTaskElements } from "./AfterLoggedInComponents/TeamSetting";
+import { type TeamTasks } from "../context/FlowtrackState";
 function App() {
   let navigate = useNavigate();
   const [Loggedin, setLoggedin] = useState(false);
@@ -31,17 +29,19 @@ function App() {
   const [AddTeambtn, setAddTeambtn] = useState(false);
   const [menuOpen, setmenuOpen] = useState(false);
   const [teamSetting, setteamSetting] = useState(false);
+    const [TeamTasks, setTeamTasks] = useState<TeamTasks[]>([]);
+
   const [AlertPopUp, setAlertPopUp] = useState<AlertType>({
     alert: false,
     type: "failure",
     msg: "This is an default alert",
   });
-const [IndividualTeamTask, setIndividualTeamTask] =
-  useState<IndividualTeamTaskElements>({
-    Team_Id: 1,
-    Team_Name: "inisiti data",
-    Team_code: "inisiti data",
-  });
+  const [IndividualTeamTask, setIndividualTeamTask] =
+    useState<IndividualTeamTaskElements>({
+      Team_Id: 1,
+      Team_Name: "inisiti data",
+      Team_code: "inisiti data",
+    });
 
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");
@@ -122,6 +122,8 @@ const [IndividualTeamTask, setIndividualTeamTask] =
                   <TeamSetting
                     setteamSetting={setteamSetting}
                     IndividualTeamTask={IndividualTeamTask}
+                    setTeamTasks={setTeamTasks}
+                    TeamTasks={TeamTasks}
                   />
                 )}
 
@@ -141,6 +143,8 @@ const [IndividualTeamTask, setIndividualTeamTask] =
                       setteamSetting={setteamSetting}
                       IndividualTeamTask={IndividualTeamTask}
                       setIndividualTeamTask={setIndividualTeamTask}
+                      setTeamTasks={setTeamTasks}
+                      TeamTasks={TeamTasks}
                     />
                   </>
                 )}
