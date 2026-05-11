@@ -29,7 +29,7 @@ const Alert: React.FC<LoginProps> = ({ AlertPopUp, setAlertPopUp }) => {
         <div
           className={`w-[100%] h-[100%]  border-b-2 pl-3   ${AlertPopUp.type == "success" ? "border-b-green-500" : "border-b-red-500"}`}
         >
-          <div className="w-[80%] break-words whitespace-normal">
+          <div className="w-[70%] break-words whitespace-normal">
             <h2
               className={`text-[15px]  xl:text-3xl font-bold mb-4  text-start ${AlertPopUp.type == "success" ? "text-green-500" : "text-red-500"}`}
             >

@@ -168,7 +168,7 @@ const Tasks: React.FC<TasksProps> = ({
         ...AlertPopUp,
         alert: true,
         type: "failure",
-        msg: "Task Deleted successully !!!",
+        msg: "You can only delete the task that you created !!!",
       });
 
       setTimeout(() => {
@@ -180,6 +180,23 @@ const Tasks: React.FC<TasksProps> = ({
           msg: "You can only delete the task that you created !!!",
         });
       }, 2000);
+    }else{
+       setAlertPopUp({
+         ...AlertPopUp,
+         alert: true,
+         type: "success",
+         msg: "Task deleted successfully !!!",
+       });
+
+       setTimeout(() => {
+         getTasks();
+         setAlertPopUp({
+           ...AlertPopUp,
+           alert: false,
+           type: "success",
+           msg: "Task deleted successfully !!!",
+         });
+       }, 2000);
     }
   };
 
