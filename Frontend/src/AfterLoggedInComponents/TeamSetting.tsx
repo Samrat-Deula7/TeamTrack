@@ -26,6 +26,8 @@ const handleTabClick = (targetClass: string) => {
   document.querySelector(`.${targetClass}`)?.classList.add("scalefull");
 };
 
+type DelPops="delete" | "leave" | ""
+
 const TeamSetting: React.FC<TeamSettingProps> = ({
   setteamSetting,
   IndividualTeamTask,
@@ -37,12 +39,23 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   const { addUserToTeam, GetTeamTasks } = useContext(FlowTrackContext);
   const [Error, setError] = useState("");
   const [AddedUserEmail, setAddedUserEmail] = useState("");
+  const [DelChangeValue, setDelChangeValue] = useState<DelPops>("");
 
   const onchange = (e: any) => {
     setAddedUserEmail(e.target.value);
     setError("");
   };
+  const onDelChange = (e: any) => {
+    setDelChangeValue(e.target.value);
+    console.log(DelChangeValue)
+  };
+  const handleDel=async ()=>{
+    if(DelChangeValue.toLowerCase()=="leave"){
+      
+    }else{
 
+    }
+  }
   const handleAdd = async () => {
     const apiRes: any = await addUserToTeam(
       AddedUserEmail,
@@ -171,13 +184,14 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       type="text"
                       placeholder="..."
                       name="input"
+                      onChange={onDelChange}
                       className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
                     />
                     <button
                       onClick={() => handleTabClick("")}
                       className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
                     >
-                      Cancle
+                      Cancel
                     </button>
                   </form>
                 </div>
@@ -190,13 +204,14 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       type="text"
                       placeholder="..."
                       name="input"
+                      onChange={onDelChange}
                       className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
                     />
                     <button
                       onClick={() => handleTabClick("")}
                       className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
                     >
-                      Cancle
+                      Cancel
                     </button>
                   </form>
                 </div>
