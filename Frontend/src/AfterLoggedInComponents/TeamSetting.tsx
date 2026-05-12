@@ -49,9 +49,10 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     setDelChangeValue(e.target.value);
     console.log(DelChangeValue)
   };
-  const handleDel=async ()=>{
+  const handleDel=async (e:any)=>{
+    e.preventDefault();
     if(DelChangeValue.toLowerCase()=="leave"){
-      
+
     }else{
 
     }
@@ -91,9 +92,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     (team, index, self) =>
       index === self.findIndex((t) => t.Name === team.Name),
   );
-  const preventDefault = async (e: any) => {
-    e.preventDefault();
-  };
+ 
   return (
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">
@@ -178,7 +177,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
               </div>
               <div className="absolute inset-0 scalenone leaveTeam tab-content z-50 flex  justify-center bg-[#101820] text-white text-xl font-bold">
                 <div className="relative xl:top-50 w-full bg-[#101820] xl:w-[350px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
-                  <form onSubmit={preventDefault}>
+                  <form onSubmit={handleDel}>
                     <p className="mb-2  text-sm xl:text-xl">Write "LEAVE" to leave the team</p>
                     <input
                       type="text"
@@ -198,7 +197,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
               </div>
               <div className="absolute inset-0 scalenone deleteTeam tab-content z-50 flex items-center justify-center bg-[#101820] text-white text-xl font-bold">
                 <div className="relative top-12 xl:-top-26 w-[490px] bg-[#101820] xl:w-[380px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
-                  <form onSubmit={preventDefault}>
+                  <form onSubmit={handleDel}>
                     <p className="mb-2 text-sm xl:text-xl">Write "DELETE" to DELETE team</p>
                     <input
                       type="text"
