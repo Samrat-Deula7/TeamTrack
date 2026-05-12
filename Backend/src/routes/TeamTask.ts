@@ -325,30 +325,29 @@ router.delete(
   },
 );
 
-// // ✅ Fixed
-// router.delete(
-//   "/DeleteTeamTask",
-//   authenticateuser,
-//   async (req: Request, res: Response) => {
-//     try {
-//       const pool = await sql.connect(config);
-//       const { Team_Id } = req.body;
-//       const payload = req.user as { user: { id: string } };
-//       const id = parseInt(payload.user.id);
+router.delete(
+  "/LeaveTeam",
+  authenticateuser,
+  async (req: Request, res: Response) => {
+    try {
+      const pool = await sql.connect(config);
+      let { Team_code } = req.body;
 
-//       const sqlResponse = await pool
-//         .request()
-//         .input("Userid", sql.Int, id)
-//         .input("Team_Id", sql.Int, Team_Id)
-//         .query(`DELETE FROM Team_Table WHERE Team_Id=@Team_Id AND User_Id=@Userid`);
+      const payload = req.user as { user: { id: string } };
+      const id = parseInt(payload.user.id);
+      let sqlResponse = await pool
+        .request()
+        .input("Userid", sql.Int, id)
+        .input("Team_Id", sql.Int, Team_code).query(`
+                delete from Team_Table where User_Id=@Userid and Team_code=@Team_Id
+                `);
+      res.send(sqlResponse.rowsAffected);
+    } catch (err) {
+      res.status(500).send("Failed to add Team Task");
+    }
+  },
+);
 
-//       res.status(200).json({ rowsAffected: sqlResponse.rowsAffected });
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).send("Failed to delete Team Task");
-//     }
-//   },
-// );
 
 console.log(
   "Registered routes:",
