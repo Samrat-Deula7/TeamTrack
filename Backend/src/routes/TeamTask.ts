@@ -331,6 +331,7 @@ router.delete(
   async (req: Request, res: Response) => {
     try {
       const pool = await sql.connect(config);
+      console.log("conected success")
       let { Team_code } = req.body;
 
       const payload = req.user as { user: { id: string } };
@@ -338,12 +339,12 @@ router.delete(
       let sqlResponse = await pool
         .request()
         .input("Userid", sql.Int, id)
-        .input("Team_Id", sql.Int, Team_code).query(`
-                delete from Team_Table where User_Id=@Userid and Team_code=@Team_Id
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
+                delete from Team_Table where User_Id=@Userid and Team_code=@Team_code
                 `);
       res.send(sqlResponse.rowsAffected);
     } catch (err) {
-      res.status(500).send("Failed to add Team Task");
+      res.status(500).send("Failed to add Team Taskgjlk");
     }
   },
 );
