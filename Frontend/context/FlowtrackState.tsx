@@ -263,6 +263,28 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
       return [];
     }
   };
+
+  const LeaveTeam = async(Team_code:string)=>{
+    const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
+    const url = "http://localhost:3000/api/teamtasks/LeaveTeam";
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          FlowTrackAuthtoken: FlowTrackAuthtoken || "",
+        },
+        body: JSON.stringify({ Team_code: Team_code }),
+      });
+      const result = await response.json();
+      if (result) {
+        return result;
+      }
+    } catch (error: any) {
+      alert(error.message);
+      return [];
+    }
+  };
   return (
     <FlowtrackContext.Provider
       value={{
@@ -276,6 +298,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
         addTeamTask,
         joinTeamWithCode,
         addUserToTeam,
+        LeaveTeam,
       }}
     >
       {children}

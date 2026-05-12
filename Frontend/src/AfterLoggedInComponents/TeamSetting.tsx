@@ -36,7 +36,8 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   setAlertPopUp,
   AlertPopUp,
 }) => {
-  const { addUserToTeam, GetTeamTasks } = useContext(FlowTrackContext);
+  const { addUserToTeam, GetTeamTasks, LeaveTeam } =
+    useContext(FlowTrackContext);
   const [Error, setError] = useState("");
   const [AddedUserEmail, setAddedUserEmail] = useState("");
   const [DelChangeValue, setDelChangeValue] = useState<DelPops>("");
@@ -47,14 +48,49 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   };
   const onDelChange = (e: any) => {
     setDelChangeValue(e.target.value);
-    console.log(DelChangeValue)
   };
+
   const handleDel=async (e:any)=>{
     e.preventDefault();
     if(DelChangeValue.toLowerCase()=="leave"){
+      const delApiRes:any = await LeaveTeam(IndividualTeamTask.Team_code);
+      if(delApiRes[0]>0 ){
+         setAlertPopUp({
+           ...AlertPopUp,
+           alert: true,
+           type: "success",
+           msg: "Team Leaved !!",
+         });
 
+         setTimeout(() => {
+           setAlertPopUp({
+             ...AlertPopUp,
+             alert: false,
+             type: "success",
+             msg: "Team Leaved !!",
+           });
+         }, 2000);
+         setDelChangeValue("")
+        setteamSetting(false);
+      }
     }else{
+       setAlertPopUp({
+         ...AlertPopUp,
+         alert: true,
+         type: "failure",
+         msg: "Unable to leave Team",
+       });
 
+       setTimeout(() => {
+         setAlertPopUp({
+           ...AlertPopUp,
+           alert: false,
+           type: "failure",
+           msg: "Unable to leave Team",
+         });
+       }, 2000);
+       setDelChangeValue("")
+       setteamSetting(false);
     }
   }
   const handleAdd = async () => {
@@ -63,7 +99,6 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       IndividualTeamTask.Team_Name,
       IndividualTeamTask.Team_code,
     );
-    console.log(apiRes);
     if (apiRes.success) {
       setAddedUserEmail("");
       let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
@@ -123,7 +158,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
             <div className="flex 2xl:flex-col justify-start items-start w-auto  gap-2 sm:gap-3 md:gap-4  p-1 ">
               <button
                 className=" text-sm sm:text-base text-gray-400 md:text-lg lg:text-6 w-auto px-6 font-semibold  rounded-sm border border-transparent hover:border-white/20 hover:bg-green-500 hover:text-white transition-all duration-300  cursor-pointer active:scale-95"
-                onClick={() => handleTabClick("")}
+                onClick={() => handleTabClick("addUser")}
               >
                 Add Member
               </button>
@@ -144,9 +179,11 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
 
             {/* This is the side div */}
             <div className="relative w-full lg:flex">
-              <div className="absolute inset-0  duration-50  z-50  text-white text-2xl  font-bold px-5">
+              <div className="absolute inset-0 addUser  duration-50  z-50  text-white text-2xl  font-bold px-5">
                 {/* This is input */}
-                <p className="text-red-500 text-center font-medium text-sm xl:text-xl">{Error}</p>
+                <p className="text-red-500 text-center font-medium text-sm xl:text-xl">
+                  {Error}
+                </p>
                 <div className="flex items-center bg-white rounded-full shadow-lg px-3 sm:px-4 py-2 xl:w-xl mx-auto mt-2">
                   <input
                     type="text"
@@ -178,7 +215,9 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
               <div className="absolute inset-0 scalenone leaveTeam tab-content z-50 flex  justify-center bg-[#101820] text-white text-xl font-bold">
                 <div className="relative xl:top-50 w-full bg-[#101820] xl:w-[350px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
                   <form onSubmit={handleDel}>
-                    <p className="mb-2  text-sm xl:text-xl">Write "LEAVE" to leave the team</p>
+                    <p className="mb-2  text-sm xl:text-xl">
+                      Write "LEAVE" to leave the team
+                    </p>
                     <input
                       type="text"
                       placeholder="..."
@@ -187,7 +226,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
                     />
                     <button
-                      onClick={() => handleTabClick("")}
+                      onClick={() => handleTabClick("addUser")}
                       className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
                     >
                       Cancel
@@ -198,7 +237,9 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
               <div className="absolute inset-0 scalenone deleteTeam tab-content z-50 flex items-center justify-center bg-[#101820] text-white text-xl font-bold">
                 <div className="relative top-12 xl:-top-26 w-[490px] bg-[#101820] xl:w-[380px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
                   <form onSubmit={handleDel}>
-                    <p className="mb-2 text-sm xl:text-xl">Write "DELETE" to DELETE team</p>
+                    <p className="mb-2 text-sm xl:text-xl">
+                      Write "DELETE" to DELETE team
+                    </p>
                     <input
                       type="text"
                       placeholder="..."
@@ -207,7 +248,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
                     />
                     <button
-                      onClick={() => handleTabClick("")}
+                      onClick={() => handleTabClick("addUser")}
                       className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
                     >
                       Cancel

@@ -331,7 +331,6 @@ router.delete(
   async (req: Request, res: Response) => {
     try {
       const pool = await sql.connect(config);
-      console.log("conected success")
       let { Team_code } = req.body;
 
       const payload = req.user as { user: { id: string } };
@@ -344,7 +343,7 @@ router.delete(
                 `);
       res.send(sqlResponse.rowsAffected);
     } catch (err) {
-      res.status(500).send("Failed to add Team Taskgjlk");
+      res.status(500).send("Failed to leave Team");
     }
   },
 );
