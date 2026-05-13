@@ -21,6 +21,7 @@ export type TeamTasks = {
   Name: string;
   Team_Tasks: string;
   Completed: boolean;
+  Type:string;
 };
 
 export type addTeamTask = {

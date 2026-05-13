@@ -250,7 +250,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                     <img src={user} alt="user" className="w-6 mr-2" />
                     <span className="text-2 font-normal text-green-500">
                       {" "}
-                      {task.Name}
+                      {task.Name} <span className={`ml-2 text-sm font-medium ${task.Type=="admin"?"text-green-500":"text-gray-500"}`}>({task.Type})</span>
                     </span>
                   </div>
                 ))}
