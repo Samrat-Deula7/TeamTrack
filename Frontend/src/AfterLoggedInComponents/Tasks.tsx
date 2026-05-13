@@ -28,6 +28,8 @@ type TasksProps = {
   setIndividualTeamTask: React.Dispatch<
     React.SetStateAction<IndividualTeamTaskElements>
   >;
+  AllTeamData: TeamData[];
+  setAllTeamData: React.Dispatch<React.SetStateAction<TeamData[]>>;
 };
 
 const Tasks: React.FC<TasksProps> = ({
@@ -40,6 +42,8 @@ const Tasks: React.FC<TasksProps> = ({
   setIndividualTeamTask,
   setTeamTasks,
   TeamTasks,
+  AllTeamData,
+  setAllTeamData,
 }) => {
   useEffect(() => {
     getTasks();
@@ -61,7 +65,6 @@ const Tasks: React.FC<TasksProps> = ({
   // const [TeamCode, setTeamCode]=useState({TeamCode:[]});
   const TeamCode: Array<number> = [];
   const [AllTasks, setAllTasks] = useState<Data[]>([]);
-  const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
 
   const {
     getAllTask,
@@ -160,10 +163,10 @@ const Tasks: React.FC<TasksProps> = ({
     }, 2000);
   };
   const HandleDeleteTeamData = async (id: any) => {
-    let deleteResponse:any = await DeleteTeamTask(id);
+    let deleteResponse: any = await DeleteTeamTask(id);
     let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
     setTeamTasks(teamTasks);
-     if (deleteResponse[0] == 0) {
+    if (deleteResponse[0] == 0) {
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -180,23 +183,23 @@ const Tasks: React.FC<TasksProps> = ({
           msg: "You can only delete the task that you created !!!",
         });
       }, 2000);
-    }else{
-       setAlertPopUp({
-         ...AlertPopUp,
-         alert: true,
-         type: "success",
-         msg: "Task deleted successfully !!!",
-       });
+    } else {
+      setAlertPopUp({
+        ...AlertPopUp,
+        alert: true,
+        type: "success",
+        msg: "Task deleted successfully !!!",
+      });
 
-       setTimeout(() => {
-         getTasks();
-         setAlertPopUp({
-           ...AlertPopUp,
-           alert: false,
-           type: "success",
-           msg: "Task deleted successfully !!!",
-         });
-       }, 2000);
+      setTimeout(() => {
+        getTasks();
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: false,
+          type: "success",
+          msg: "Task deleted successfully !!!",
+        });
+      }, 2000);
     }
   };
 

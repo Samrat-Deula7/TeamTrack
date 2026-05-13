@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { type AlertType } from "../Alert";
+import {type TeamData} from "../../context/FlowtrackState"
+import FlowTrackContext from "../../context/FlowtrackContext"
 
 type SignupPorps = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
   AddTeambtn: boolean;
   AlertPopUp: AlertType;
+  AllTeamData?: TeamData[];
+  setAllTeamData?: React.Dispatch<React.SetStateAction<TeamData[]>>;
 };
 
-const Signup: React.FC<SignupPorps> = ({
+const AddTeam: React.FC<SignupPorps> = ({
   setAddTeambtn,
   setAlertPopUp,
   AlertPopUp,
   AddTeambtn,
+  AllTeamData,
+  setAllTeamData,
 }) => {
+  const {
+   
+    GetTeamData,
+    
+  } = useContext(FlowTrackContext);
   const [validationError, setValidationError] = useState({
     Team_Name: "",
     Team_Tasks: "",
@@ -72,6 +83,8 @@ const Signup: React.FC<SignupPorps> = ({
           type: "success",
           msg: result[0].success + "Code= " + result[1].Code,
         });
+        const teamDataSet: TeamData[] = await GetTeamData();
+            setAllTeamData?.(teamDataSet);
         setAddTeambtn(false);
         setTimeout(() => {
           // I am still setting the type and msg because if i dont then for a sec the alert show failure.
@@ -159,8 +172,6 @@ const Signup: React.FC<SignupPorps> = ({
                 onChange={onChange}
               />
             </div>
-
-           
           </div>
 
           <button
@@ -177,4 +188,4 @@ const Signup: React.FC<SignupPorps> = ({
   );
 };
 
-export default Signup;
+export default AddTeam;

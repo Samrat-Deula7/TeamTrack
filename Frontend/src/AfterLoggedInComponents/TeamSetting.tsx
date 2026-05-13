@@ -4,6 +4,7 @@ import user from "../assets/user.png";
 import FlowTrackContext from "../../context/FlowtrackContext";
 import { useContext, useState } from "react";
 import { type AlertType } from "../Alert";
+import { type TeamData } from "../../context/FlowtrackState";
 
 export type IndividualTeamTaskElements = {
   Team_Id: number;
@@ -17,6 +18,7 @@ type TeamSettingProps = {
   TeamTasks: TeamTasks[];
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
   AlertPopUp: AlertType;
+   
 };
 
 const handleTabClick = (targetClass: string) => {
@@ -35,6 +37,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   TeamTasks,
   setAlertPopUp,
   AlertPopUp,
+  
 }) => {
   const { addUserToTeam, GetTeamTasks, LeaveTeam } =
     useContext(FlowTrackContext);
@@ -50,49 +53,49 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     setDelChangeValue(e.target.value);
   };
 
-  const handleDel=async (e:any)=>{
+  const handleDel = async (e: any) => {
     e.preventDefault();
-    if(DelChangeValue.toLowerCase()=="leave"){
-      const delApiRes:any = await LeaveTeam(IndividualTeamTask.Team_code);
-      if(delApiRes[0]>0 ){
-         setAlertPopUp({
-           ...AlertPopUp,
-           alert: true,
-           type: "success",
-           msg: "Team Leaved !!",
-         });
+    if (DelChangeValue.toLowerCase() == "leave") {
+      const delApiRes: any = await LeaveTeam(IndividualTeamTask.Team_code);
+      if (delApiRes[0] > 0) {
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: true,
+          type: "success",
+          msg: "Team Leaved !!",
+        });
 
-         setTimeout(() => {
-           setAlertPopUp({
-             ...AlertPopUp,
-             alert: false,
-             type: "success",
-             msg: "Team Leaved !!",
-           });
-         }, 2000);
-         setDelChangeValue("")
+        setTimeout(() => {
+          setAlertPopUp({
+            ...AlertPopUp,
+            alert: false,
+            type: "success",
+            msg: "Team Leaved !!",
+          });
+        }, 2000);
+        setDelChangeValue("");
         setteamSetting(false);
       }
-    }else{
-       setAlertPopUp({
-         ...AlertPopUp,
-         alert: true,
-         type: "failure",
-         msg: "Unable to leave Team",
-       });
+    } else {
+      setAlertPopUp({
+        ...AlertPopUp,
+        alert: true,
+        type: "failure",
+        msg: "Unable to leave Team",
+      });
 
-       setTimeout(() => {
-         setAlertPopUp({
-           ...AlertPopUp,
-           alert: false,
-           type: "failure",
-           msg: "Unable to leave Team",
-         });
-       }, 2000);
-       setDelChangeValue("")
-       setteamSetting(false);
+      setTimeout(() => {
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: false,
+          type: "failure",
+          msg: "Unable to leave Team",
+        });
+      }, 2000);
+      setDelChangeValue("");
+      setteamSetting(false);
     }
-  }
+  };
   const handleAdd = async () => {
     const apiRes: any = await addUserToTeam(
       AddedUserEmail,
@@ -127,7 +130,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     (team, index, self) =>
       index === self.findIndex((t) => t.Name === team.Name),
   );
- 
+
   return (
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">

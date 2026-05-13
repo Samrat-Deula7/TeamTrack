@@ -18,6 +18,7 @@ import Iteration from "./AfterLoggedInComponents/Iteration";
 import AddTeam from "./AfterLoggedInComponents/AddTeam";
 
 import Alert, { type AlertType } from "./Alert";
+import { type TeamData } from "../context/FlowtrackState";
 
 import { type IndividualTeamTaskElements } from "./AfterLoggedInComponents/TeamSetting";
 import { type TeamTasks } from "../context/FlowtrackState";
@@ -42,6 +43,8 @@ function App() {
       Team_Name: "inisiti data",
       Team_code: "inisiti data",
     });
+      const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
+
 
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");
@@ -136,6 +139,8 @@ function App() {
                       setAddTeambtn={setAddTeambtn}
                       setAlertPopUp={setAlertPopUp}
                       AlertPopUp={AlertPopUp}
+                      AllTeamData={AllTeamData}
+                      setAllTeamData={setAllTeamData}
                     />
                     <Tasks
                       setAlertPopUp={setAlertPopUp}
@@ -147,6 +152,8 @@ function App() {
                       setIndividualTeamTask={setIndividualTeamTask}
                       setTeamTasks={setTeamTasks}
                       TeamTasks={TeamTasks}
+                      AllTeamData={AllTeamData}
+                      setAllTeamData={setAllTeamData}
                     />
                   </>
                 )}

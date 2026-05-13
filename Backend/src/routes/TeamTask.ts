@@ -192,7 +192,7 @@ router.get(
         .request()
         .input("TeamCode", sql.NVarChar(sql.MAX), Team_code)
         .query(
-          "select u.Name ,t.Team_Id, t.Team_Tasks, t.Completed from User_Table u Inner join Team_Table t on u.User_Id=t.User_Id where Team_code=@TeamCode",
+          "select u.Name ,t.Team_Id, t.Team_Tasks, t.Completed, t.Type from User_Table u Inner join Team_Table t on u.User_Id=t.User_Id where Team_code=@TeamCode",
         );
 
       return res.status(200).json({ tasks: TeamTasks.recordset });
@@ -265,6 +265,7 @@ router.post(
     }
   },
 );
+
 router.post("/addUserToTeam", async (req: Request, res: Response) => {
   try {
     const pool = await sql.connect(config);
@@ -272,6 +273,7 @@ router.post("/addUserToTeam", async (req: Request, res: Response) => {
     if (Completed == undefined) {
       Completed = 0;
     }
+    let Type="member"
 
     TeamTask = "";
     let id = await pool
@@ -289,8 +291,9 @@ router.post("/addUserToTeam", async (req: Request, res: Response) => {
         .input("Team_Name", sql.VarChar(70), Team_Name)
         .input("TeamTask", sql.VarChar(150), TeamTask)
         .input("completed", sql.Bit, Completed)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
-        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .input("Type", sql.VarChar(10), Type).query(`
+        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code,@Type)
       `);
       res.status(200).send({ success: "User added successfully !" });
     } else {
