@@ -30,7 +30,7 @@ router.post(
     try {
       const pool = await sql.connect(config);
       let { Team_Name, Completed } = req.body;
-      let Type="admin";
+      let Type = "admin";
       let Team_Tasks = "";
       if (Completed == undefined) {
         Completed = 0;
@@ -249,7 +249,7 @@ router.post(
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
-      let Type:any = await pool
+      let Type: any = await pool
         .request()
         .input("Userid", sql.Int, id)
         .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
@@ -281,7 +281,7 @@ router.post("/addUserToTeam", async (req: Request, res: Response) => {
     if (Completed == undefined) {
       Completed = 0;
     }
-    let Type="member"
+    let Type = "member";
 
     TeamTask = "";
     let id = await pool
@@ -361,6 +361,38 @@ router.delete(
   },
 );
 
+router.delete(
+  "/DeleteTeam",
+  authenticateuser,
+  async (req: Request, res: Response) => {
+    try {
+      const pool = await sql.connect(config);
+      let { Team_code } = req.body;
+      const payload = req.user as { user: { id: string } };
+      const id = parseInt(payload.user.id);
+
+      let Type: any = await pool
+        .request()
+        .input("Userid", sql.Int, id)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
+`);
+
+      if (Type.recordset[0].Type != "admin") {
+        Team_code = "0";
+      }
+
+      let sqlResponse = await pool
+        .request()
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
+                  delete from Team_Table where Team_code=@Team_code
+                `);
+      res.send(sqlResponse.rowsAffected);
+    } catch (err) {
+      res.status(500).send("Failed to leave Team");
+    }
+  },
+);
 
 console.log(
   "Registered routes:",

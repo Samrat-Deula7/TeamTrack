@@ -4,7 +4,6 @@ import user from "../assets/user.png";
 import FlowTrackContext from "../../context/FlowtrackContext";
 import { useContext, useState } from "react";
 import { type AlertType } from "../Alert";
-import { type TeamData } from "../../context/FlowtrackState";
 
 export type IndividualTeamTaskElements = {
   Team_Id: number;
@@ -39,7 +38,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   AlertPopUp,
   
 }) => {
-  const { addUserToTeam, GetTeamTasks, LeaveTeam } =
+  const { addUserToTeam, GetTeamTasks, LeaveTeam, DeleteTeam } =
     useContext(FlowTrackContext);
   const [Error, setError] = useState("");
   const [AddedUserEmail, setAddedUserEmail] = useState("");
@@ -56,8 +55,8 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   const handleDel = async (e: any) => {
     e.preventDefault();
     if (DelChangeValue.toLowerCase() == "leave") {
-      const delApiRes: any = await LeaveTeam(IndividualTeamTask.Team_code);
-      if (delApiRes[0] > 0) {
+      const levApiRes: any = await LeaveTeam(IndividualTeamTask.Team_code);
+      if (levApiRes[0] > 0) {
         setAlertPopUp({
           ...AlertPopUp,
           alert: true,
@@ -76,7 +75,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
         setDelChangeValue("");
         setteamSetting(false);
       }
-    } else {
+     else {
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -95,6 +94,47 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       setDelChangeValue("");
       setteamSetting(false);
     }
+  }else{
+          const delApiRes: any = await DeleteTeam(IndividualTeamTask.Team_code);
+          if (delApiRes[0] > 0) {
+            setAlertPopUp({
+              ...AlertPopUp,
+              alert: true,
+              type: "success",
+              msg: "Team Deleted!!",
+            });
+
+            setTimeout(() => {
+              setAlertPopUp({
+                ...AlertPopUp,
+                alert: false,
+                type: "success",
+                msg: "Team Deleted!!",
+              });
+            }, 2000);
+            setDelChangeValue("");
+            setteamSetting(false);
+          } else {
+            setAlertPopUp({
+              ...AlertPopUp,
+              alert: true,
+              type: "failure",
+              msg: "Only Admin is authorized to delete the team !!",
+            });
+
+            setTimeout(() => {
+              setAlertPopUp({
+                ...AlertPopUp,
+                alert: false,
+                type: "failure",
+                msg: "Only Admin is authorized to delete the team !!",
+              });
+            }, 2000);
+            setDelChangeValue("");
+            setteamSetting(false);
+          }
+
+  }
   };
   const handleAdd = async () => {
     const apiRes: any = await addUserToTeam(
