@@ -17,8 +17,6 @@ Phone_No varchar(80),
 )
 
 
-
-
 CREATE TABLE User_Tasks (
     Task_Id INT PRIMARY KEY IDENTITY(1,1),
     User_Id INT NOT NULL,
@@ -34,16 +32,21 @@ CREATE TABLE Team_Table(
     Team_Tasks VARCHAR(150) NOT NULL,
     Completed BIT NOT NULL DEFAULT 0,
     Team_code NVARCHAR(MAX),
+
     FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
 
+Create table User_Type(
+Type_Id Int Primary key,
+User_Id Int ,
+Type Varchar(10) Default 'member'
 
+Foreign key (User_Id) references Team_Table(Team_Id)
+)
 select * from User_Tasks
 select * from User_Table
 select * from Team_Table
-
-delete from User_Tasks
-drop table User_Tasks
+select * from User_Type
 
 
 
