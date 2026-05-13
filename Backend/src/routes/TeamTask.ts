@@ -249,14 +249,22 @@ router.post(
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
+      let Type:any = await pool
+        .request()
+        .input("Userid", sql.Int, id)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
+`);
+
       await pool
         .request()
         .input("Userid", sql.Int, id)
         .input("Team_Name", sql.VarChar(70), Team_Name)
         .input("TeamTask", sql.VarChar(150), TeamTask)
         .input("completed", sql.Bit, Completed)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
-        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .input("Type", sql.VarChar(10), Type.recordset[0].Type).query(`
+        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code,@Type)
       `);
       res.status(200).send({ success: "Team Task saved !" });
     } catch (err) {
