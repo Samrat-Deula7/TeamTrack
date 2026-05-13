@@ -36,17 +36,12 @@ CREATE TABLE Team_Table(
     FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
 
-Create table User_Type(
-Type_Id Int Primary key,
-User_Id Int ,
-Type Varchar(10) Default 'member'
+alter table Team_Table add Type varchar(10) default 'member'
 
-Foreign key (User_Id) references Team_Table(Team_Id)
-)
 select * from User_Tasks
 select * from User_Table
 select * from Team_Table
-select * from User_Type
+
 
 
 
