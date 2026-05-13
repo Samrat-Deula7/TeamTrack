@@ -32,17 +32,15 @@ CREATE TABLE Team_Table(
     Team_Tasks VARCHAR(150) NOT NULL,
     Completed BIT NOT NULL DEFAULT 0,
     Team_code NVARCHAR(MAX),
-
+    Type varchar(10) default 'member'
     FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
 
-alter table Team_Table add Type varchar(10) default 'member'
+
 
 select * from User_Tasks
 select * from User_Table
 select * from Team_Table
-
-
 
 
 Issues That I have faced while building this project

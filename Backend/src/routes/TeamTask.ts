@@ -30,6 +30,7 @@ router.post(
     try {
       const pool = await sql.connect(config);
       let { Team_Name, Completed } = req.body;
+      let Type="admin";
       let Team_Tasks = "";
       if (Completed == undefined) {
         Completed = 0;
@@ -73,8 +74,9 @@ router.post(
           .input("Team_Name", sql.VarChar(70), Team_Name)
           .input("Team_Tasks", sql.VarChar(150), Team_Tasks)
           .input("Completed", sql.Bit, Completed)
-          .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
-              INSERT INTO Team_Table VALUES (@User_Id, @Team_Name, @Team_Tasks, @Completed,@Team_code)
+          .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+          .input("Type", sql.VarChar(10), Type).query(`
+              INSERT INTO Team_Table VALUES (@User_Id, @Team_Name, @Team_Tasks, @Completed,@Team_code,@Type)
             `);
         res
           .status(200)

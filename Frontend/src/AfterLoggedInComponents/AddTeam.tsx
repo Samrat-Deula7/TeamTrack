@@ -126,11 +126,11 @@ const Signup: React.FC<SignupPorps> = ({
       }`}
     >
       <div
-        className={`relative w-[300px]  xl:w-[350px] xl:h-[300px] text-center bg-[#10172a] rounded-2xl py-3 px-2 ${
+        className={`relative w-[300px]  xl:w-[350px] xl:h-[200px] text-center bg-[#10172a] rounded-2xl py-3 px-2 ${
           AddTeambtn ? "animate-popup" : ""
         }`}
       >
-        <h2 className="text-2xl  xl:text-3xl font-bold mb-8 text-green-500 text-center ">
+        <h2 className="text-2xl  xl:text-3xl font-bold mb-3 text-green-500 text-center ">
           Add new Team
         </h2>
         <h6 className="text-red-500">{validationError.userExistsError}</h6>
@@ -146,7 +146,7 @@ const Signup: React.FC<SignupPorps> = ({
         </button>
 
         <form onSubmit={preventDefault}>
-          <div className="flex flex-col justify-around items-center text-center h-[150px]">
+          <div className="flex flex-col justify-around items-center text-center h-[70px]">
             <div className="relative">
               <h6 className="text-red-500">{validationError.Team_Name}</h6>
               <input
@@ -160,18 +160,7 @@ const Signup: React.FC<SignupPorps> = ({
               />
             </div>
 
-            <div className="relative">
-              <h6 className="text-red-500">{validationError.Team_Tasks}</h6>
-              <input
-                type="text"
-                id="password"
-                name="Team_Tasks"
-                className="w-[280px] xl:w-[300px] bg-black border border-white/10 rounded-full  rounded px-2 py-1 xl:px-4 xl:py-3 text-white transition focus:outline-none focus:border-green-500 focus:bg-[#020617CC]"
-                placeholder="Enter your first task..."
-                onChange={onChange}
-                value={credentials.Team_Tasks}
-              />
-            </div>
+           
           </div>
 
           <button
