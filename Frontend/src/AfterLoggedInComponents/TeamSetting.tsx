@@ -248,10 +248,20 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 {TeamTaskFilter.map((task: TeamTasks) => (
                   <div className="flex items-center" key={task.Team_Id}>
                     <img src={user} alt="user" className="w-6 mr-2" />
-                    <span className="text-2 font-normal text-green-500">
+                    <div className="flex justify-center items-center text-2 font-normal text-green-500">
                       {" "}
-                      {task.Name} <span className={`ml-2 text-sm font-medium ${task.Type=="admin"?"text-green-500":"text-gray-500"}`}>({task.Type})</span>
-                    </span>
+                      {task.Name}{" "}
+                      <span
+                        className={`ml-2 text-sm font-medium ${task.Type == "admin" ? "text-green-500" : "text-gray-500"}`}
+                      >
+                        ({task.Type})
+                      </span>
+                      <button
+                        className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "member" ? "block" : "hidden"}`}
+                      >
+                        Update to admin ?
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
