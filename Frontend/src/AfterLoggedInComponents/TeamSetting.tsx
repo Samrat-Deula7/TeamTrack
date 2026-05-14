@@ -57,9 +57,11 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     setDelChangeValue(e.target.value);
   };
 
-  const handleUpdateType=async()=>{
-    console.log('tried to update')
-    const UpdateRes:any = await UpdateTeamTableUserType(IndividualTeamTask.Team_Id,IndividualTeamTask.Team_code);
+  const handleUpdateType=async(TeamId:number)=>{
+    const UpdateRes: any = await UpdateTeamTableUserType(
+      TeamId,
+      IndividualTeamTask.Team_code,
+    );
     if(UpdateRes[0]>0){
       console.log(UpdateRes[0])
       console.log("Updated Successfully")
@@ -275,7 +277,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       </span>
                       <button
                         className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "member" ? "block" : "hidden"}`}
-                        onClick={handleUpdateType}
+                        onClick={()=>handleUpdateType(task.Team_Id)}
                       >
                         Update to admin ?
                       </button>
