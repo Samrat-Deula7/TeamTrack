@@ -52,6 +52,10 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     setDelChangeValue(e.target.value);
   };
 
+  const handleUpdateType=()=>{
+    console.log('tried to update')
+  };
+
   const handleDel = async (e: any) => {
     e.preventDefault();
     if (DelChangeValue.toLowerCase() == "leave") {
@@ -258,6 +262,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       </span>
                       <button
                         className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "member" ? "block" : "hidden"}`}
+                        onClick={handleUpdateType}
                       >
                         Update to admin ?
                       </button>
