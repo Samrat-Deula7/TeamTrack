@@ -62,13 +62,43 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       TeamId,
       IndividualTeamTask.Team_code,
     );
-    if(UpdateRes[0]>0){
-      console.log(UpdateRes[0])
-      console.log("Updated Successfully")
-    }else{
-      console.log(UpdateRes[0]);
-      console.log("Only Admin can pormote to Admin")
-    }
+     if (UpdateRes[0] > 0) {
+       setAlertPopUp({
+         ...AlertPopUp,
+         alert: true,
+         type: "success",
+         msg: "Updated Successfully!",
+       });
+
+       setTimeout(() => {
+         setAlertPopUp({
+           ...AlertPopUp,
+           alert: false,
+           type: "success",
+           msg: "Updated Successfully!",
+         });
+       }, 2000);
+       setDelChangeValue("");
+       setteamSetting(false);
+     } else {
+       setAlertPopUp({
+         ...AlertPopUp,
+         alert: true,
+         type: "failure",
+         msg: "Only Admin can pormote to Admin",
+       });
+
+       setTimeout(() => {
+         setAlertPopUp({
+           ...AlertPopUp,
+           alert: false,
+           type: "failure",
+           msg: "Only Admin can pormote to Admin",
+         });
+       }, 2000);
+       setDelChangeValue("");
+       setteamSetting(false);
+     }
   };
 
   const handleDel = async (e: any) => {
