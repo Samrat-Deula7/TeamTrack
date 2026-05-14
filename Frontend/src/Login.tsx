@@ -54,7 +54,6 @@ const Login: React.FC<LoginProps> = ({
         }),
       });
       const result = await response.json();
-      console.log(result);
       if (result.FlowTrackAuthtoken) {
         // Save the auth token and redirect
         setCredentials({

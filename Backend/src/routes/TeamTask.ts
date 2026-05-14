@@ -242,18 +242,27 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const pool = await sql.connect(config);
-      let { Team_Id } = req.body;
-      let Type='admin'
+      let { Team_Id, Team_code } = req.body;
+      let SetType='admin'
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
+       let Type: any = await pool
+         .request()
+         .input("Userid", sql.Int, id)
+         .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+         .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
+`);
+
+       if (Type.recordset[0].Type != "admin") {
+         Team_Id = -1;
+       }
 
       let sqlResponse = await pool
         .request()
-        .input("Userid", sql.Int, id)
         .input("Team_Id", sql.Int, Team_Id)
-        .input("Type", sql.VarChar(10), Type).query(`
-        Update Team_Table set Type = @Type where User_Id = @Userid and Team_Id = @Team_Id
+        .input("SetType", sql.VarChar(10), SetType).query(`
+        Update Team_Table set Type = @SetType where  Team_Id = @Team_Id
       `);
 
       res.send(sqlResponse.rowsAffected);

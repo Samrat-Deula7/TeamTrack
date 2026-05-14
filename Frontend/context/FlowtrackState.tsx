@@ -80,6 +80,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
       return {};
     }
   };
+
   const UpdateTeamTableCompleteState = async (
     Team_Id: number,
     Completed: boolean,
@@ -95,6 +96,29 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
           FlowTrackAuthtoken: FlowTrackAuthtoken || "",
         },
         body: JSON.stringify({ Team_Id: Team_Id, Completed: Completed }),
+      });
+      const result = await response.json();
+      return result;
+    } catch (error: any) {
+      alert(error.message);
+      return {};
+    }
+  };
+
+  const UpdateTeamTableUserType = async (
+    Team_Id: number,
+    Team_code:string,
+  ): Promise<object> => {
+    const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
+    const url = "http://localhost:3000/api/teamtasks/UpdateTeamTableUserType";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          FlowTrackAuthtoken: FlowTrackAuthtoken || "",
+        },
+        body: JSON.stringify({ Team_Id: Team_Id, Team_code: Team_code }),
       });
       const result = await response.json();
       return result;
@@ -314,6 +338,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
         getAllTask,
         UpdateCompletedState,
         UpdateTeamTableCompleteState,
+        UpdateTeamTableUserType,
         DeleteTask,
         DeleteTeamTask,
         GetTeamData,

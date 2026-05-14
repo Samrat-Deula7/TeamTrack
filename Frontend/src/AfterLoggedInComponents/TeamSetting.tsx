@@ -38,8 +38,13 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   AlertPopUp,
   
 }) => {
-  const { addUserToTeam, GetTeamTasks, LeaveTeam, DeleteTeam } =
-    useContext(FlowTrackContext);
+  const {
+    addUserToTeam,
+    GetTeamTasks,
+    LeaveTeam,
+    DeleteTeam,
+    UpdateTeamTableUserType,
+  } = useContext(FlowTrackContext);
   const [Error, setError] = useState("");
   const [AddedUserEmail, setAddedUserEmail] = useState("");
   const [DelChangeValue, setDelChangeValue] = useState<DelPops>("");
@@ -52,8 +57,16 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     setDelChangeValue(e.target.value);
   };
 
-  const handleUpdateType=()=>{
+  const handleUpdateType=async()=>{
     console.log('tried to update')
+    const UpdateRes:any = await UpdateTeamTableUserType(IndividualTeamTask.Team_Id,IndividualTeamTask.Team_code);
+    if(UpdateRes[0]>0){
+      console.log(UpdateRes[0])
+      console.log("Updated Successfully")
+    }else{
+      console.log(UpdateRes[0]);
+      console.log("Only Admin can pormote to Admin")
+    }
   };
 
   const handleDel = async (e: any) => {
