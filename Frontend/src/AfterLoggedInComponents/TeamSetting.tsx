@@ -57,45 +57,53 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     setDelChangeValue(e.target.value);
   };
 
+   const showSuccess = (message: string) => {
+     setAlertPopUp({
+       ...AlertPopUp,
+       alert: true,
+       type: "success",
+       msg: message,
+     });
+
+     setTimeout(() => {
+       setAlertPopUp({
+         ...AlertPopUp,
+         alert: false,
+         type: "success",
+         msg: message,
+       });
+     }, 2000);
+   };
+
+   const showFailure = (message: string) => {
+     setAlertPopUp({
+       ...AlertPopUp,
+       alert: true,
+       type: "failure",
+       msg: message,
+     });
+
+     setTimeout(() => {
+       setAlertPopUp({
+         ...AlertPopUp,
+         alert: false,
+         type: "failure",
+         msg: message,
+       });
+     }, 2000);
+   };
+
   const handleUpdateType=async(TeamId:number)=>{
     const UpdateRes: any = await UpdateTeamTableUserType(
       TeamId,
       IndividualTeamTask.Team_code,
     );
      if (UpdateRes[0] > 0) {
-       setAlertPopUp({
-         ...AlertPopUp,
-         alert: true,
-         type: "success",
-         msg: "Updated Successfully!",
-       });
-
-       setTimeout(() => {
-         setAlertPopUp({
-           ...AlertPopUp,
-           alert: false,
-           type: "success",
-           msg: "Updated Successfully!",
-         });
-       }, 2000);
+      showSuccess("Updated Successfully!");
        setDelChangeValue("");
        setteamSetting(false);
      } else {
-       setAlertPopUp({
-         ...AlertPopUp,
-         alert: true,
-         type: "failure",
-         msg: "Only Admin can pormote to Admin",
-       });
-
-       setTimeout(() => {
-         setAlertPopUp({
-           ...AlertPopUp,
-           alert: false,
-           type: "failure",
-           msg: "Only Admin can pormote to Admin",
-         });
-       }, 2000);
+      showFailure("Only Admin can pormote to Admin");
        setDelChangeValue("");
        setteamSetting(false);
      }
@@ -106,79 +114,22 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     if (DelChangeValue.toLowerCase() == "leave") {
       const levApiRes: any = await LeaveTeam(IndividualTeamTask.Team_code);
       if (levApiRes[0] > 0) {
-        setAlertPopUp({
-          ...AlertPopUp,
-          alert: true,
-          type: "success",
-          msg: "Team Leaved !!",
-        });
-
-        setTimeout(() => {
-          setAlertPopUp({
-            ...AlertPopUp,
-            alert: false,
-            type: "success",
-            msg: "Team Leaved !!",
-          });
-        }, 2000);
+        showSuccess("Team Leaved !!");
         setDelChangeValue("");
         setteamSetting(false);
       }
      else {
-      setAlertPopUp({
-        ...AlertPopUp,
-        alert: true,
-        type: "failure",
-        msg: "Unable to leave Team",
-      });
-
-      setTimeout(() => {
-        setAlertPopUp({
-          ...AlertPopUp,
-          alert: false,
-          type: "failure",
-          msg: "Unable to leave Team",
-        });
-      }, 2000);
-      setDelChangeValue("");
+      showFailure("Unable to leave Team");
       setteamSetting(false);
     }
   }else{
           const delApiRes: any = await DeleteTeam(IndividualTeamTask.Team_code);
           if (delApiRes[0] > 0) {
-            setAlertPopUp({
-              ...AlertPopUp,
-              alert: true,
-              type: "success",
-              msg: "Team Deleted!!",
-            });
-
-            setTimeout(() => {
-              setAlertPopUp({
-                ...AlertPopUp,
-                alert: false,
-                type: "success",
-                msg: "Team Deleted!!",
-              });
-            }, 2000);
+            showSuccess("Team Deleted!!");
             setDelChangeValue("");
             setteamSetting(false);
           } else {
-            setAlertPopUp({
-              ...AlertPopUp,
-              alert: true,
-              type: "failure",
-              msg: "Only Admin is authorized to delete the team !!",
-            });
-
-            setTimeout(() => {
-              setAlertPopUp({
-                ...AlertPopUp,
-                alert: false,
-                type: "failure",
-                msg: "Only Admin is authorized to delete the team !!",
-              });
-            }, 2000);
+             showFailure("Only Admin is authorized to delete the team !!");
             setDelChangeValue("");
             setteamSetting(false);
           }
@@ -195,21 +146,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       setAddedUserEmail("");
       let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
       setTeamTasks(teamTasks);
-      setAlertPopUp({
-        ...AlertPopUp,
-        alert: true,
-        type: "success",
-        msg: apiRes.success,
-      });
-
-      setTimeout(() => {
-        setAlertPopUp({
-          ...AlertPopUp,
-          alert: false,
-          type: "success",
-          msg: apiRes.success,
-        });
-      }, 2000);
+      showSuccess(apiRes.success);
     } else {
       setError(apiRes.error);
     }
