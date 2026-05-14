@@ -235,6 +235,35 @@ router.post(
   },
 );
 
+// Update complete state API
+router.post(
+  "/UpdateTeamTableUserType",
+  authenticateuser,
+  async (req: Request, res: Response) => {
+    try {
+      const pool = await sql.connect(config);
+      let { Team_Id } = req.body;
+      let Type='admin'
+      const payload = req.user as { user: { id: string } };
+      const id = parseInt(payload.user.id);
+      // Insert query with bound parameters
+
+      let sqlResponse = await pool
+        .request()
+        .input("Userid", sql.Int, id)
+        .input("Team_Id", sql.Int, Team_Id)
+        .input("Type", sql.VarChar(10), Type).query(`
+        Update Team_Table set Type = @Type where User_Id = @Userid and Team_Id = @Team_Id
+      `);
+
+      res.send(sqlResponse.rowsAffected);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Some error occurred");
+    }
+  },
+);
+
 // CreateTask API
 router.post(
   "/CreateTeamTask",
