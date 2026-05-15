@@ -192,7 +192,7 @@ router.get(
         .request()
         .input("TeamCode", sql.NVarChar(sql.MAX), Team_code)
         .query(
-          "select u.Name ,t.Team_Id, t.Team_Tasks, t.Completed, t.Type from User_Table u Inner join Team_Table t on u.User_Id=t.User_Id where Team_code=@TeamCode",
+          "select u.Name ,t.Team_Id, t.User_Id, t.Team_Tasks, t.Completed, t.Type from User_Table u Inner join Team_Table t on u.User_Id=t.User_Id where Team_code=@TeamCode",
         );
 
       return res.status(200).json({ tasks: TeamTasks.recordset });
@@ -242,8 +242,12 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const pool = await sql.connect(config);
-      let { Team_Id, Team_code } = req.body;
-      let SetType='admin'
+      let { User_Id, Team_code, SetType } = req.body;
+      if(SetType == 'admin'){
+        SetType='member'
+      }else{
+        SetType='admin'
+      }
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
@@ -255,14 +259,15 @@ router.post(
 `);
 
        if (Type.recordset[0].Type != "admin") {
-         Team_Id = -1;
+         Team_code = "0";
        }
 
       let sqlResponse = await pool
         .request()
-        .input("Team_Id", sql.Int, Team_Id)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .input("User_Id", sql.Int, User_Id)
         .input("SetType", sql.VarChar(10), SetType).query(`
-        Update Team_Table set Type = @SetType where  Team_Id = @Team_Id
+        Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
       `);
 
       res.send(sqlResponse.rowsAffected);

@@ -17,8 +17,9 @@ type FlowtrackContextType = {
     Completed: boolean,
   ) => Promise<object>;
   UpdateTeamTableUserType: (
-    Task_id: number,
+    User_Id: number,
     Team_code: string,
+    SetType: string,
   ) => Promise<object>;
   DeleteTask: (Task_id: number) => void;
   DeleteTeamTask: (Team_Id: number) => Promise<object>;

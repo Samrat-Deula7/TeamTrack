@@ -93,10 +93,11 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
      }, 2000);
    };
 
-  const handleUpdateType=async(TeamId:number)=>{
+  const handleUpdateType=async(UserId:number,SetType:string)=>{
     const UpdateRes: any = await UpdateTeamTableUserType(
-      TeamId,
+      UserId,
       IndividualTeamTask.Team_code,
+      SetType,
     );
      if (UpdateRes[0] > 0) {
       showSuccess("Updated Successfully!");
@@ -244,9 +245,19 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                       </span>
                       <button
                         className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "member" ? "block" : "hidden"}`}
-                        onClick={() => handleUpdateType(task.Team_Id)}
+                        onClick={() =>
+                          handleUpdateType(task.User_Id, task.Type)
+                        }
                       >
                         Update to admin ?
+                      </button>
+                      <button
+                        className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "admin" ? "block" : "hidden"}`}
+                        onClick={() =>
+                          handleUpdateType(task.User_Id, task.Type)
+                        }
+                      >
+                        Demote to member ?
                       </button>
                     </div>
                   </div>
@@ -277,6 +288,31 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 </div>
               </div>
               <div className="absolute inset-0 scalenone deleteTeam tab-content z-50 flex items-center justify-center bg-[#101820] text-white text-xl font-bold">
+                <div className="relative top-12 xl:-top-26 w-[490px] bg-[#101820] xl:w-[380px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
+                  <p className="mb-2 text-sm xl:text-xl">
+                    Write "DELETE" to DELETE team
+                  </p>
+                  <div className="flex items-center justify-around">
+                    <form onSubmit={handleDel}>
+                      <input
+                        type="text"
+                        placeholder="..."
+                        name="input"
+                        onChange={onDelChange}
+                        className="w-[200px]  mr-1 font-medium bg-black border border-white/10 rounded-full  rounded px-2 py-1  text-white transition focus:outline-none focus:border-red-500 focus:bg-[#020617CC]"
+                      />
+                    </form>
+                    <button
+                      onClick={() => handleTabClick("addUser")}
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-5 lg:px-6 py-2 rounded-full ml-2 transition-colors cursor-pointer text-xs sm:text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute inset-0 scalenone demoteUser tab-content z-50 flex items-center justify-center bg-[#101820] text-white text-xl font-bold">
                 <div className="relative top-12 xl:-top-26 w-[490px] bg-[#101820] xl:w-[380px] h-[100px] xl:h-[120px] text-center  rounded-2xl py-3 px-2 border-5 border-red-500">
                   <p className="mb-2 text-sm xl:text-xl">
                     Write "DELETE" to DELETE team

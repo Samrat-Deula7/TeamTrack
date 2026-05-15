@@ -18,10 +18,11 @@ export type TeamData = {
 
 export type TeamTasks = {
   Team_Id: number;
+  User_Id:number;
   Name: string;
   Team_Tasks: string;
   Completed: boolean;
-  Type:string;
+  Type: string;
 };
 
 export type addTeamTask = {
@@ -106,8 +107,9 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const UpdateTeamTableUserType = async (
-    Team_Id: number,
-    Team_code:string,
+    User_Id: number,
+    Team_code: string,
+    SetType: string,
   ): Promise<object> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
     const url = "http://localhost:3000/api/teamtasks/UpdateTeamTableUserType";
@@ -118,7 +120,11 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
           "Content-Type": "application/json",
           FlowTrackAuthtoken: FlowTrackAuthtoken || "",
         },
-        body: JSON.stringify({ Team_Id: Team_Id, Team_code: Team_code }),
+        body: JSON.stringify({
+          User_Id: User_Id,
+          Team_code: Team_code,
+          SetType: SetType,
+        }),
       });
       const result = await response.json();
       return result;
