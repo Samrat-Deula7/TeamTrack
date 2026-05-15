@@ -262,18 +262,7 @@ router.post(
         Team_code = "0";
       }
 
-      // if (adminCount >= 2) {
-      // let sqlResponse = await pool
-      //   .request()
-      //   .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-      //   .input("User_Id", sql.Int, User_Id)
-      //   .input("SetType", sql.VarChar(10), SetType).query(`
-      //       Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
-      //     `);
-      //       res.send(sqlResponse.rowsAffected);
-      // }else{
-      //   res.send(-1);
-      // }
+    
 
       let sqlResponse = await pool
         .request()
@@ -282,7 +271,6 @@ router.post(
         .input("SetType", sql.VarChar(10), SetType).query(`
         Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
       `);
-      res.send(sqlResponse.rowsAffected);
 
       let TypeSets: any = await pool
         .request()
@@ -293,6 +281,7 @@ router.post(
         (row: any) => row.Type === "admin",
       ).length;
       if (adminCount == 0) {
+        SetType="admin";
         let sqlResponse = await pool
           .request()
           .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
@@ -300,6 +289,11 @@ router.post(
           .input("SetType", sql.VarChar(10), SetType).query(`
         Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
       `);
+            res.send(-1);
+
+      }else{
+      res.send(sqlResponse.rowsAffected);
+
       }
     } catch (err) {
       console.error(err);

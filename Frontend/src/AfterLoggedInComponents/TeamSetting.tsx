@@ -99,16 +99,19 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       IndividualTeamTask.Team_code,
       SetType,
     );
-    console.log(UpdateRes)
-     if (UpdateRes[0] > 0) {
+    if (UpdateRes == -1) {
+       showFailure("Atleast 1 User need to be admin");
+       setDelChangeValue("");
+       setteamSetting(false);
+    } else if (UpdateRes[0] > 0) {
       showSuccess("Updated Successfully!");
-       setDelChangeValue("");
-       setteamSetting(false);
-     } else {
+      setDelChangeValue("");
+      setteamSetting(false);
+    } else {
       showFailure("Only Admin can pormote to Admin");
-       setDelChangeValue("");
-       setteamSetting(false);
-     }
+      setDelChangeValue("");
+      setteamSetting(false);
+    }
   };
 
   const handleDel = async (e: any) => {
