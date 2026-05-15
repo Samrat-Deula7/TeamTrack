@@ -9,18 +9,18 @@ import FlowtrackState from "../context/FlowtrackState";
 // This is after logged in components
 import Background from "./AfterLoggedInComponents/background";
 import Nav from "./AfterLoggedInComponents/Nav";
-import Tasks from "./AfterLoggedInComponents/Tasks";
-import TeamSetting from "./AfterLoggedInComponents/TeamSetting";
+import Tasks from "./AfterLoggedInComponents/Tasks/Tasks";
+import TeamSetting from "./AfterLoggedInComponents/Tasks/TeamSetting";
 import Collaboration from "./AfterLoggedInComponents/Collaboration";
 import Visualization from "./AfterLoggedInComponents/Visualization";
 import History from "./AfterLoggedInComponents/History";
 import Iteration from "./AfterLoggedInComponents/Iteration";
-import AddTeam from "./AfterLoggedInComponents/AddTeam";
+import AddTeam from "./AfterLoggedInComponents/Tasks/AddTeam";
 
 import Alert, { type AlertType } from "./Alert";
 import { type TeamData } from "../context/FlowtrackState";
 
-import { type IndividualTeamTaskElements } from "./AfterLoggedInComponents/TeamSetting";
+import { type IndividualTeamTaskElements } from "./AfterLoggedInComponents/Tasks/TeamSetting";
 import { type TeamTasks } from "../context/FlowtrackState";
 function App() {
   let navigate = useNavigate();
@@ -30,7 +30,7 @@ function App() {
   const [AddTeambtn, setAddTeambtn] = useState(false);
   const [menuOpen, setmenuOpen] = useState(false);
   const [teamSetting, setteamSetting] = useState(false);
-    const [TeamTasks, setTeamTasks] = useState<TeamTasks[]>([]);
+  const [TeamTasks, setTeamTasks] = useState<TeamTasks[]>([]);
 
   const [AlertPopUp, setAlertPopUp] = useState<AlertType>({
     alert: false,
@@ -43,8 +43,7 @@ function App() {
       Team_Name: "inisiti data",
       Team_code: "inisiti data",
     });
-      const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
-
+  const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
 
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");

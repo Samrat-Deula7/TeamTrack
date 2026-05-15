@@ -1,19 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
-import Add from "../assets/add.png";
-import Tick from "../assets/check-mark.png";
-import Delete from "../assets/trash.png";
-import OpeningB from "../assets/open-bracket.png";
-import ClosingB from "../assets/close-bracket.png";
-import FlowTrackContext from "../../context/FlowtrackContext";
-import { type AlertType } from "../Alert";
+import Add from "../../assets/add.png";
+import Tick from "../../assets/check-mark.png";
+import Delete from "../../assets/trash.png";
+import OpeningB from "../../assets/open-bracket.png";
+import ClosingB from "../../assets/close-bracket.png";
+import FlowTrackContext from "../../../context/FlowtrackContext";
+import { type AlertType } from "../../Alert";
 import {
   type Data,
   type TeamData,
   type TeamTasks,
   type addTeamTask,
-} from "../../context/FlowtrackState";
-import Addbtn from "../assets/add.gif";
-import Setting from "../assets/settings.png";
+} from "../../../context/FlowtrackState";
+import Addbtn from "../../assets/add.gif";
+import Setting from "../../assets/settings.png";
 import { type IndividualTeamTaskElements } from "./TeamSetting";
 
 type TasksProps = {
