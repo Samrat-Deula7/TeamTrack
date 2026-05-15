@@ -243,24 +243,37 @@ router.post(
     try {
       const pool = await sql.connect(config);
       let { User_Id, Team_code, SetType } = req.body;
-      if(SetType == 'admin'){
-        SetType='member'
-      }else{
-        SetType='admin'
+      if (SetType == "admin") {
+        SetType = "member";
+      } else {
+        SetType = "admin";
       }
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
-       let Type: any = await pool
-         .request()
-         .input("Userid", sql.Int, id)
-         .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-         .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
+      let Type: any = await pool
+        .request()
+        .input("Userid", sql.Int, id)
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
 `);
 
-       if (Type.recordset[0].Type != "admin") {
-         Team_code = "0";
-       }
+      if (Type.recordset[0].Type != "admin") {
+        Team_code = "0";
+      }
+
+      // if (adminCount >= 2) {
+      // let sqlResponse = await pool
+      //   .request()
+      //   .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+      //   .input("User_Id", sql.Int, User_Id)
+      //   .input("SetType", sql.VarChar(10), SetType).query(`
+      //       Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
+      //     `);
+      //       res.send(sqlResponse.rowsAffected);
+      // }else{
+      //   res.send(-1);
+      // }
 
       let sqlResponse = await pool
         .request()
@@ -269,8 +282,25 @@ router.post(
         .input("SetType", sql.VarChar(10), SetType).query(`
         Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
       `);
-
       res.send(sqlResponse.rowsAffected);
+
+      let TypeSets: any = await pool
+        .request()
+        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+        .query(`select Type from Team_Table  where Team_code=@Team_code GROUP BY User_Id, Type;
+`);
+      const adminCount = TypeSets.recordset.filter(
+        (row: any) => row.Type === "admin",
+      ).length;
+      if (adminCount == 0) {
+        let sqlResponse = await pool
+          .request()
+          .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+          .input("User_Id", sql.Int, User_Id)
+          .input("SetType", sql.VarChar(10), SetType).query(`
+        Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
+      `);
+      }
     } catch (err) {
       console.error(err);
       res.status(500).send("Some error occurred");

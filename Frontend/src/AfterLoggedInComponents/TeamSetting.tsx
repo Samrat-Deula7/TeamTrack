@@ -99,6 +99,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       IndividualTeamTask.Team_code,
       SetType,
     );
+    console.log(UpdateRes)
      if (UpdateRes[0] > 0) {
       showSuccess("Updated Successfully!");
        setDelChangeValue("");
