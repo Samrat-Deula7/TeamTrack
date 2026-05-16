@@ -176,7 +176,7 @@ function App() {
                   setAlertPopUp={setAlertPopUp}
                   AlertPopUp={AlertPopUp}
                 />
-                <Collaboration setAddTeambtn={setAddTeambtn} />
+                <Collaboration setAddTeambtn={setAddTeambtn} AllTeamData ={AllTeamData}/>
               </>
             }
           />

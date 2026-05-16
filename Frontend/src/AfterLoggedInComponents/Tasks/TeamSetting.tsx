@@ -162,6 +162,15 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     <>
       <div className="min-h-auto  w-full flex justify-center items-center px-1 xl:px-10  pt-4  ">
         <div className="w-full h-170 sm:min-h-96 md:h-140 lg:h-128 xl:h-154 2xl:h-200 rounded-xl border border-white/10 p-4 sm:p-4 ">
+          <button
+            onClick={() => {
+              setteamSetting(false);
+            }}
+            className="absolute top-20 right-5 xl:top-30 xl:right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
+            aria-label="Close button"
+          >
+            &times;
+          </button>
           <div className="flex mb-3">
             <h1 className="font-bold mr-3 text-xl text-gray-400">
               General Setting:{" "}
@@ -173,15 +182,6 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
 
           {/* Cant put onClick={onComplete()} because the function will be called
         immediately so we put no braket onClick={onComplete} due to which the function is only called when the button is clicked */}
-          <button
-            onClick={() => {
-              setteamSetting(false);
-            }}
-            className="absolute top-20 right-5 xl:top-30 xl:right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
-            aria-label="Close button"
-          >
-            &times;
-          </button>
 
           <div className="flex flex-col xl:flex-row  w-full h-80 sm:min-h-96 md:h-60 lg:h-128 xl:h-144 2xl:h-180 px-0.1">
             {/* This is the button div */}
