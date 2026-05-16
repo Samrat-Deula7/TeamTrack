@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {type TeamData} from "../../context/FlowtrackState"
+import FlowTrackContext from "../../context/FlowtrackContext";
 import Search from "../assets/search.png";
 import Add from "../assets/add.gif"
-import Time from "../assets/time.gif"
 import arrow from "../assets/arrow.png"
+import plus from "../assets/plus.png"
+import addEmoji from "../assets/smile-plus.png"
+import mic from "../assets/microphone.png"
 
 type CollaborationType = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
+    setAllTeamData: React.Dispatch<React.SetStateAction<TeamData[]>>;
   AllTeamData: TeamData[];
 };
 
  const Collaboration: React.FC<CollaborationType> = ({
    setAddTeambtn,
+   setAllTeamData,
    AllTeamData,
  }) => {
+  const { GetTeamData } = useContext(FlowTrackContext);
+   const getTeamData = async () => {
+      const teamDataSet: TeamData[] = await GetTeamData();
+      setAllTeamData(teamDataSet);
+    };
+  useEffect(() => {
+    getTeamData();
+  }, [AllTeamData]);
    //  const [searchQuery, setSearchQuery] = useState("");
    //  const handleSearch = () => {
    //    if (searchQuery.trim()) {
@@ -31,15 +44,17 @@ type CollaborationType = {
      (team, index, self) =>
        index === self.findIndex((t) => t.Team_Name === team.Team_Name),
    );
-
+    const handleSend = async (e: any) => {
+    e.preventDefault();
+    }
    return (
      <>
        <div className="flex flex-col md:flex-row justify-center items-start gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
          {/* Left Panel - Search Section */}
          <div
-           className={`flex flex-col space-y-8 justify-start items-center w-full  lg:w-[25%] h-screen  lg:h-[500px] xl:h-[600px] 2xl:h-[800px]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6 ${ChatDiv ? "hidden" : "flex"}`}
+           className={`lg:flex flex-col space-y-8 justify-start items-center w-full  lg:w-[25%] h-screen  lg:h-[500px] xl:h-[600px] 2xl:h-[800px]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6 ${ChatDiv ? "hidden" : "flex"}`}
          >
-           {/* Search Bar */}
+           {/* Input Bar */}
            <div className="flex items-center bg-white rounded-full shadow-lg h-14 px-2 py-2 w-full mt-2">
              <img
                src={Search}
@@ -111,20 +126,42 @@ type CollaborationType = {
              onClick={() => {
                setChatDiv(false);
              }}
-             className="absolute top-2 left-2 xl:top-30 xl:right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
+             className="flex lg:hidden absolute top-2 left-2 xl:top-30 xl:right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
              aria-label="Close button"
            >
-             <img src={arrow} alt="back" className="w-5"/>
+             <img src={arrow} alt="back" className="w-5" />
            </button>
-           <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
-             Feature Coming Soon
-             <span className="font-extrabold">!!</span>
+           <form
+             onSubmit={handleSend}
+             className="absolute bottom-1  flex items-center  bg-white rounded-full shadow-lg w-[95%] h-10 px-3 py-2 mt-2 mb-1 m-auto"
+           >
              <img
-               src={Time}
-               alt="time_icon"
-               className="absolute left-40 -bottom-10 w-[80px] h-[80px] rounded-full"
+               src={plus}
+               alt="search"
+               className="w-3 h-3 sm:w-4 sm:h-4  shrink-0 mr-3 cursor-pointer"
              />
-           </div>
+             <img
+               src={addEmoji}
+               alt="search"
+               className="w-4 h-4 sm:w-5 sm:h-5  shrink-0 mr-5 cursor-pointer"
+             />
+
+             <div className="flex items-center justify-between w-full ">
+               <input
+                 type="text"
+                 placeholder="Send Message ..."
+                 //  value={searchQuery}
+                 //  onChange={(e) => setSearchQuery(e.target.value)}
+                 //  onKeyPress={handleKeyPress}
+                 className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-xs sm:text-base min-w-0"
+               />
+               <img
+                 src={mic}
+                 alt="search"
+                 className="w-4 h-4 sm:w-5 sm:h-5  shrink-0 cursor-pointer"
+               />
+             </div>
+           </form>
          </div>
        </div>
      </>
