@@ -3,44 +3,45 @@
 SQL commands for the database schema
 
 
-use Project_Flow_Track
-
-select * from User_Tasks
+Data Base: Project_Team_Track
 
 
-create table User_Table(
-User_Id int primary key IDENTITY(1,1),
-Name varchar(20),
-Password varchar(80),
-Email varchar(30) unique,
-Phone_No varchar(80),
-)
+
+CREATE TABLE User_Table (
+    User_Id SERIAL PRIMARY KEY,
+    Name VARCHAR(20),
+    Password VARCHAR(80),
+    Email VARCHAR(30) UNIQUE,
+    Phone_No VARCHAR(80)
+);
+
 
 
 CREATE TABLE User_Tasks (
-    Task_Id INT PRIMARY KEY IDENTITY(1,1),
+    Task_Id SERIAL PRIMARY KEY,
     User_Id INT NOT NULL,
     Task VARCHAR(150) NOT NULL,
-    Completed BIT NOT NULL DEFAULT 0,
+    Completed BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
 
-CREATE TABLE Team_Table(
-    Team_Id INT PRIMARY KEY IDENTITY(1,1),
-    User_Id INT NOT NULL,
-    Team_Name VARCHAR(70) NOT NULL,
-    Team_Tasks VARCHAR(150) NOT NULL,
-    Completed BIT NOT NULL DEFAULT 0,
-    Team_code NVARCHAR(MAX),
-    Type varchar(10) default 'member'
-    FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
-);
 
+Create table Team_Table(
+Team_Id serial primary key,
+User_Id INT not null,
+Team_Name varchar(70) not null,
+Team_Tasks varchar(150) not null,
+Completed Boolean not null default FALSE,
+Team_code Text,
+Type varchar(10) default 'member',
+FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
+);
 
 
 select * from User_Tasks
 select * from User_Table
 select * from Team_Table
+
 
 
 Issues That I have faced while building this project
