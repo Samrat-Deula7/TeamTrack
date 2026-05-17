@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
-import sql from "mssql";
-import { config } from "./Task";
+// import sql from "mssql";
+
+
+import { pool } from "./Task";
 import authenticateuser from "../middleware/authenticateuser";
 
 const router = express.Router();
@@ -28,12 +30,11 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const pool = await sql.connect(config);
       let { Team_Name, Completed } = req.body;
       let Type = "admin";
       let Team_Tasks = "";
-      if (Completed == undefined) {
-        Completed = 0;
+      if (Completed === undefined) {
+        Completed = false; // use boolean in Postgres
       }
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
@@ -51,33 +52,37 @@ router.post(
       };
       let Team_code = JSON.stringify(genCode());
 
-      const TeamName: any = await pool
-        .request()
-        .input("Team_Name", sql.NVarChar(sql.MAX), Team_Name)
-        .query("SELECT 1 FROM Team_Table WHERE Team_Name = @Team_Name");
+      // const TeamName: any = await pool
+      //   .request()
+      //   .input("Team_Name", sql.NVarChar(sql.MAX), Team_Name)
+      //   .query("SELECT 1 FROM Team_Table WHERE Team_Name = @Team_Name");
+      const teamNameResult = await pool.query(
+        "SELECT 1 FROM team_table WHERE team_name = $1",
+        [Team_Name],
+      );
 
-      const code: any = await pool
-        .request()
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .query("SELECT 1 FROM Team_Table WHERE Team_code = @Team_code");
-      if (code.recordset.length > 0) {
+      // const code: any = await pool
+      //   .request()
+      //   .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
+      //   .query("SELECT 1 FROM Team_Table WHERE Team_code = @Team_code");
+
+      const codeResult = await pool.query(
+        "SELECT 1 FROM team_table WHERE team_code = $1",
+        [Team_code],
+      );
+      if (codeResult.rowCount! > 0) {
         Team_code = JSON.stringify(genCode());
-      } else if (TeamName.recordset.length > 0) {
+      } else if (teamNameResult.rowCount! > 0) {
         res.status(400).json({
           error: "Team name already exists! please pick another name",
         });
       } else {
         // Insert query with bound parameters
-        await pool
-          .request()
-          .input("User_Id", sql.Int, id)
-          .input("Team_Name", sql.VarChar(70), Team_Name)
-          .input("Team_Tasks", sql.VarChar(150), Team_Tasks)
-          .input("Completed", sql.Bit, Completed)
-          .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-          .input("Type", sql.VarChar(10), Type).query(`
-              INSERT INTO Team_Table VALUES (@User_Id, @Team_Name, @Team_Tasks, @Completed,@Team_code,@Type)
-            `);
+        await pool.query(
+          `INSERT INTO team_table (user_id, team_name, team_tasks, completed, team_code, type)
+     VALUES ($1, $2, $3, $4, $5, $6)`,
+          [id, Team_Name, Team_Tasks, Completed, Team_code, Type],
+        );
         res
           .status(200)
           .send([{ success: "Team Has been created !" }, { Code: Team_code }]);
@@ -105,40 +110,37 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const pool = await sql.connect(config);
-      let { Team_Tasks, Completed, Team_code } = req.body;
-      if (Completed == undefined) {
-        Completed = 0;
-      }
-      if (Team_Tasks == null) {
-        Team_Tasks = "";
-      }
+     let { Team_Tasks, Completed, Team_code } = req.body;
+     if (Completed === undefined) {
+       Completed = false; // use boolean in Postgres
+     }
+     if (Team_Tasks == null) {
+       Team_Tasks = "";
+     }
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
 
-      let Team_Name: any = await pool
-        .request()
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .query("select Team_Name from Team_Table WHERE Team_code = @Team_code");
+      const teamNameResult = await pool.query(
+        "SELECT team_name FROM team_table WHERE team_code = $1",
+        [Team_code],
+      );
 
-      if (
-        !Team_Name ||
-        !Team_Name.recordset ||
-        Team_Name.recordset.length === 0
-      ) {
+      if (!teamNameResult || teamNameResult.rowCount === 0) {
         // Query failed or result is undefined
         return res.status(200).send({ fail: "No such team exists" });
       } else {
         // Insert query with bound parameters
-        await pool
-          .request()
-          .input("User_Id", sql.Int, id)
-          .input("Team_Name", sql.VarChar(70), Team_Name.recordset[0].Team_Name)
-          .input("Team_Tasks", sql.VarChar(150), Team_Tasks)
-          .input("Completed", sql.Bit, Completed)
-          .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
-              INSERT INTO Team_Table VALUES (@User_Id, @Team_Name, @Team_Tasks, @Completed,@Team_code)
-            `);
+        await pool.query(
+          `INSERT INTO team_table (user_id, team_name, team_tasks, completed, team_code)
+     VALUES ($1, $2, $3, $4, $5)`,
+          [
+            id,
+            teamNameResult.rows[0].team_name,
+            Team_Tasks,
+            Completed,
+            Team_code,
+          ],
+        );
         res.status(200).send({ success: "Team joined successfully !" });
       }
     } catch (error) {
@@ -155,26 +157,18 @@ router.get(
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
 
-      const pool = await sql.connect(config);
+      const teamCodeResult = await pool.query(
+        "SELECT team_code FROM team_table WHERE user_id = $1",
+        [id],
+      );
 
-      let Team_code: any = await pool
-        .request()
-        .input("userId", sql.Int, id)
-        .query("select Team_code from Team_Table WHERE User_Id = @userId");
+      // Get team data by user_id or team_code
+      const teamDataResult = await pool.query(
+        "SELECT * FROM team_table WHERE user_id = $1 OR team_code = $2",
+        [id, teamCodeResult.rows[0].team_code],
+      );
 
-      const TeamData = await pool
-        .request()
-        .input("userId", sql.Int, id)
-        .input(
-          "TeamCode",
-          sql.NVarChar(sql.MAX),
-          Team_code.recordset[0].Team_code,
-        )
-        .query(
-          "select * from  Team_Table  WHERE User_Id=@userId or Team_code=@Teamcode;",
-        );
-
-      return res.json({ dataSet: TeamData.recordset });
+      return res.json({ dataSet: teamDataResult.rows });
     } catch (error) {
       console.error(error);
     }
@@ -187,15 +181,15 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const Team_code: any = req.header("Team_code");
-      const pool = await sql.connect(config);
-      const TeamTasks = await pool
-        .request()
-        .input("TeamCode", sql.NVarChar(sql.MAX), Team_code)
-        .query(
-          "select u.Name ,t.Team_Id, t.User_Id, t.Team_Tasks, t.Completed, t.Type from User_Table u Inner join Team_Table t on u.User_Id=t.User_Id where Team_code=@TeamCode",
-        );
+     const teamTasksResult = await pool.query(
+       `SELECT u.name, t.team_id, t.user_id, t.team_tasks, t.completed, t.type
+   FROM user_table u
+   INNER JOIN team_table t ON u.user_id = t.user_id
+   WHERE t.team_code = $1`,
+       [Team_code],
+     );
 
-      return res.status(200).json({ tasks: TeamTasks.recordset });
+     return res.status(200).json({ tasks: teamTasksResult.rows });
     } catch (error) {
       console.error(error);
     }
@@ -208,26 +202,18 @@ router.post(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
-      let { Team_Id, Completed } = req.body;
-      if (Completed == 0) {
-        Completed = 0;
-      } else {
-        Completed = 1;
-      }
-      const payload = req.user as { user: { id: string } };
-      const id = parseInt(payload.user.id);
-      // Insert query with bound parameters
+    let { Team_Id, Completed } = req.body;
+Completed = Completed == 0 ? false : true; // use boolean in Postgres
 
-      let sqlResponse = await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_Id", sql.Int, Team_Id)
-        .input("Completed", sql.Int, Completed).query(`
-        Update Team_Table set Completed = @Completed where User_Id = @Userid and Team_Id = @Team_Id
-      `);
+const payload = req.user as { user: { id: string } };
+const id = parseInt(payload.user.id);
 
-      res.send(sqlResponse.rowsAffected);
+const sqlResponse = await pool.query(
+  "UPDATE team_table SET completed = $1 WHERE user_id = $2 AND team_id = $3",
+  [Completed, id, Team_Id]
+);
+
+res.send(sqlResponse.rowCount);
     } catch (err) {
       console.error(err);
       res.status(500).send("Some error occurred");
@@ -241,60 +227,45 @@ router.post(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
       let { User_Id, Team_code, SetType } = req.body;
-      if (SetType == "admin") {
-        SetType = "member";
-      } else {
-        SetType = "admin";
-      }
+      SetType = SetType === "admin" ? "member" : "admin";
+
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
-      let Type: any = await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
-`);
+      const typeResult = await pool.query(
+        "SELECT type FROM team_table WHERE user_id = $1 AND team_code = $2",
+        [id, Team_code],
+      );
 
-      if (Type.recordset[0].Type != "admin") {
-        Team_code = "0";
+      if (typeResult.rowCount! > 0 && typeResult.rows[0].type !== "admin") {
+        Team_code = "0"; // block if not admin
       }
 
-    
+      const sqlResponse = await pool.query(
+        "UPDATE team_table SET type = $1 WHERE user_id = $2 AND team_code = $3",
+        [SetType, User_Id, Team_code],
+      );
 
-      let sqlResponse = await pool
-        .request()
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .input("User_Id", sql.Int, User_Id)
-        .input("SetType", sql.VarChar(10), SetType).query(`
-        Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
-      `);
-
-      let TypeSets: any = await pool
-        .request()
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .query(`select Type from Team_Table  where Team_code=@Team_code GROUP BY User_Id, Type;
-`);
-      const adminCount = TypeSets.recordset.filter(
-        (row: any) => row.Type === "admin",
+      // Check how many admins remain in the team
+      const typeSets = await pool.query(
+        "SELECT type FROM team_table WHERE team_code = $1 GROUP BY user_id, type",
+        [Team_code],
+      );
+      const adminCount = typeSets.rows.filter(
+        (row) => row.type === "admin",
       ).length;
+
       if (adminCount == 0) {
-        SetType="admin";
-        let sqlResponse = await pool
-          .request()
-          .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-          .input("User_Id", sql.Int, User_Id)
-          .input("SetType", sql.VarChar(10), SetType).query(`
-        Update Team_Table set Type = @SetType where User_Id = @User_Id and Team_code=@Team_code
-      `);
-            res.send(-1);
-
-      }else{
-      res.send(sqlResponse.rowsAffected);
-
-      }
+        SetType = "admin";
+        await pool.query(
+          "UPDATE team_table SET type = $1 WHERE user_id = $2 AND team_code = $3",
+          [SetType, User_Id, Team_code],
+        );
+        res.send(-1);
+      } 
+        res.send(sqlResponse.rowCount);
+      
     } catch (err) {
       console.error(err);
       res.status(500).send("Some error occurred");
@@ -308,31 +279,26 @@ router.post(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
       let { Team_Name, TeamTask, Completed, Team_code } = req.body;
-      if (Completed == undefined) {
-        Completed = 0;
+      if (Completed === undefined) {
+        Completed = false; 
       }
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
-      let Type: any = await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
-`);
+     const typeResult = await pool.query(
+       "SELECT type FROM team_table WHERE user_id = $1 AND team_code = $2",
+       [id, Team_code],
+     );
 
-      await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_Name", sql.VarChar(70), Team_Name)
-        .input("TeamTask", sql.VarChar(150), TeamTask)
-        .input("completed", sql.Bit, Completed)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .input("Type", sql.VarChar(10), Type.recordset[0].Type).query(`
-        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code,@Type)
-      `);
+      const Type = typeResult.rows[0]?.type;
+
+      // Insert new team task
+      await pool.query(
+        `INSERT INTO team_table (user_id, team_name, team_tasks, completed, team_code, type)
+   VALUES ($1, $2, $3, $4, $5, $6)`,
+        [id, Team_Name, TeamTask, Completed, Team_code, Type],
+      );
       res.status(200).send({ success: "Team Task saved !" });
     } catch (err) {
       console.error(err);
@@ -343,33 +309,27 @@ router.post(
 
 router.post("/addUserToTeam", async (req: Request, res: Response) => {
   try {
-    const pool = await sql.connect(config);
     let { Email, Team_Name, TeamTask, Completed, Team_code } = req.body;
-    if (Completed == undefined) {
-      Completed = 0;
+    if (Completed === undefined) {
+      Completed = false; // boolean in Postgres
     }
     let Type = "member";
-
     TeamTask = "";
-    let id = await pool
-      .request()
-      .input("email", sql.VarChar(30), Email)
-      .query("select User_Id from User_Table WHERE Email = @email");
 
-    if (id.recordset.length > 0) {
-      const userId = id.recordset[0].User_Id;
+    const idResult = await pool.query(
+      "SELECT user_id FROM user_table WHERE email = $1",
+      [Email],
+    );
+
+    if (idResult.rowCount! > 0) {
+      const userId = idResult.rows[0].user_id;
 
       // Insert query with bound parameters
-      await pool
-        .request()
-        .input("Userid", sql.Int, userId)
-        .input("Team_Name", sql.VarChar(70), Team_Name)
-        .input("TeamTask", sql.VarChar(150), TeamTask)
-        .input("completed", sql.Bit, Completed)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .input("Type", sql.VarChar(10), Type).query(`
-        insert into Team_Table Values (@Userid,@Team_Name,@TeamTask,@completed,@Team_code,@Type)
-      `);
+     await pool.query(
+       `INSERT INTO team_table (user_id, team_name, team_tasks, completed, team_code, type)
+     VALUES ($1, $2, $3, $4, $5, $6)`,
+       [userId, Team_Name, TeamTask, Completed, Team_code, Type],
+     );
       res.status(200).send({ success: "User added successfully !" });
     } else {
       return res.status(400).json({
@@ -387,18 +347,17 @@ router.delete(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
       let { Team_Id } = req.body;
 
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
-      let sqlResponse = await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_Id", sql.Int, Team_Id).query(`
-                delete from Team_Table where Team_Id=@Team_Id and User_Id =@Userid
-                `);
-      res.send(sqlResponse.rowsAffected);
+
+      const sqlResponse = await pool.query(
+        "DELETE FROM team_table WHERE team_id = $1 AND user_id = $2",
+        [Team_Id, id],
+      );
+
+      res.send(sqlResponse.rowCount);
     } catch (err) {
       res.status(500).send("Failed to add Team Task");
     }
@@ -410,18 +369,17 @@ router.delete(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
       let { Team_code } = req.body;
 
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
-      let sqlResponse = await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
-                delete from Team_Table where User_Id=@Userid and Team_code=@Team_code
-                `);
-      res.send(sqlResponse.rowsAffected);
+
+      const sqlResponse = await pool.query(
+        "DELETE FROM team_table WHERE user_id = $1 AND team_code = $2",
+        [id, Team_code],
+      );
+
+      res.send(sqlResponse.rowCount);
     } catch (err) {
       res.status(500).send("Failed to leave Team");
     }
@@ -433,28 +391,25 @@ router.delete(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
-      let { Team_code } = req.body;
-      const payload = req.user as { user: { id: string } };
-      const id = parseInt(payload.user.id);
+     let { Team_code } = req.body;
 
-      let Type: any = await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code)
-        .query(`select Type from Team_Table where User_Id=@Userid and Team_code=@Team_code
-`);
+     const payload = req.user as { user: { id: string } };
+     const id = parseInt(payload.user.id);
 
-      if (Type.recordset[0].Type != "admin") {
-        Team_code = "0";
+      const typeResult = await pool.query(
+        "SELECT type FROM team_table WHERE user_id = $1 AND team_code = $2",
+        [id, Team_code],
+      );
+
+      if (typeResult.rowCount! > 0 && typeResult.rows[0].type !== "admin") {
+        Team_code = "0"; // block deletion if not admin
       }
 
-      let sqlResponse = await pool
-        .request()
-        .input("Team_code", sql.NVarChar(sql.MAX), Team_code).query(`
-                  delete from Team_Table where Team_code=@Team_code
-                `);
-      res.send(sqlResponse.rowsAffected);
+      const sqlResponse = await pool.query(
+        "DELETE FROM team_table WHERE team_code = $1",
+        [Team_code],
+      );
+     res.send(sqlResponse.rowCount);
     } catch (err) {
       res.status(500).send("Failed to leave Team");
     }

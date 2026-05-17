@@ -4,26 +4,35 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
 
-import sql from "mssql";
+// import sql from "mssql";
+import { Pool } from "pg";
 
 import jwt from "jsonwebtoken";
 import authenticateuser from "../middleware/authenticateuser";
 
 const router = express.Router();
 
-export const config = {
-  user: process.env.Database_User,
-  password: process.env.Database_User_Pass,
-  server: "DESKTOP-DVSO359",
+// export const config = {
+//   user: process.env.Database_User,
+//   password: process.env.Database_User_Pass,
+//   server: "DESKTOP-DVSO359",
+//   database: process.env.Database,
+//   options: {
+//     trustServerCertificate: true,
+//     trustedConnection: false,
+//     enableArithAbort: true,
+//     instancename: "SQLEXPRESS",
+//   },
+//   port: 1433,
+// };
+
+export const pool = new Pool({
+  user: "postgres",
+  host: "localhost",
   database: process.env.Database,
-  options: {
-    trustServerCertificate: true,
-    trustedConnection: false,
-    enableArithAbort: true,
-    instancename: "SQLEXPRESS",
-  },
-  port: 1433,
-};
+  password: process.env.Database_User_Pass,
+  port: 5432,
+});
 
 // Sign Up API
 router.post(
@@ -53,34 +62,33 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const pool = await sql.connect(config);
+      
+       const { Name, Password, Email, Phoneno } = req.body;
 
-      const { Name, Password, Email, Phoneno } = req.body;
+  
+    // Encrypt password and phone number
+    const salt = await bcrypt.genSalt(10);
+    const EncryptedPassword = await bcrypt.hash(Password, salt);
+    const EncryptedPhoneno = await bcrypt.hash(Phoneno, salt);
 
-      const salt = await bcrypt.genSalt(10);
-      let EncriptedPassword = await bcrypt.hash(Password, salt);
-      let EncriptedPhoneno = await bcrypt.hash(Phoneno, salt);
+    // Check if email already exists
+    const checkQuery = "SELECT 1 FROM user_table WHERE email = $1";
+    const checkResult = await pool.query(checkQuery, [Email]);
 
-      const emails: any = await pool
-        .request()
-        .input("email", sql.VarChar(30), Email)
-        .query("SELECT 1 FROM User_Table WHERE Email = @email");
-      if (emails.recordset.length > 0) {
-        res.status(400).json({
-          error: "User already exists!",
-        });
-      } else {
-        // Insert query with bound parameters
-        await pool
-          .request()
-          .input("name", sql.VarChar(20), Name)
-          .input("password", sql.VarChar(80), EncriptedPassword)
-          .input("email", sql.VarChar(30), Email)
-          .input("phoneno", sql.VarChar(80), EncriptedPhoneno).query(`
-        INSERT INTO User_Table VALUES (@name, @password, @email, @phoneno)
-      `);
-        res.status(200).send({ success: "User Created successfully" });
-      }
+    if (checkResult.rowCount! > 0) {
+      return res.status(400).json({ error: "User already exists!" });
+    }
+
+    // Insert new user
+    const insertQuery = `
+      INSERT INTO user_table (name, password, email, phone_no)
+      VALUES ($1, $2, $3, $4)
+      RETURNING user_id;
+    `;
+    const values = [Name, EncryptedPassword, Email, EncryptedPhoneno];
+    await pool.query(insertQuery, values);
+
+    res.status(200).send({ success: "User Created successfully" });
     } catch (err) {
       console.error(err);
       res.status(400).json({
@@ -101,22 +109,38 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
+      // const { Email, Password } = req.body;
+
+      // const pool = await sql.connect(config);
+
+      // let id = await pool
+      //   .request()
+      //   .input("email", sql.VarChar(30), Email)
+      //   .query("select User_Id from User_Table WHERE Email = @email");
+
+      // if (id.recordset.length > 0) {
+      //   const userId = id.recordset[0].User_Id;
+
+        // let DBpassword: any = await pool
+        //   .request()
+        //   .input("userId", sql.Int, userId)
+        //   .query("select Password from User_Table WHERE User_Id = @userId");
       const { Email, Password } = req.body;
+const idResult = await pool.query(
+  "SELECT user_id FROM user_table WHERE email = $1",
+  [Email]
+);
 
-      const pool = await sql.connect(config);
+if (idResult.rowCount! > 0) {
+  const userId = idResult.rows[0].user_id;
 
-      let id = await pool
-        .request()
-        .input("email", sql.VarChar(30), Email)
-        .query("select User_Id from User_Table WHERE Email = @email");
+  // Step 2: Get password by user_id
+  const pwResult = await pool.query(
+    "SELECT password FROM user_table WHERE user_id = $1",
+    [userId]
+  );
 
-      if (id.recordset.length > 0) {
-        const userId = id.recordset[0].User_Id;
-
-        let DBpassword: any = await pool
-          .request()
-          .input("userId", sql.Int, userId)
-          .query("select Password from User_Table WHERE User_Id = @userId");
+  const DBpassword = pwResult.rows[0].password;
 
         const passwordCompare = await bcrypt.compare(
           Password,
@@ -159,21 +183,17 @@ router.post(
   authenticateuser,
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
       let { Task, Completed } = req.body;
       if (Completed == undefined) {
-        Completed = 0;
+        Completed = false;
       }
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
       // Insert query with bound parameters
-      await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("task", sql.VarChar(80), Task)
-        .input("completed", sql.Bit, Completed).query(`
-        INSERT INTO User_Tasks VALUES (@Userid, @task,@completed)
-      `);
+     await pool.query(
+       "INSERT INTO user_tasks (user_id, task, completed) VALUES ($1, $2, $3)",
+       [id, Task, Completed ?? false],
+     );
       res.status(200).send({ success: "Task has been saved !" });
     } catch (err) {
       console.error(err);
@@ -185,11 +205,14 @@ router.post(
 // GetAllTasks API
 router.get("/GetAllTasks",authenticateuser, async (req: Request, res: Response) => {
   try {
-    const pool = await sql.connect(config);
      const payload = req.user as { user: { id: string } };
      const id = parseInt(payload.user.id);
-    const data = await pool.request().input("Userid",sql.Int,id).query("SELECT * FROM User_Tasks Where User_Id=@Userid");
-    return res.json({ dataSet: data.recordset });
+  const dataResult = await pool.query(
+    "SELECT * FROM user_tasks WHERE user_id = $1",
+    [id],
+  );
+
+  return res.json({ dataSet: dataResult.rows });
   } catch (err) {
     console.error(err);
     res.status(500).send("Some error occurred");
@@ -202,24 +225,16 @@ router.post(
   authenticateuser, 
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
-      let {Task_Id, Completed } = req.body;
-      if (Completed == 0) {
-        Completed = 0;
-      } else {
-        Completed = 1;
-      }
-      const payload = req.user as { user: { id: string } };
-      const id = parseInt(payload.user.id);
-      // Insert query with bound parameters
-      
-      await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("taskId", sql.Int, Task_Id)
-        .input("Completed", sql.Int, Completed).query(`
-        Update User_Tasks set Completed = @Completed where User_Id = @Userid and Task_Id = @taskId
-      `);
+     let { Task_Id, Completed } = req.body;
+     Completed = Completed == 0 ? false : true;
+
+     const payload = req.user as { user: { id: string } };
+     const id = parseInt(payload.user.id);
+
+     await pool.query(
+       "UPDATE user_tasks SET completed = $1 WHERE user_id = $2 AND task_id = $3",
+       [Completed, id, Task_Id],
+     );
         
       res.status(200).send({ success: "Task has been Completed !" });
     } catch (err) {
@@ -237,20 +252,15 @@ router.delete(
   authenticateuser, 
   async (req: Request, res: Response) => {
     try {
-      const pool = await sql.connect(config);
-      let {Task_Id } = req.body;
-     
-      const payload = req.user as { user: { id: string } };
-      const id = parseInt(payload.user.id);
-      // Insert query with bound parameters
-      
-      await pool
-        .request()
-        .input("Userid", sql.Int, id)
-        .input("taskId", sql.Int, Task_Id)
-        .query(`
-       Delete from User_Tasks where User_Id = @Userid and Task_Id = @taskId
-      `);
+     let { Task_Id } = req.body;
+
+     const payload = req.user as { user: { id: string } };
+     const id = parseInt(payload.user.id);
+
+     await pool.query(
+       "DELETE FROM user_tasks WHERE user_id = $1 AND task_id = $2",
+       [id, Task_Id],
+     );
         
       res.status(200).send({ success: "Task has been Deleted successfully !" });
     } catch (err) {
