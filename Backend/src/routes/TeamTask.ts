@@ -162,11 +162,16 @@ router.get(
         [id],
       );
 
+       if (teamCodeResult.rowCount === 0) {
+         return res.status(200).json({ dataSet: [] });
+       }
+      const teamCode = teamCodeResult.rows[0].team_code;
       // Get team data by user_id or team_code
       const teamDataResult = await pool.query(
         "SELECT * FROM team_table WHERE user_id = $1 OR team_code = $2",
-        [id, teamCodeResult.rows[0].team_code],
+        [id, teamCode],
       );
+     
 
       return res.json({ dataSet: teamDataResult.rows });
     } catch (error) {

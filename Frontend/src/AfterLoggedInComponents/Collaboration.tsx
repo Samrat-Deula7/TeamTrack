@@ -42,7 +42,7 @@ type CollaborationType = {
    const [ChatDiv, setChatDiv] = useState(false);
    const uniqueTeams = AllTeamData.filter(
      (team, index, self) =>
-       index === self.findIndex((t) => t.Team_Name === team.Team_Name),
+       index === self.findIndex((t) => t.team_name === team.team_name),
    );
     const handleSend = async (e: any) => {
     e.preventDefault();
@@ -87,7 +87,7 @@ type CollaborationType = {
            <div className="space-y-3 sm:space-y-4  h-screen  lg:h-[500px] xl:h-[600px] 2xl:h-[800px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll ">
              {uniqueTeams.map((Task: TeamData) => (
                <div
-                 key={Task.Team_Id}
+                 key={Task.team_id}
                  className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3  bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300  hover:bg-transparent cursor-pointer"
                  //  onClick={() => {
                  //    focusOnTeamData(
@@ -103,13 +103,13 @@ type CollaborationType = {
                    <h2 className="text-black font-medium text-xs">
                      Team:
                      <span className="font-bold text-xs text-green-500">
-                       {"\n" + Task.Team_Name}
+                       {"\n" + Task.team_name}
                      </span>
                    </h2>
                    <h3 className="text-black font-medium text-xs">
                      Code:
                      <span className="font-bold text-xs text-green-500">
-                       {"\n" + Task.Team_code}
+                       {"\n" + Task.team_code}
                      </span>
                    </h3>
                  </div>

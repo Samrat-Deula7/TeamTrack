@@ -155,7 +155,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
 
   const TeamTaskFilter = TeamTasks.filter(
     (team, index, self) =>
-      index === self.findIndex((t) => t.Name === team.Name),
+      index === self.findIndex((t) => t.name === team.name),
   );
 
   return (
@@ -233,28 +233,28 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
                 <br />
                 <h1 className="mb-2">Team Members :</h1>
                 {TeamTaskFilter.map((task: TeamTasks) => (
-                  <div className="flex items-center" key={task.Team_Id}>
+                  <div className="flex items-center" key={task.team_id}>
                     <img src={user} alt="user" className="w-6 mr-2" />
                     <div className="flex justify-center items-center text-2 font-normal text-green-500">
                       {" "}
-                      {task.Name}{" "}
+                      {task.name}{" "}
                       <span
-                        className={`ml-2 text-sm font-medium ${task.Type == "admin" ? "text-green-500" : "text-gray-500"}`}
+                        className={`ml-2 text-sm font-medium ${task.type == "admin" ? "text-green-500" : "text-gray-500"}`}
                       >
-                        ({task.Type})
+                        ({task.type})
                       </span>
                       <button
-                        className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "member" ? "block" : "hidden"}`}
+                        className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.type == "member" ? "block" : "hidden"}`}
                         onClick={() =>
-                          handleUpdateType(task.User_Id, task.Type)
+                          handleUpdateType(task.user_id, task.type)
                         }
                       >
                         Update to admin ?
                       </button>
                       <button
-                        className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.Type == "admin" ? "block" : "hidden"}`}
+                        className={`bg-green-500 hover:bg-green-600 text-white px-1.25 py-1 rounded-full ml-2 transition-colors cursor-pointer font-medium text-xs whitespace-nowrap ${task.type == "admin" ? "block" : "hidden"}`}
                         onClick={() =>
-                          handleUpdateType(task.User_Id, task.Type)
+                          handleUpdateType(task.user_id, task.type)
                         }
                       >
                         Demote to member ?

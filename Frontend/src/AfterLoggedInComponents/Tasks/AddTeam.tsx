@@ -24,13 +24,13 @@ const AddTeam: React.FC<SignupPorps> = ({
   const [validationError, setValidationError] = useState({
     Team_Name: "",
     Team_Tasks: "",
-    Completed: "",
+    Completed: false,
     userExistsError: "",
   });
   const [credentials, setCredentials] = useState({
     Team_Name: "",
     Team_Tasks: "",
-    Completed: "",
+    Completed: false,
   });
 
   const onChange = (e: any) => {

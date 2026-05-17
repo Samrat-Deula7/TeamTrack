@@ -81,11 +81,11 @@ const Tasks: React.FC<TasksProps> = ({
 
   const uniqueTeams = AllTeamData.filter(
     (team, index, self) =>
-      index === self.findIndex((t) => t.Team_Name === team.Team_Name),
+      index === self.findIndex((t) => t.team_name === team.team_name),
   );
 
   // const uniqueTeamTask = TeamTasks.filter((team,index,self)=>index===self.findIndex((t)=>t.Team_Tasks != ""))
-  const uniqueTeamTask = TeamTasks.filter((x) => x.Team_Tasks != "");
+  const uniqueTeamTask = TeamTasks.filter((x) => x.team_tasks != "");
 
   const focusOnTeamData = async (
     Team_Id: number,
@@ -423,14 +423,14 @@ const Tasks: React.FC<TasksProps> = ({
             <div className="space-y-3 sm:space-y-4 max-h-[calc(100vh-20rem)] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll">
               {AllTasks.map((Task: Data) => (
                 <div
-                  key={Task.Task_Id}
+                  key={Task.task_id}
                   className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200"
                 >
                   <button
-                    onClick={() => UpdateState(Task.Task_Id, Task.Completed)}
+                    onClick={() => UpdateState(Task.task_id, Task.completed)}
                     className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 border-2  cursor-pointer border-gray-400 rounded flex items-center justify-center hover:bg-gray-50 hover:border-gray-500 transition-all duration-200"
                   >
-                    {Task.Completed && (
+                    {Task.completed && (
                       <img
                         src={Tick}
                         alt="tick"
@@ -440,16 +440,16 @@ const Tasks: React.FC<TasksProps> = ({
                   </button>
                   <span
                     className={`flex-1 text-sm sm:text-base md:text-lg wrap-break-word leading-relaxed ${
-                      Task.Completed
+                      Task.completed
                         ? "text-gray-400 line-through"
                         : "text-gray-700"
                     }`}
                   >
-                    {Task.Task}
+                    {Task.task}
                   </span>
 
                   <button
-                    onClick={() => HandleDelete(Task.Task_Id)}
+                    onClick={() => HandleDelete(Task.task_id)}
                     className="shrink-0 text-gray-400 hover:text-red-500 transition-colors duration-200  cursor-pointer"
                   >
                     <img
@@ -534,13 +534,13 @@ const Tasks: React.FC<TasksProps> = ({
             <div className="space-y-3 sm:space-y-4 max-h-[60%] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll ">
               {uniqueTeams.map((Task: TeamData) => (
                 <div
-                  key={Task.Team_Id}
+                  key={Task.team_id}
                   className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300  hover:bg-transparent cursor-pointer"
                   onClick={() => {
                     focusOnTeamData(
-                      Task.Team_Id,
-                      Task.Team_Name,
-                      Task.Team_code,
+                      Task.team_id,
+                      Task.team_name,
+                      Task.team_code,
                     );
                     setFocused(true);
                   }}
@@ -549,13 +549,13 @@ const Tasks: React.FC<TasksProps> = ({
                     <h2 className="text-black font-medium">
                       Team:
                       <span className="font-bold text-green-500">
-                        {"\n" + Task.Team_Name}
+                        {"\n" + Task.team_name}
                       </span>
                     </h2>
                     <h3 className="text-black font-medium">
                       Code:
                       <span className="font-bold text-green-500">
-                        {"\n" + Task.Team_code}
+                        {"\n" + Task.team_code}
                       </span>
                     </h3>
                   </div>
@@ -616,16 +616,16 @@ const Tasks: React.FC<TasksProps> = ({
                 <div className=" h-[80%] overflow-y-scroll space-y-3 sm:space-y-4">
                   {uniqueTeamTask.map((tasks: TeamTasks) => (
                     <div
-                      key={tasks.Team_Id}
+                      key={tasks.team_id}
                       className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 md:p-5 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200 "
                     >
                       <button
                         onClick={() => {
-                          UpdateTeamtableState(tasks.Team_Id, tasks.Completed);
+                          UpdateTeamtableState(tasks.team_id, tasks.completed);
                         }}
                         className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 border-2  cursor-pointer border-gray-400 rounded flex items-center justify-center hover:bg-gray-50 hover:border-gray-500 transition-all duration-200"
                       >
-                        {tasks.Completed && (
+                        {tasks.completed && (
                           <img
                             src={Tick}
                             alt="tick"
@@ -635,25 +635,25 @@ const Tasks: React.FC<TasksProps> = ({
                       </button>
                       <span
                         className={`flex-1 text-sm sm:text-base md:text-lg wrap-break-word leading-relaxed ${
-                          tasks.Completed
+                          tasks.completed
                             ? "text-gray-400 line-through"
                             : "text-gray-700"
                         }`}
                       >
-                        {tasks.Name}
+                        {tasks.name}
                       </span>
                       <span
                         className={`flex-1 text-sm sm:text-base md:text-lg wrap-break-word leading-relaxed ${
-                          tasks.Completed
+                          tasks.completed
                             ? "text-gray-400 line-through"
                             : "text-gray-700"
                         }`}
                       >
-                        {tasks.Team_Tasks}
+                        {tasks.team_tasks}
                       </span>
 
                       <button
-                        onClick={() => HandleDeleteTeamData(tasks.Team_Id)}
+                        onClick={() => HandleDeleteTeamData(tasks.team_id)}
                         className="shrink-0 text-gray-400 hover:text-red-500 transition-colors duration-200  cursor-pointer"
                       >
                         <img

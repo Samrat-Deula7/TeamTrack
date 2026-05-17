@@ -109,25 +109,10 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      // const { Email, Password } = req.body;
-
-      // const pool = await sql.connect(config);
-
-      // let id = await pool
-      //   .request()
-      //   .input("email", sql.VarChar(30), Email)
-      //   .query("select User_Id from User_Table WHERE Email = @email");
-
-      // if (id.recordset.length > 0) {
-      //   const userId = id.recordset[0].User_Id;
-
-        // let DBpassword: any = await pool
-        //   .request()
-        //   .input("userId", sql.Int, userId)
-        //   .query("select Password from User_Table WHERE User_Id = @userId");
+    
       const { Email, Password } = req.body;
 const idResult = await pool.query(
-  "SELECT user_id FROM user_table WHERE email = $1",
+  "SELECT User_Id FROM user_table WHERE Email = $1",
   [Email]
 );
 
@@ -136,7 +121,7 @@ if (idResult.rowCount! > 0) {
 
   // Step 2: Get password by user_id
   const pwResult = await pool.query(
-    "SELECT password FROM user_table WHERE user_id = $1",
+    "SELECT Password FROM user_table WHERE User_Id = $1",
     [userId]
   );
 
@@ -144,7 +129,7 @@ if (idResult.rowCount! > 0) {
 
         const passwordCompare = await bcrypt.compare(
           Password,
-          DBpassword.recordset[0].Password,
+          DBpassword,
         );
 
         if (passwordCompare) {

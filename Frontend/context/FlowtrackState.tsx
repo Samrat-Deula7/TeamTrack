@@ -1,28 +1,28 @@
 import FlowtrackContext from "./FlowtrackContext";
 
 export type Data = {
-  Task_Id: number;
-  User_Id: number;
-  Task: string;
-  Completed: boolean;
+  task_id: number;
+  user_id: number;
+  task: string;
+  completed: boolean;
 };
 
 export type TeamData = {
-  Team_Id: number;
-  User_Id: number;
-  Team_Name: string;
-  Team_Tasks: string;
-  Completed: boolean;
-  Team_code: string;
+  team_id: number;
+  user_id: number;
+  team_name: string;
+  team_tasks: string;
+  completed: boolean;
+  team_code: string;
 };
 
 export type TeamTasks = {
-  Team_Id: number;
-  User_Id:number;
-  Name: string;
-  Team_Tasks: string;
-  Completed: boolean;
-  Type: string;
+  team_id: number;
+  user_id:number;
+  name: string;
+  team_tasks: string;
+  completed: boolean;
+  type: string;
 };
 
 export type addTeamTask = {
