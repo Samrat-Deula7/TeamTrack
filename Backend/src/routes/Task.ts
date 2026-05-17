@@ -12,20 +12,6 @@ import authenticateuser from "../middleware/authenticateuser";
 
 const router = express.Router();
 
-// export const config = {
-//   user: process.env.Database_User,
-//   password: process.env.Database_User_Pass,
-//   server: "DESKTOP-DVSO359",
-//   database: process.env.Database,
-//   options: {
-//     trustServerCertificate: true,
-//     trustedConnection: false,
-//     enableArithAbort: true,
-//     instancename: "SQLEXPRESS",
-//   },
-//   port: 1433,
-// };
-
 export const pool = new Pool({
   user: "postgres",
   host: "localhost",
@@ -33,6 +19,8 @@ export const pool = new Pool({
   password: process.env.Database_User_Pass,
   port: 5432,
 });
+
+
 
 // Sign Up API
 router.post(

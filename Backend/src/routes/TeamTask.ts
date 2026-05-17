@@ -379,12 +379,25 @@ router.delete(
       const payload = req.user as { user: { id: string } };
       const id = parseInt(payload.user.id);
 
+       const typeSets = await pool.query(
+         "SELECT type FROM team_table WHERE team_code = $1 GROUP BY user_id, type",
+         [Team_code],
+       );
+       const adminCount = typeSets.rows.filter(
+         (row) => row.type === "admin",
+       ).length;
+
+       if(adminCount>1){
       const sqlResponse = await pool.query(
         "DELETE FROM team_table WHERE user_id = $1 AND team_code = $2",
         [id, Team_code],
       );
-
       res.send(sqlResponse.rowCount);
+    }else{
+      res.send(-1)
+    }
+
+      
     } catch (err) {
       res.status(500).send("Failed to leave Team");
     }

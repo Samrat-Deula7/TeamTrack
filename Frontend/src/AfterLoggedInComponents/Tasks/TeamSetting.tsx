@@ -101,7 +101,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
       showFailure("Atleast 1 User need to be admin");
       setDelChangeValue("");
       setteamSetting(false);
-    } else if (UpdateRes[0] > 0) {
+    } else if (UpdateRes > 0) {
       showSuccess("Updated Successfully!");
       setDelChangeValue("");
       setteamSetting(false);
@@ -120,13 +120,16 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
         showSuccess("Team Leaved !!");
         setDelChangeValue("");
         setteamSetting(false);
-      } else {
+      } else if(levApiRes==-1) {
+        showFailure("Your are the only Admin so you can't leave !!");
+        setteamSetting(false);
+      }else{
         showFailure("Unable to leave Team");
         setteamSetting(false);
       }
     } else {
       const delApiRes: any = await DeleteTeam(IndividualTeamTask.Team_code);
-      if (delApiRes[0] > 0) {
+      if (delApiRes > 0) {
         showSuccess("Team Deleted!!");
         setDelChangeValue("");
         setteamSetting(false);
