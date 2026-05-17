@@ -84,7 +84,7 @@ type CollaborationType = {
            </div>
 
            {/* Teams */}
-           <div className="space-y-3 sm:space-y-4  h-screen  lg:h-[500px] xl:h-[600px] 2xl:h-[800px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll ">
+           <div className="space-y-3 sm:space-y-4  h-screen  lg:h-[500px] xl:h-[600px] 2xl:h-[800px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto ">
              {uniqueTeams.map((Task: TeamData) => (
                <div
                  key={Task.team_id}
@@ -122,6 +122,10 @@ type CollaborationType = {
          <div
            className={`lg:flex items-center justify-center w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv ? "flex" : "hidden"}`}
          >
+
+           <div className="absolute top-0 right-0 bg-[#101820] w-full h-xl">
+             
+           </div>
            <button
              onClick={() => {
                setChatDiv(false);

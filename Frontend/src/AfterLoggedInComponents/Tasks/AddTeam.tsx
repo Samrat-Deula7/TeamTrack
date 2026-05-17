@@ -65,12 +65,12 @@ const AddTeam: React.FC<SignupPorps> = ({
         setCredentials({
           Team_Name: "",
           Team_Tasks: "",
-          Completed: "",
+          Completed: false,
         });
         setValidationError({
           Team_Name: "",
           Team_Tasks: "",
-          Completed: "",
+          Completed: false,
           userExistsError: "",
         });
         setAlertPopUp({
@@ -97,7 +97,7 @@ const AddTeam: React.FC<SignupPorps> = ({
           setValidationError({
             Team_Name: "",
             Team_Tasks: "",
-            Completed: "",
+            Completed: false,
             userExistsError: alreadyExistsError,
           });
         } else {
@@ -108,7 +108,7 @@ const AddTeam: React.FC<SignupPorps> = ({
           setValidationError({
             Team_Name: getErrorMessage("Team_Name"),
             Team_Tasks: getErrorMessage("Team_Tasks"),
-            Completed: "",
+            Completed: false,
             userExistsError: "",
           });
         }

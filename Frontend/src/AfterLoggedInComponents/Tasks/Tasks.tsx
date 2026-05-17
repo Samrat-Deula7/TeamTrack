@@ -123,7 +123,7 @@ const Tasks: React.FC<TasksProps> = ({
     let updateResponse: any = await UpdateTeamTableCompleteState(id, completed);
     let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
     setTeamTasks(teamTasks);
-    if (updateResponse[0] == 0) {
+    if (updateResponse == 0) {
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -166,7 +166,7 @@ const Tasks: React.FC<TasksProps> = ({
     let deleteResponse: any = await DeleteTeamTask(id);
     let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
     setTeamTasks(teamTasks);
-    if (deleteResponse[0] == 0) {
+    if (deleteResponse == 0) {
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -420,7 +420,7 @@ const Tasks: React.FC<TasksProps> = ({
             </div>
 
             {/* Task List */}
-            <div className="space-y-3 sm:space-y-4 max-h-[calc(100vh-20rem)] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll">
+            <div className="space-y-3 sm:space-y-4 max-h-[calc(100vh-20rem)] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto">
               {AllTasks.map((Task: Data) => (
                 <div
                   key={Task.task_id}
@@ -531,7 +531,7 @@ const Tasks: React.FC<TasksProps> = ({
 
             {/* Add your content here */}
             {/* Task List */}
-            <div className="space-y-3 sm:space-y-4 max-h-[60%] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-scroll ">
+            <div className="space-y-3 sm:space-y-4 max-h-[60%] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto ">
               {uniqueTeams.map((Task: TeamData) => (
                 <div
                   key={Task.team_id}
@@ -613,7 +613,7 @@ const Tasks: React.FC<TasksProps> = ({
                 </div>
 
                 {/* team tasks */}
-                <div className=" h-[80%] overflow-y-scroll space-y-3 sm:space-y-4">
+                <div className=" h-[80%] overflow-y-auto space-y-3 sm:space-y-4">
                   {uniqueTeamTask.map((tasks: TeamTasks) => (
                     <div
                       key={tasks.team_id}
