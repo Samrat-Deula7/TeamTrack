@@ -116,7 +116,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     e.preventDefault();
     if (DelChangeValue.toLowerCase() == "leave") {
       const levApiRes: any = await LeaveTeam(IndividualTeamTask.Team_code);
-      if (levApiRes[0] > 0) {
+      if (levApiRes > 0) {
         showSuccess("Team Leaved !!");
         setDelChangeValue("");
         setteamSetting(false);
