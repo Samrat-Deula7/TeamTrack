@@ -20,7 +20,7 @@ const AddTeam: React.FC<SignupPorps> = ({
   AllTeamData,
   setAllTeamData,
 }) => {
-const host = "http://localhost:3000";
+const host = "https://team-track-flax.vercel.app";
 
   const { GetTeamData } = useContext(FlowTrackContext);
   const [validationError, setValidationError] = useState({

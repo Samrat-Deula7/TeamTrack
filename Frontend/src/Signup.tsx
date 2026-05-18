@@ -16,7 +16,7 @@ const Signup: React.FC<SignupPorps> = ({
   setAlertPopUp,
   AlertPopUp,
 }) => {
-const host = "http://localhost:3000";
+const host = "https://team-track-flax.vercel.app";
 
   const [validationError, setValidationError] = useState({
     Name: "",

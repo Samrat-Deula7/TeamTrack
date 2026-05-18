@@ -32,7 +32,7 @@ export type addTeamTask = {
   Team_code: string;
 };
 
-const host = "http://localhost:3000";
+const host = "https://team-track-flax.vercel.app";
 const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
