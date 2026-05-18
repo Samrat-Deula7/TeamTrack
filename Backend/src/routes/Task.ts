@@ -12,14 +12,19 @@ import authenticateuser from "../middleware/authenticateuser";
 
 const router = express.Router();
 
-export const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: process.env.Database,
-  password: process.env.Database_User_Pass,
-  port: 5432,
-});
 
+
+export const pool = new Pool({
+  user: process.env.Database_User,
+  password: process.env.Database_User_Pass, // from URI
+  host: process.env.Database_Host, // from URI
+  port: 16993, // from URI
+  database: process.env.Database, // from URI
+  ssl: {
+    rejectUnauthorized: true,
+    ca: require("fs").readFileSync("./src/routes/ca.pem").toString(), // path to Aiven CA cert
+  },
+});
 
 
 // Sign Up API
