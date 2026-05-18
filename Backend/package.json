@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "tsc && cp src/routes/ca.pem dist/routes/",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],

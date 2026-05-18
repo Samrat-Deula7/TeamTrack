@@ -3,6 +3,8 @@ import { body, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
+import path from "path";
+import fs from "fs";
 
 // import sql from "mssql";
 import { Pool } from "pg";
@@ -12,7 +14,7 @@ import authenticateuser from "../middleware/authenticateuser";
 
 const router = express.Router();
 
-
+const caPath = path.join(__dirname, "ca.pem");
 
 export const pool = new Pool({
   user: process.env.Database_User,
@@ -22,7 +24,7 @@ export const pool = new Pool({
   database: process.env.Database, // from URI
   ssl: {
     rejectUnauthorized: true,
-    ca: require("fs").readFileSync("./src/routes/ca.pem").toString(), // path to Aiven CA cert
+    ca: fs.readFileSync(caPath).toString(), // path to Aiven CA cert
   },
 });
 
