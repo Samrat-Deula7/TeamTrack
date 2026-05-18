@@ -31,6 +31,8 @@ export type addTeamTask = {
   Completed: false;
   Team_code: string;
 };
+
+const host = "https://team-track-eight.vercel.app";
 const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -38,7 +40,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const getAllTask = async (): Promise<Data[]> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/tasks/GetAllTasks";
+    const url = `${host}/api/tasks/GetAllTasks`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -64,7 +66,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
     Completed: boolean,
   ): Promise<object> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/tasks/UpdateCompleteState";
+    const url = `${host}/api/tasks/UpdateCompleteState`;
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -88,7 +90,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   ): Promise<object> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
     const url =
-      "http://localhost:3000/api/teamtasks/UpdateTeamTableCompleteState";
+      `${host}/api/teamtasks/UpdateTeamTableCompleteState`;
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -112,7 +114,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
     SetType: string,
   ): Promise<object> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/UpdateTeamTableUserType";
+    const url = `${host}/api/teamtasks/UpdateTeamTableUserType`;
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -136,7 +138,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const DeleteTask = async (Task_id: number) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/tasks/DeleteTask";
+    const url = `${host}/api/tasks/DeleteTask`;
     try {
       const response = fetch(url, {
         method: "DELETE",
@@ -153,7 +155,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   
   const DeleteTeamTask = async (Team_Id: number) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/DeleteTeamTask";
+    const url = `${host}/api/teamtasks/DeleteTeamTask`;
     try {
       const response = await fetch(url, {
         method: "DELETE",
@@ -175,7 +177,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const GetTeamData = async () => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/GetTeamData";
+    const url = `${host}/api/teamtasks/GetTeamData`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -198,7 +200,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const GetTeamTasks = async (Task_code: string) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/getTeamTasks";
+    const url = `${host}/api/teamtasks/getTeamTasks`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -221,7 +223,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const addTeamTask = async (TeamTask: addTeamTask) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/CreateTeamTask";
+    const url = `${host}/api/teamtasks/CreateTeamTask`;
 
     try {
       const response = await fetch(url, {
@@ -250,7 +252,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const joinTeamWithCode = async (Team_code: string) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/joinTeamWithCode";
+    const url = `${host}/api/teamtasks/joinTeamWithCode`;
 
     try {
       const response = await fetch(url, {
@@ -272,7 +274,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const addUserToTeam = async(Email:string, Team_Name:string, Team_code:string)=>{
-    const url = "http://localhost:3000/api/teamtasks/addUserToTeam";
+    const url = `${host}/api/teamtasks/addUserToTeam`;
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -297,7 +299,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const LeaveTeam = async(Team_code:string)=>{
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/LeaveTeam";
+    const url = `${host}/api/teamtasks/LeaveTeam`;
     try {
       const response = await fetch(url, {
         method: "DELETE",
@@ -319,7 +321,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const DeleteTeam = async (Team_code: string) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/teamtasks/DeleteTeam";
+    const url = `${host}/api/teamtasks/DeleteTeam`;
     try {
       const response = await fetch(url, {
         method: "DELETE",

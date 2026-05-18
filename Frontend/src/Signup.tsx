@@ -16,6 +16,8 @@ const Signup: React.FC<SignupPorps> = ({
   setAlertPopUp,
   AlertPopUp,
 }) => {
+      const host = "https://team-track-eight.vercel.app";
+
   const [validationError, setValidationError] = useState({
     Name: "",
     Password: "",
@@ -42,7 +44,7 @@ const Signup: React.FC<SignupPorps> = ({
     try {
       if (credentials.Password == credentials.CPassword) {
         // API Call
-        const url = "http://localhost:3000/api/tasks/SignUpUser";
+        const url = `${host}/api/tasks/SignUpUser`;
         const { Name, Password, CPassword, Email, Phoneno } = credentials;
 
         const response = await fetch(url, {

@@ -19,6 +19,8 @@ const Login: React.FC<LoginProps> = ({
   setAlertPopUp,
   AlertPopUp,
 }) => {
+    const host = "https://team-track-eight.vercel.app";
+
   useEffect(() => {
     const token = localStorage.getItem("FlowTrackToken");
     if (token) {
@@ -41,7 +43,7 @@ const Login: React.FC<LoginProps> = ({
 
   const createUser = async () => {
     // API Call
-    const url = "http://localhost:3000/api/tasks/LoginUser";
+    const url =`${host}/api/tasks/LoginUser`;
     try {
       const response = await fetch(url, {
         method: "POST",

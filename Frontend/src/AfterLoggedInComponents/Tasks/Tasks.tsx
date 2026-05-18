@@ -45,6 +45,8 @@ const Tasks: React.FC<TasksProps> = ({
   AllTeamData,
   setAllTeamData,
 }) => {
+        const host = "https://team-track-eight.vercel.app";
+
   useEffect(() => {
     getTasks();
     getTeamData();
@@ -323,7 +325,7 @@ const Tasks: React.FC<TasksProps> = ({
   };
   const addTask = async () => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = "http://localhost:3000/api/tasks/CreateTask";
+    const url = `${host}/api/tasks/CreateTask`;
     if (Task.task != "") TaskInInput = true;
     if (TaskInInput) {
       try {

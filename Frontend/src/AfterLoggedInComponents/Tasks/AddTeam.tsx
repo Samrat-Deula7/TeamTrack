@@ -20,6 +20,8 @@ const AddTeam: React.FC<SignupPorps> = ({
   AllTeamData,
   setAllTeamData,
 }) => {
+  const host = "https://team-track-eight.vercel.app";
+
   const { GetTeamData } = useContext(FlowTrackContext);
   const [validationError, setValidationError] = useState({
     Team_Name: "",
@@ -43,7 +45,7 @@ const AddTeam: React.FC<SignupPorps> = ({
   const createUser = async () => {
     try {
       // API Call
-      const url = "http://localhost:3000/api/teamtasks/createTeam";
+      const url = `${host}/api/teamtasks/createTeam`;
       const { Team_Name, Team_Tasks, Completed } = credentials;
       const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
 
