@@ -46,7 +46,7 @@ select * from Team_Table
 
 Issues That I have faced while building this project
 
-Problem number 1
+📌 Problem number 1
 
 Here's exactly what happened:
 
@@ -101,3 +101,79 @@ nodemon src/index.ts
 
 Server is running on http://localhost:3000
 [nodemon] clean exit - waiting for changes before restart   // This line means the server experienced an client crash which let to me finding the problem
+
+
+
+
+
+
+
+📌 Problem number 2: ENOENT error for ca.pem
+Problem:
+
+Your code tried to read ./src/routes/ca.pem.
+
+After TypeScript compilation, runtime files live in dist/, not src/.
+
+Vercel only deploys the compiled output, so src/ doesn’t exist in production.
+
+Result: ENOENT: no such file or directory crash.
+
+Solution:
+
+Use __dirname to resolve paths dynamically:
+
+ts
+const caPath = path.join(__dirname, "ca.pem");
+const caCert = fs.readFileSync(caPath).toString();
+This makes the path relative to the compiled file’s directory (dist/routes/), not hard‑coded to src/.
+
+
+
+
+
+
+📌 Problem number 3: File missing in dist/
+Problem:
+
+Even after fixing the path, TypeScript (tsc) only compiles .ts files — it doesn’t copy non‑code assets like .pem.
+
+So dist/routes/ca.pem didn’t exist at runtime.
+
+Solution:
+
+Update the build script to copy the file:
+
+json
+"scripts": {
+  "build": "tsc && cp src/routes/ca.pem dist/routes/"
+}
+This ensures ca.pem is always present in dist/routes/ after build, so the runtime can find it.
+
+
+
+
+📌 Problem number 4: Using app.listen on Vercel
+Problem:
+
+In local development, you need app.listen(PORT) to start the server.
+
+On Vercel (serverless), the platform itself provides the HTTP server.
+
+If you leave app.listen in deployed code, it tries to bind to a port inside the serverless runtime → crash (Function Invocation Failed).
+
+Solution:
+
+Split your setup:
+
+Local dev entry (e.g., index.ts):
+
+ts
+import app from "./app";
+app.listen(3000, () => console.log("Server running locally"));
+Vercel entry (e.g., api/index.ts):
+
+ts
+import app from "./app";
+export default app; // no app.listen
+This way, local dev works with app.listen, and Vercel works with export default app.
