@@ -140,7 +140,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
     const url = `${host}/api/tasks/DeleteTask`;
     try {
-      const response = fetch(url, {
+      fetch(url, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

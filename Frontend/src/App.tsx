@@ -138,7 +138,6 @@ function App() {
                       setAddTeambtn={setAddTeambtn}
                       setAlertPopUp={setAlertPopUp}
                       AlertPopUp={AlertPopUp}
-                      AllTeamData={AllTeamData}
                       setAllTeamData={setAllTeamData}
                     />
                     <Tasks

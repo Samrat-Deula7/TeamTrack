@@ -8,7 +8,6 @@ type SignupPorps = {
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
   AddTeambtn: boolean;
   AlertPopUp: AlertType;
-  AllTeamData?: TeamData[];
   setAllTeamData?: React.Dispatch<React.SetStateAction<TeamData[]>>;
 };
 
@@ -17,7 +16,6 @@ const AddTeam: React.FC<SignupPorps> = ({
   setAlertPopUp,
   AlertPopUp,
   AddTeambtn,
-  AllTeamData,
   setAllTeamData,
 }) => {
 const host = "https://team-track-flax.vercel.app";
