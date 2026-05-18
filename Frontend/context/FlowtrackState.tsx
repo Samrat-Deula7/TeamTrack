@@ -40,7 +40,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const getAllTask = async (): Promise<Data[]> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = `https://team-track-kohl.vercel.app/api/tasks/GetAllTasks`;
+    const url = `${host}/api/tasks/GetAllTasks`;
     try {
       const response = await fetch(url, {
         method: "GET",
