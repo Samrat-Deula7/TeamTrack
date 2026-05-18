@@ -32,7 +32,7 @@ export type addTeamTask = {
   Team_code: string;
 };
 
-const host = "https://team-track-eight.vercel.app";
+const host = "http://localhost:3000";
 const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -40,7 +40,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
 
   const getAllTask = async (): Promise<Data[]> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url = `${host}/api/tasks/GetAllTasks`;
+    const url = `https://team-track-kohl.vercel.app/api/tasks/GetAllTasks`;
     try {
       const response = await fetch(url, {
         method: "GET",

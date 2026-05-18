@@ -19,7 +19,7 @@ const Login: React.FC<LoginProps> = ({
   setAlertPopUp,
   AlertPopUp,
 }) => {
-    const host = "https://team-track-eight.vercel.app";
+const host = "http://localhost:3000";
 
   useEffect(() => {
     const token = localStorage.getItem("FlowTrackToken");
