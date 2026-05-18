@@ -73,7 +73,12 @@ const host = "https://team-track-flax.vercel.app";
         setTimeout(() => {
           setLoggedin(true);
           localStorage.setItem("FlowTrackToken", result.FlowTrackAuthtoken);
-          setAlertPopUp({ ...AlertPopUp, alert: false });
+          setAlertPopUp({
+            ...AlertPopUp,
+            alert: false,
+            type: "success",
+            msg: "Logged in Successfully",
+          });
         }, 2000);
       } else {
         if (result.errors) {
@@ -103,7 +108,12 @@ const host = "https://team-track-flax.vercel.app";
         msg: error.message,
       });
       setTimeout(() => {
-        setAlertPopUp({ ...AlertPopUp, alert: false });
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: false,
+          type: "failure",
+          msg: error.message,
+        });
       }, 2000);
     }
   };

@@ -128,7 +128,12 @@ const host = "https://team-track-flax.vercel.app";
            msg: "Both password must be same",
          });
          setTimeout(() => {
-           setAlertPopUp({ ...AlertPopUp, alert: false });
+           setAlertPopUp({
+             ...AlertPopUp,
+             alert: false,
+             type: "failure",
+             msg: "Both password must be same",
+           });
          }, 2000);
       }
     } catch (error: any) {
