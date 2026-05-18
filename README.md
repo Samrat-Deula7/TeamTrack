@@ -177,3 +177,37 @@ ts
 import app from "./app";
 export default app; // no app.listen
 This way, local dev works with app.listen, and Vercel works with export default app.
+
+
+
+
+
+
+📌 Problem number 5:
+
+When deploying the project to Vercel, the build completed successfully but the platform returned the error:
+
+No Output Directory named "build" found after the Build completed.
+
+This happened because Vercel defaults to expecting a build/ folder (used by Create React App). Our project uses Vite, which outputs production files into a dist/ folder instead. As a result, Vercel could not locate the correct output directory and deployment failed.
+
+Solution
+We resolved the issue by explicitly telling Vercel to use the correct output folder:
+
+Update Project Settings in Vercel
+
+Build Command: npm run build
+
+Output Directory: dist
+
+Install Command: npm install
+
+Alternative via vercel.json  
+Add a configuration file in the project root:
+
+json
+{
+  "version": 2,
+  "routes": [{ "src": "/api/(.*)", "dest": "dist/index.js" }]
+}
+This ensures Vercel routes API requests correctly and serves files from the dist/ folder.
