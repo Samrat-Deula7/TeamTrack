@@ -9,6 +9,7 @@ type SignupPorps = {
   AddTeambtn: boolean;
   AlertPopUp: AlertType;
   setAllTeamData?: React.Dispatch<React.SetStateAction<TeamData[]>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AddTeam: React.FC<SignupPorps> = ({
@@ -17,8 +18,9 @@ const AddTeam: React.FC<SignupPorps> = ({
   AlertPopUp,
   AddTeambtn,
   setAllTeamData,
+  setLoading,
 }) => {
-const host = "https://team-track-flax.vercel.app";
+  const host = "https://team-track-flax.vercel.app";
 
   const { GetTeamData } = useContext(FlowTrackContext);
   const [validationError, setValidationError] = useState({
@@ -42,6 +44,7 @@ const host = "https://team-track-flax.vercel.app";
 
   const createUser = async () => {
     try {
+      setLoading(true);
       // API Call
       const url = `${host}/api/teamtasks/createTeam`;
       const { Team_Name, Team_Tasks, Completed } = credentials;
@@ -61,6 +64,7 @@ const host = "https://team-track-flax.vercel.app";
       });
       const result = await response.json();
       if (result[0].success) {
+        setLoading(false);
         // Save the auth token and redirect
         setCredentials({
           Team_Name: "",
@@ -92,6 +96,7 @@ const host = "https://team-track-flax.vercel.app";
           });
         }, 3000);
       } else {
+        setLoading(false);
         if (result.error) {
           const alreadyExistsError = result.error;
           setValidationError({
@@ -114,6 +119,7 @@ const host = "https://team-track-flax.vercel.app";
         }
       }
     } catch (error: any) {
+      setLoading(false);
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,

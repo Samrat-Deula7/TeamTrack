@@ -30,6 +30,7 @@ type TasksProps = {
   >;
   AllTeamData: TeamData[];
   setAllTeamData: React.Dispatch<React.SetStateAction<TeamData[]>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Tasks: React.FC<TasksProps> = ({
@@ -44,8 +45,9 @@ const Tasks: React.FC<TasksProps> = ({
   TeamTasks,
   AllTeamData,
   setAllTeamData,
+  setLoading,
 }) => {
-const host = "https://team-track-flax.vercel.app";
+  const host = "https://team-track-flax.vercel.app";
 
   useEffect(() => {
     getTasks();
@@ -165,10 +167,12 @@ const host = "https://team-track-flax.vercel.app";
     }, 2000);
   };
   const HandleDeleteTeamData = async (id: any) => {
+    setLoading(true);
     let deleteResponse: any = await DeleteTeamTask(id);
     let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
     setTeamTasks(teamTasks);
     if (deleteResponse == 0) {
+      setLoading(false);
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -186,6 +190,7 @@ const host = "https://team-track-flax.vercel.app";
         });
       }, 2000);
     } else {
+      setLoading(false);
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -227,9 +232,11 @@ const host = "https://team-track-flax.vercel.app";
     let CodeInputArray = Array.from(CodeInput);
     CodeInputArray.map((code: any) => TeamCode.push(parseInt(code.value)));
     console.log(JSON.stringify(TeamCode));
+    setLoading(true);
     let data: any = await joinTeamWithCode(JSON.stringify(TeamCode));
     getTeamData();
     if (data.success) {
+      setLoading(false);
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -247,6 +254,7 @@ const host = "https://team-track-flax.vercel.app";
         });
       }, 2000);
     } else {
+      setLoading(false);
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
@@ -271,10 +279,12 @@ const host = "https://team-track-flax.vercel.app";
     if (TeamTask.TeamTask != "") TaskInInput = true;
 
     if (TaskInInput) {
+      setLoading(true);
       const teamtask = await addTeamTask(TeamTask as addTeamTask);
       let data = await GetTeamTasks(IndividualTeamTask.Team_code);
       setTeamTasks(data);
       if (teamtask != "") {
+        setLoading(false);
         setAlertPopUp({
           ...AlertPopUp,
           alert: true,
@@ -298,6 +308,7 @@ const host = "https://team-track-flax.vercel.app";
           Team_code: "",
         });
       } else {
+        setLoading(false);
         setAlertPopUp({
           ...AlertPopUp,
           alert: true,
@@ -329,6 +340,7 @@ const host = "https://team-track-flax.vercel.app";
     if (Task.task != "") TaskInInput = true;
     if (TaskInInput) {
       try {
+        setLoading(true);
         const response = await fetch(url, {
           method: "POST",
           headers: {
@@ -342,6 +354,7 @@ const host = "https://team-track-flax.vercel.app";
         });
         const result = await response.json();
         if (result.success) {
+          setLoading(false);
           setTask({ task: "", completed: false });
 
           setAlertPopUp({
@@ -362,6 +375,7 @@ const host = "https://team-track-flax.vercel.app";
           }, 2000);
         }
       } catch (error: any) {
+        setLoading(false);
         setAlertPopUp({
           ...AlertPopUp,
           alert: true,
@@ -374,6 +388,7 @@ const host = "https://team-track-flax.vercel.app";
         }, 2000);
       }
     } else {
+      setLoading(false);
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,

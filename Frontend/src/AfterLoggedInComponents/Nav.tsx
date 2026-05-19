@@ -55,6 +55,7 @@ const NavBar: React.FC<NavProps> = ({
           <button
             className="text-[#000000] font-bold text-[13px] border border-2 border-green-500 text-green-500 w-30 h-7 rounded-xl duration-300 hover:border-none hover:bg-transparent cursor-pointer"
             onClick={() => {
+              
               setAlertPopUp({
                 ...AlertPopUp,
                 alert: true,

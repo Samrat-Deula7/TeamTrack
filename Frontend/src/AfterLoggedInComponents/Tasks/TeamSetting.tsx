@@ -17,6 +17,7 @@ type TeamSettingProps = {
   TeamTasks: TeamTasks[];
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
   AlertPopUp: AlertType;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const handleTabClick = (targetClass: string) => {
@@ -35,6 +36,7 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   TeamTasks,
   setAlertPopUp,
   AlertPopUp,
+  setLoading,
 }) => {
   const {
     addUserToTeam,
@@ -92,20 +94,26 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   };
 
   const handleUpdateType = async (UserId: number, SetType: string) => {
+    setLoading(true)
     const UpdateRes: any = await UpdateTeamTableUserType(
       UserId,
       IndividualTeamTask.Team_code,
       SetType,
     );
     if (UpdateRes == -1) {
+          setLoading(false);
       showFailure("Atleast 1 User need to be admin");
       setDelChangeValue("");
       setteamSetting(false);
     } else if (UpdateRes > 0) {
+                setLoading(false);
+
       showSuccess("Updated Successfully!");
       setDelChangeValue("");
       setteamSetting(false);
     } else {
+                setLoading(false);
+
       showFailure("Only Admin can pormote to Admin");
       setDelChangeValue("");
       setteamSetting(false);
@@ -115,25 +123,32 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
   const handleDel = async (e: any) => {
     e.preventDefault();
     if (DelChangeValue.toLowerCase() == "leave") {
+      setLoading(true);
       const levApiRes: any = await LeaveTeam(IndividualTeamTask.Team_code);
       if (levApiRes > 0) {
+        setLoading(false);
         showSuccess("Team Leaved !!");
         setDelChangeValue("");
         setteamSetting(false);
-      } else if(levApiRes==-1) {
+      } else if (levApiRes == -1) {
+        setLoading(false);
         showFailure("Your are the only Admin so you can't leave !!");
         setteamSetting(false);
-      }else{
+      } else {
+        setLoading(false);
         showFailure("Unable to leave Team");
         setteamSetting(false);
       }
     } else {
+      setLoading(true);
       const delApiRes: any = await DeleteTeam(IndividualTeamTask.Team_code);
       if (delApiRes > 0) {
+        setLoading(false);
         showSuccess("Team Deleted!!");
         setDelChangeValue("");
         setteamSetting(false);
       } else {
+        setLoading(false);
         showFailure("Only Admin is authorized to delete the team !!");
         setDelChangeValue("");
         setteamSetting(false);
@@ -141,17 +156,20 @@ const TeamSetting: React.FC<TeamSettingProps> = ({
     }
   };
   const handleAdd = async () => {
+    setLoading(true);
     const apiRes: any = await addUserToTeam(
       AddedUserEmail,
       IndividualTeamTask.Team_Name,
       IndividualTeamTask.Team_code,
     );
     if (apiRes.success) {
+      setLoading(false);
       setAddedUserEmail("");
       let teamTasks = await GetTeamTasks(IndividualTeamTask.Team_code);
       setTeamTasks(teamTasks);
       showSuccess(apiRes.success);
     } else {
+      setLoading(false);
       setError(apiRes.error);
     }
   };

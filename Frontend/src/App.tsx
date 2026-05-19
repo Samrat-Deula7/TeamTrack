@@ -140,6 +140,7 @@ function App() {
                     TeamTasks={TeamTasks}
                     AlertPopUp={AlertPopUp}
                     setAlertPopUp={setAlertPopUp}
+                    setLoading={setLoading}
                   />
                 )}
 
@@ -151,6 +152,7 @@ function App() {
                       setAlertPopUp={setAlertPopUp}
                       AlertPopUp={AlertPopUp}
                       setAllTeamData={setAllTeamData}
+                      setLoading={setLoading}
                     />
                     <Tasks
                       setAlertPopUp={setAlertPopUp}
@@ -164,6 +166,7 @@ function App() {
                       TeamTasks={TeamTasks}
                       AllTeamData={AllTeamData}
                       setAllTeamData={setAllTeamData}
+                      setLoading={setLoading}
                     />
                   </>
                 )}
@@ -187,6 +190,7 @@ function App() {
                   setAddTeambtn={setAddTeambtn}
                   setAlertPopUp={setAlertPopUp}
                   AlertPopUp={AlertPopUp}
+                  setLoading={setLoading}
                 />
                 <Collaboration
                   setAddTeambtn={setAddTeambtn}
