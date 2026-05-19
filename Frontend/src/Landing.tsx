@@ -12,6 +12,7 @@ type LandingProps = {
   setLoggedin: React.Dispatch<React.SetStateAction<boolean>>;
   setSignupbtn: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   AlertPopUp: AlertType;
   Loginbtn: boolean;
   Signupbtn: boolean;
@@ -24,6 +25,7 @@ const Landing: React.FC<LandingProps> = ({
   setSignupbtn,
   setAlertPopUp,
   AlertPopUp,
+  setLoading,
 }) => {
   return (
     <>
@@ -35,6 +37,7 @@ const Landing: React.FC<LandingProps> = ({
         setSignupbtn={setSignupbtn}
         setAlertPopUp={setAlertPopUp}
         AlertPopUp={AlertPopUp}
+        setLoading={setLoading}
       />
       <Signup
         Signupbtn={Signupbtn}
@@ -42,6 +45,7 @@ const Landing: React.FC<LandingProps> = ({
         setLoginbtn={setLoginbtn}
         setAlertPopUp={setAlertPopUp}
         AlertPopUp={AlertPopUp}
+        setLoading={setLoading}
       />
       <HeroSection />
       <CTASection />

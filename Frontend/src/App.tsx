@@ -18,6 +18,7 @@ import Iteration from "./AfterLoggedInComponents/Iteration";
 import AddTeam from "./AfterLoggedInComponents/Tasks/AddTeam";
 
 import Alert, { type AlertType } from "./Alert";
+import Loading from "./Loading";
 import { type TeamData } from "../context/FlowtrackState";
 
 import { type IndividualTeamTaskElements } from "./AfterLoggedInComponents/Tasks/TeamSetting";
@@ -44,6 +45,13 @@ function App() {
       Team_code: "inisiti data",
     });
   const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
+  // }, [loading]);
 
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");
@@ -78,6 +86,7 @@ function App() {
             element={
               <>
                 <Bg />
+                <Loading loading={loading} />
                 <Alert AlertPopUp={AlertPopUp} setAlertPopUp={setAlertPopUp} />
                 <Landing
                   setLoginbtn={setLoginbtn}
@@ -87,6 +96,7 @@ function App() {
                   setSignupbtn={setSignupbtn}
                   setAlertPopUp={setAlertPopUp}
                   AlertPopUp={AlertPopUp}
+                  setLoading={setLoading}
                 />
               </>
             }
@@ -102,6 +112,7 @@ function App() {
                   AlertPopUp={AlertPopUp}
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
+                  loading={loading}
                 />
                 <AfterLoggedIn />
               </>
@@ -119,6 +130,7 @@ function App() {
                   AlertPopUp={AlertPopUp}
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
+                  loading={loading}
                 />
                 {teamSetting && (
                   <TeamSetting
@@ -168,6 +180,7 @@ function App() {
                   AlertPopUp={AlertPopUp}
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
+                  loading={loading}
                 />
                 <AddTeam
                   AddTeambtn={AddTeambtn}
@@ -193,6 +206,7 @@ function App() {
                   AlertPopUp={AlertPopUp}
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
+                  loading={loading}
                 />
                 <Visualization />
               </>
@@ -208,6 +222,7 @@ function App() {
                   AlertPopUp={AlertPopUp}
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
+                  loading={loading}
                 />
                 <History />
               </>
@@ -223,6 +238,7 @@ function App() {
                   AlertPopUp={AlertPopUp}
                   setmenuOpen={setmenuOpen}
                   menuOpen={menuOpen}
+                  loading={loading}
                 />
                 <Iteration />
               </>

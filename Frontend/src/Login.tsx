@@ -7,6 +7,7 @@ type LoginProps = {
   setLoginbtn: React.Dispatch<React.SetStateAction<boolean>>;
   setSignupbtn: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   Loginbtn: boolean;
   AlertPopUp: AlertType;
 };
@@ -18,8 +19,9 @@ const Login: React.FC<LoginProps> = ({
   setSignupbtn,
   setAlertPopUp,
   AlertPopUp,
+  setLoading,
 }) => {
-const host = "https://team-track-flax.vercel.app";
+  const host = "https://team-track-flax.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("FlowTrackToken");
@@ -43,8 +45,9 @@ const host = "https://team-track-flax.vercel.app";
 
   const createUser = async () => {
     // API Call
-    const url =`${host}/api/tasks/LoginUser`;
+    const url = `${host}/api/tasks/LoginUser`;
     try {
+      setLoading(true);
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -58,6 +61,7 @@ const host = "https://team-track-flax.vercel.app";
       const result = await response.json();
       if (result.FlowTrackAuthtoken) {
         // Save the auth token and redirect
+        setLoading(false);
         setCredentials({
           email: "",
           password: "",
@@ -81,6 +85,7 @@ const host = "https://team-track-flax.vercel.app";
           });
         }, 2000);
       } else {
+        setLoading(false);
         if (result.errors) {
           const getErrorMessage = (field: string) => {
             const errors = result.errors.find((e: any) => e.path === field);
@@ -101,6 +106,8 @@ const host = "https://team-track-flax.vercel.app";
         setLoggedin(false);
       }
     } catch (error: any) {
+      setLoading(false);
+
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,

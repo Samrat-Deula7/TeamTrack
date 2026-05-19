@@ -5,6 +5,7 @@ type SignupPorps = {
   setSignupbtn: React.Dispatch<React.SetStateAction<boolean>>;
   setLoginbtn: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertPopUp: React.Dispatch<React.SetStateAction<AlertType>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   Signupbtn: boolean;
   AlertPopUp: AlertType;
 };
@@ -15,8 +16,9 @@ const Signup: React.FC<SignupPorps> = ({
   setLoginbtn,
   setAlertPopUp,
   AlertPopUp,
+  setLoading,
 }) => {
-const host = "https://team-track-flax.vercel.app";
+  const host = "https://team-track-flax.vercel.app";
 
   const [validationError, setValidationError] = useState({
     Name: "",
@@ -42,6 +44,7 @@ const host = "https://team-track-flax.vercel.app";
 
   const createUser = async () => {
     try {
+      setLoading(true);
       if (credentials.Password == credentials.CPassword) {
         // API Call
         const url = `${host}/api/tasks/SignUpUser`;
@@ -63,6 +66,8 @@ const host = "https://team-track-flax.vercel.app";
         const result = await response.json();
         console.log(result);
         if (result.success) {
+          setLoading(false);
+
           // Save the auth token and redirect
           setCredentials({
             Name: "",
@@ -87,7 +92,6 @@ const host = "https://team-track-flax.vercel.app";
           setSignupbtn(false);
           setLoginbtn(true);
           setTimeout(() => {
-            
             // I am still setting the type and msg because if i dont then for a sec the alert show failure.
             setAlertPopUp({
               ...AlertPopUp,
@@ -97,6 +101,7 @@ const host = "https://team-track-flax.vercel.app";
             });
           }, 3000);
         } else {
+          setLoading(false);
           if (result.error) {
             const alreadyExistsError = result.error;
             setValidationError({
@@ -107,6 +112,8 @@ const host = "https://team-track-flax.vercel.app";
               userExistsError: alreadyExistsError,
             });
           } else {
+            setLoading(false);
+
             const getErrorMessage = (field: string) => {
               const error = result.errors.find((e: any) => e.path === field);
               return error?.msg || null;
@@ -121,22 +128,26 @@ const host = "https://team-track-flax.vercel.app";
           }
         }
       } else {
-         setAlertPopUp({
-           ...AlertPopUp,
-           alert: true,
-           type: "failure",
-           msg: "Both password must be same",
-         });
-         setTimeout(() => {
-           setAlertPopUp({
-             ...AlertPopUp,
-             alert: false,
-             type: "failure",
-             msg: "Both password must be same",
-           });
-         }, 2000);
+        setLoading(false);
+
+        setAlertPopUp({
+          ...AlertPopUp,
+          alert: true,
+          type: "failure",
+          msg: "Both password must be same",
+        });
+        setTimeout(() => {
+          setAlertPopUp({
+            ...AlertPopUp,
+            alert: false,
+            type: "failure",
+            msg: "Both password must be same",
+          });
+        }, 2000);
       }
     } catch (error: any) {
+      setLoading(false);
+
       setAlertPopUp({
         ...AlertPopUp,
         alert: true,
