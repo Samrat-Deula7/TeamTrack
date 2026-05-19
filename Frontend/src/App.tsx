@@ -47,11 +47,6 @@ function App() {
   const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 3000);
-  // }, [loading]);
 
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");
