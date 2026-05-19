@@ -211,3 +211,30 @@ json
   "routes": [{ "src": "/api/(.*)", "dest": "dist/index.js" }]
 }
 This ensures Vercel routes API requests correctly and serves files from the dist/ folder.
+
+
+
+
+Frontend Problem
+
+Problem
+After deploying the app to Vercel, navigating directly to routes such as /dashboard or /tasks/123 resulted in 404 errors.
+This happened because Vercel’s server tried to find actual files at those paths, but in a Single Page Application (SPA) built with React/Vite, routing is handled client‑side. The server only has index.html and bundled assets, so without special configuration, non‑root routes break.
+
+Solution
+We added a vercel.json file with a rewrite rule:
+
+json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+This tells Vercel:
+
+For any incoming request path, serve index.html.
+
+Once index.html loads, the frontend router (React Router) takes over and displays the correct page.
