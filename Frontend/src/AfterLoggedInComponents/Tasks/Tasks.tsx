@@ -478,13 +478,13 @@ const host = "https://team-track-flax.vercel.app";
                 Code:{" "}
               </h2>
 
-              <div className="flex flex-wrap outline-none text-gray-700 text-sm sm:text-base min-w-0 space-x-1">
+              <div className="flex flex-wrap outline-none text-gray-700 text-sm sm:text-base min-w-0 space-x-3">
                 <div className="flex items-center">
                   <img src={OpeningB} alt="" className="h-4 2xl:h-6" />
                   <input
                     type="text"
                     id="TeamCode"
-                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
+                    className="w-5 sm:w-10 md:w-12 2xl:w-14 font-bold text-xs sm:text-xl CodeInput text-center"
                   />
                   <p className="font-bold">|</p>
                 </div>
@@ -492,7 +492,7 @@ const host = "https://team-track-flax.vercel.app";
                   <input
                     type="text"
                     id="TeamCode"
-                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
+                    className="w-5 sm:w-10 md:w-12 2xl:w-14 font-bold text-xs sm:text-xl CodeInput text-center"
                   />
                   <p className="font-bold">|</p>
                 </div>
@@ -500,7 +500,7 @@ const host = "https://team-track-flax.vercel.app";
                   <input
                     type="text"
                     id="TeamCode"
-                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
+                    className="w-5 sm:w-10 md:w-12 2xl:w-14 font-bold text-xs sm:text-xl CodeInput text-center"
                   />
                   <p className="font-bold">|</p>
                 </div>
@@ -508,7 +508,7 @@ const host = "https://team-track-flax.vercel.app";
                   <input
                     type="text"
                     id="TeamCode"
-                    className="w-4 sm:w-10 md:w-12 2xl:w-14 font-bold text-lg sm:text-xl CodeInput text-center"
+                    className="w-5 sm:w-10 md:w-12 2xl:w-14 font-bold text-xs sm:text-xl CodeInput text-center"
                   />
                   <img src={ClosingB} alt="" className="h-4 xl:h-6" />
                 </div>
