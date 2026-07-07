@@ -8,6 +8,7 @@ import plus from "../assets/plus.png";
 import addEmoji from "../assets/smile-plus.png";
 import mic from "../assets/microphone.png";
 // import Time from "../assets/time.gif";
+import Client from "./SocketioClient/Client";
 
 type CollaborationType = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +51,7 @@ const Collaboration: React.FC<CollaborationType> = ({
   };
   return (
     <>
+      <Client />
       <div className="flex flex-col md:flex-row justify-center items-start gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
         {/* Left Panel - Search Section */}
         <div
