@@ -7,7 +7,7 @@ import arrow from "../assets/arrow.png";
 import plus from "../assets/plus.png";
 import addEmoji from "../assets/smile-plus.png";
 import mic from "../assets/microphone.png";
-import Time from "../assets/time.gif"
+import Time from "../assets/time.gif";
 
 type CollaborationType = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,7 @@ const Collaboration: React.FC<CollaborationType> = ({
   //      handleSearch();
   //    }
   //  };
-  const [ChatDiv, setChatDiv] = useState(false);
+  const [ChatDiv, setChatDiv] = useState({ on: false, team: "" });
   const uniqueTeams = AllTeamData.filter(
     (team, index, self) =>
       index === self.findIndex((t) => t.team_name === team.team_name),
@@ -89,7 +89,7 @@ const Collaboration: React.FC<CollaborationType> = ({
             {uniqueTeams.map((Task: TeamData) => (
               <div
                 key={Task.team_id}
-                className="flex flex-col w-full h-auto items-center gap-3 sm:gap-4 p-3  bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300  hover:bg-transparent cursor-pointer"
+                className="flex flex-col w-auto h-auto items-center gap-3 sm:gap-4 p-3  bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md  duration-300  hover:bg-transparent cursor-pointer"
                 //  onClick={() => {
                 //    focusOnTeamData(
                 //      Task.Team_Id,
@@ -98,10 +98,12 @@ const Collaboration: React.FC<CollaborationType> = ({
                 //    );
                 //    setFocused(true);
                 //  }}
-                onClick={() => setChatDiv(true)}
+                onClick={() =>
+                  setChatDiv({ ...ChatDiv, on: true, team: Task.team_name })
+                }
               >
-                <div className="flex w-full h-auto justify-around  items-center">
-                  <h2 className="text-black font-medium text-xs">
+                <div className="flex w-full h-auto justify-around  items-center justify-between">
+                  <h2 className="text-black font-medium text-xs mr-2">
                     Team:
                     <span className="font-bold text-xs text-green-500">
                       {"\n" + Task.team_name}
@@ -121,20 +123,17 @@ const Collaboration: React.FC<CollaborationType> = ({
 
         {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
         <div
-          className={`lg:flex items-center justify-center w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv ? "flex" : "hidden"}`}
+          className={`lg:flex items-center justify-center w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
         >
-          <div className="relative w-60 h-20 bg-green-500 font-bold text-white rounded-2xl transition-transform animate-bounce px-4 py-4">
-            Feature Under work
-            <span className="font-extrabold">!!</span>
-            <img
-              src={Time}
-              alt="time_icon"
-              className="absolute left-40 -bottom-10 w-[80px] h-[80px] rounded-full"
-            />
+          <div className="w-full  px-2 py-3 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
+            <span className="font-bold text-xs md:text-xl text-green-500">
+              {ChatDiv.team}
+            </span>
           </div>
+
           <button
             onClick={() => {
-              setChatDiv(false);
+              setChatDiv({ ...ChatDiv, on: false, team: "" });
             }}
             className="flex lg:hidden absolute top-2 left-2 xl:top-30 xl:right-16 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
             aria-label="Close button"
