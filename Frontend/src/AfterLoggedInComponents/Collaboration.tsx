@@ -7,7 +7,7 @@ import arrow from "../assets/arrow.png";
 import plus from "../assets/plus.png";
 import addEmoji from "../assets/smile-plus.png";
 import mic from "../assets/microphone.png";
-import Time from "../assets/time.gif";
+// import Time from "../assets/time.gif";
 
 type CollaborationType = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
