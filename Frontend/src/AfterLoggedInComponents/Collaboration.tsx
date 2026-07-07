@@ -125,11 +125,47 @@ const Collaboration: React.FC<CollaborationType> = ({
         <div
           className={`lg:flex items-center justify-center w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
         >
-          <div className="w-full  px-2 py-3 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
+          {/* This is the top bar */}
+          <div className="w-full  px-3 py-2 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
             <span className="font-bold text-xs md:text-xl text-green-500">
               {ChatDiv.team}
             </span>
           </div>
+
+          {/* This is the messing left and right block */}
+
+          <div className="w-full h-[400px] xl:h-[500px] 2xl:h-[700px] flex flex-col justify-end">
+
+            {/* This is the left message block */}
+            <div className="w-full  flex justify-start items-end">
+              <div className="flex flex-col">
+                {/* This is each message */}
+                <div className="flex m-0.5">
+                  <div className="w-0 h-0   border-l-[5px] border-l-transparent  border-r-[5px] border-r-transparent border-t-[10px] transform rotate-90 -translate-x-0 translate-y-1 border-white "></div>
+                  <div className="bg-white z-1 px-3 py-2 h-10 rounded-sm font-medium">
+                    Left Message
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+
+            {/* This is the right message block */}
+            <div className="w-full  flex justify-end items-end">
+              <div className="flex flex-col">
+                {/* This is each message */}
+
+                <div className="flex m-0.5">
+                  <div className="bg-white z-1 px-3 py-2 h-10 rounded-sm font-medium">
+                    Right Message
+                  </div>
+                  <div className="w-0 h-0   border-l-[5px] border-l-transparent  border-r-[5px] border-r-transparent border-t-[10px] transform -rotate-90 -translate-x-0 translate-y-1 border-white "></div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
 
           <button
             onClick={() => {
