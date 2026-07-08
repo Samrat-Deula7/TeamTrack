@@ -4,6 +4,7 @@ dotenv.config();
 import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
+// Since the JWT doesn't have user in request we need to provide an custom interface.
 declare global {
   namespace Express {
     interface Request {
