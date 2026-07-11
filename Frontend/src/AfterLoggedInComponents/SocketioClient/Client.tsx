@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
+// Need to add live backend link before deployment.
+
 const socket = io("http://localhost:3000", {
   auth: { FlowTrackToken: localStorage.getItem("FlowTrackToken") },
 }); // connect to backend
@@ -19,9 +21,5 @@ export default function Client() {
     };
   }, []);
 
-  return (
-    <div>
-    
-    </div>
-  );
+  return <div></div>;
 }
