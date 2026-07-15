@@ -96,7 +96,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv }) => {
             src={plus}
             alt="search"
             className="w-3 h-3 sm:w-4 sm:h-4  shrink-0 mr-3 cursor-pointer"
-          />
+          />n 
           <img
             src={addEmoji}
             alt="search"
