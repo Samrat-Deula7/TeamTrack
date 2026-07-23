@@ -37,10 +37,17 @@ Type varchar(10) default 'member',
 FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
 
+create table team_conversation (
+  conv_id serial primary key,
+  team_id int4 not null,
+  conversation varchar(1000),
+  foreign key(team_id) references team_table(team_id)
+)
 
 select * from User_Tasks
 select * from User_Table
 select * from Team_Table
+select * from team_conversation
 
 
 
