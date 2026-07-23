@@ -9,12 +9,13 @@ const SocketUserAuth = async (auth: string) => {
       user: { id: string };
     };
     const userId = parseInt(data.user.id);
+    return userId;
 
-    const userName = await pool.query(
-      "Select name from user_table where user_id = $1",
-      [userId],
-    );
-    return userName.rows[0].name;
+    // const userName = await pool.query(
+    //   "Select name from user_table where user_id = $1",
+    //   [userId],
+    // );
+    // return userName.rows[0].name;
   } catch (error) {}
 };
 

@@ -43,8 +43,8 @@ const io = new Server(server, {
 
 io.on("connection",async (socket) => {
   const token = socket.handshake.auth.FlowTrackToken;
-  const user =await SocketUserAuth(token);
-  console.log(user);
+  const userId =await SocketUserAuth(token);
+  
   console.log("a user connected : " + socket.id);
 });
 
