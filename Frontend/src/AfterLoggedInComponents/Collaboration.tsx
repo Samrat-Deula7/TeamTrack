@@ -50,9 +50,9 @@ const Collaboration: React.FC<CollaborationType> = ({
     (team, index, self) =>
       index === self.findIndex((t) => t.team_name === team.team_name),
   );
-  const handleSend = async (e: any) => {
-    e.preventDefault();
-  };
+  // const handleSend = async (e: any) => {
+  //   e.preventDefault();
+  // };
   return (
     <>
       <div className="flex flex-col md:flex-row justify-center items-start gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
