@@ -8,7 +8,7 @@ import { type Chat } from "../Collaboration";
 
 // Need to add live backend link before deployment.
 
-const socket = io("http://localhost:3000"); // connect to backend
+const socket = io("https://team-track-flax.vercel.app"); // connect to backend
 type ClientType = {
   ChatDiv: Chat;
   setChatDiv: React.Dispatch<React.SetStateAction<Chat>>;
