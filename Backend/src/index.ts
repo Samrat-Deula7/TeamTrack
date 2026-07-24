@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // local dev frontend
-      "https://team-track-3v5z.vercel.app/", // live frontend URL
+      "https://team-track-3v5z.vercel.app", // live frontend URL
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
@@ -37,7 +37,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173", // dev frontend
-      "https://team-track-3v5z.vercel.app/", // live frontend
+      "https://team-track-3v5z.vercel.app", // live frontend
     ],
     methods: ["GET", "POST"],
   },
