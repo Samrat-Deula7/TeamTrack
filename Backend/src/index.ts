@@ -4,7 +4,7 @@ import teamtaskRouter from "./routes/TeamTask";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import SocketUserAuth from "./SocketioServer/SocketUserAuth";
+import teamConversation from "./SocketioServer/TeamConversationPopulator";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +27,8 @@ app.use(express.json());
 app.use("/api/tasks", tasksRouter);
 app.use("/api/teamtasks", teamtaskRouter);
 
+// route for socket api
+app.use("/api/conversation", teamConversation);
 // This is the socket server
 
 const server = createServer(app);
@@ -41,10 +43,7 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection",async (socket) => {
-  const token = socket.handshake.auth.FlowTrackToken;
-  const userId = await SocketUserAuth(token);
-  
+io.on("connection", async (socket) => {
   console.log("a user connected : " + socket.id);
 });
 

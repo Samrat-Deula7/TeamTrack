@@ -8,9 +8,7 @@ import { type Chat } from "../Collaboration";
 
 // Need to add live backend link before deployment.
 
-const socket = io("http://localhost:3000", {
-  auth: { FlowTrackToken: localStorage.getItem("FlowTrackToken") },
-}); // connect to backend
+const socket = io("http://localhost:3000"); // connect to backend
 type ClientType = {
   ChatDiv: Chat;
   setChatDiv: React.Dispatch<React.SetStateAction<Chat>>;
@@ -43,7 +41,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv }) => {
       >
         {/* This is the top bar */}
         <div className="w-full  px-3 py-2 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
-          <span className="font-bold text-xs md:text-xl text-green-500">
+          <span className="font-bold text-xs md:text-xl text-green-500 mx-7">
             {ChatDiv.team}
           </span>
         </div>
@@ -96,7 +94,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv }) => {
             src={plus}
             alt="search"
             className="w-3 h-3 sm:w-4 sm:h-4  shrink-0 mr-3 cursor-pointer"
-          />n 
+          />
           <img
             src={addEmoji}
             alt="search"
