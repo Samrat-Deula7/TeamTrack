@@ -47,7 +47,7 @@ const Tasks: React.FC<TasksProps> = ({
   setAllTeamData,
   setLoading,
 }) => {
-  const host = "https://team-track-flax.vercel.app";
+  const host = "https://teamtrack-yeze.onrender.com";
 
   useEffect(() => {
     getTasks();

@@ -8,7 +8,7 @@ import { type Chat } from "../Collaboration";
 
 // Need to add live backend link before deployment.
 
-const socket = io("https://team-track-flax.vercel.app", {
+const socket = io("https://teamtrack-yeze.onrender.com", {
   withCredentials: true, // important if you enabled credentials in backend CORS
 });
 type ClientType = {

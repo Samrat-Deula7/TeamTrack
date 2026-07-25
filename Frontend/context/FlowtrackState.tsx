@@ -18,7 +18,7 @@ export type TeamData = {
 
 export type TeamTasks = {
   team_id: number;
-  user_id:number;
+  user_id: number;
   name: string;
   team_tasks: string;
   completed: boolean;
@@ -32,7 +32,7 @@ export type addTeamTask = {
   Team_code: string;
 };
 
-const host = "https://team-track-flax.vercel.app";
+const host = "https://teamtrack-yeze.onrender.com";
 const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -89,8 +89,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
     Completed: boolean,
   ): Promise<object> => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
-    const url =
-      `${host}/api/teamtasks/UpdateTeamTableCompleteState`;
+    const url = `${host}/api/teamtasks/UpdateTeamTableCompleteState`;
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -152,7 +151,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
       alert(error.message);
     }
   };
-  
+
   const DeleteTeamTask = async (Team_Id: number) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
     const url = `${host}/api/teamtasks/DeleteTeamTask`;
@@ -273,7 +272,11 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const addUserToTeam = async(Email:string, Team_Name:string, Team_code:string)=>{
+  const addUserToTeam = async (
+    Email: string,
+    Team_Name: string,
+    Team_code: string,
+  ) => {
     const url = `${host}/api/teamtasks/addUserToTeam`;
     try {
       const response = await fetch(url, {
@@ -297,7 +300,7 @@ const FlowtrackState: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const LeaveTeam = async(Team_code:string)=>{
+  const LeaveTeam = async (Team_code: string) => {
     const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
     const url = `${host}/api/teamtasks/LeaveTeam`;
     try {
