@@ -40,6 +40,7 @@ const io = new Server(server, {
       "https://team-track-3v5z.vercel.app", // live frontend
     ],
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
