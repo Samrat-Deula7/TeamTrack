@@ -191,6 +191,7 @@ function App() {
                   setAddTeambtn={setAddTeambtn}
                   AllTeamData={AllTeamData}
                   setAllTeamData={setAllTeamData}
+                  setLoading={setLoading}
                 />
               </>
             }

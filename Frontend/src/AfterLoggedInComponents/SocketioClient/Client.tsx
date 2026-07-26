@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import arrow from "../../assets/arrow.png";
 import plus from "../../assets/plus.png";
@@ -14,11 +14,40 @@ const socket = io("https://teamtrack-yeze.onrender.com", {
 type ClientType = {
   ChatDiv: Chat;
   setChatDiv: React.Dispatch<React.SetStateAction<Chat>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv }) => {
+const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   // const [socketId, setSocketId] = useState<any>("");
+  const host = "https://teamtrack-yeze.onrender.com";
 
+  const [mess, setMess] = useState("");
+  const onChange = (e: any) => {
+    setMess(e.target.value);
+  };
+  const populateConversation = async () => {
+    try {
+      setLoading(true);
+      const url = `${host}/api/conversation/talk`;
+      const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          FlowTrackAuthtoken: FlowTrackAuthtoken || "",
+        },
+        body: JSON.stringify({ mess }),
+      });
+
+      const result = await response.json();
+      if (result[0].success) {
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     socket.on("connect", () => {
       // setSocketId(socket.id);
@@ -32,6 +61,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv }) => {
 
   const handleSend = async (e: any) => {
     e.preventDefault();
+    populateConversation();
+    setMess("");
   };
 
   return (
@@ -110,6 +141,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv }) => {
               //  value={searchQuery}
               //  onChange={(e) => setSearchQuery(e.target.value)}
               //  onKeyPress={handleKeyPress}
+              value={mess}
+              onChange={onChange}
               className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-xs sm:text-base min-w-0"
             />
             <img

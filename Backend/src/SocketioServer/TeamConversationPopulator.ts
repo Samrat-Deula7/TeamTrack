@@ -32,7 +32,7 @@ ConversationRouter.post(
     } catch (error) {
       console.log(error);
       res.status(400).json({
-        error: "unable to pupulate conversation.",
+        error: "unable to populate conversation.",
       });
     }
   },

@@ -13,6 +13,7 @@ import Client from "./SocketioClient/Client";
 type CollaborationType = {
   setAddTeambtn: React.Dispatch<React.SetStateAction<boolean>>;
   setAllTeamData: React.Dispatch<React.SetStateAction<TeamData[]>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   AllTeamData: TeamData[];
 };
 
@@ -24,6 +25,7 @@ const Collaboration: React.FC<CollaborationType> = ({
   setAddTeambtn,
   setAllTeamData,
   AllTeamData,
+  setLoading,
 }) => {
   const { GetTeamData } = useContext(FlowTrackContext);
   const getTeamData = async () => {
@@ -127,7 +129,7 @@ const Collaboration: React.FC<CollaborationType> = ({
         </div>
 
         {/* The right pannel in now inside Client */}
-        <Client ChatDiv={ChatDiv} setChatDiv={setChatDiv} />
+        <Client ChatDiv={ChatDiv} setChatDiv={setChatDiv} setLoading={setLoading}/>
       </div>
     </>
   );
