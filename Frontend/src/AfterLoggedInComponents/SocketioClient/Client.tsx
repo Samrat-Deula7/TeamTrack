@@ -18,10 +18,36 @@ type ClientType = {
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
-  // const [socketId, setSocketId] = useState<any>("");
   const host = "https://teamtrack-yeze.onrender.com";
 
   const [mess, setMess] = useState("");
+
+  let sendMessage: any;
+
+  const createMessages = (message: string, position: string) => {
+    const messContainer = document.getElementById("messages-block");
+    const messTail = document.createElement("div");
+    messTail.classList.add(
+      "msg-row",
+      `${position == "left" ? "left" : "right"}`,
+    );
+
+    const bubbleWrap = document.createElement("div");
+    bubbleWrap.classList.add("bubble-wrap");
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("bubble");
+    bubble.innerText = message;
+
+    const tail = document.createElement("div");
+    tail.classList.add("tail");
+
+    messContainer?.append(messTail);
+    messTail.append(bubbleWrap);
+    bubbleWrap.append(bubble);
+    bubbleWrap.append(tail);
+  };
+
   const onChange = (e: any) => {
     setMess(e.target.value);
   };
@@ -62,6 +88,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const handleSend = async (e: any) => {
     e.preventDefault();
     populateConversation();
+    sendMessage = mess;
+    createMessages(sendMessage, "right");
     setMess("");
   };
 
@@ -79,36 +107,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           </span>
         </div>
 
-        {/* This is the messing left and right block */}
-
-        <div className="w-full h-[400px] xl:h-[500px] 2xl:h-[700px] flex flex-col justify-end">
-          {/* This is the left message block */}
-          <div className="w-full  flex justify-start items-end">
-            <div className="flex flex-col">
-              {/* This is each message */}
-              <div className="flex m-0.5">
-                <div className="w-0 h-0   border-l-[5px] border-l-transparent  border-r-[5px] border-r-transparent border-t-[10px] transform rotate-90 -translate-x-0 translate-y-1 border-white "></div>
-                <div className="bg-white max-w-xl w-auto h-auto wrap-break-word z-1 px-3 py-2 h-10 rounded-sm font-medium">
-                  Left Message
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* This is the right message block */}
-          <div className="w-full  flex justify-end items-end">
-            <div className="flex flex-col">
-              {/* This is each message */}
-
-              <div className="flex m-0.5">
-                <div className="bg-white max-w-xl w-auto h-auto wrap-break-word z-1 px-3 py-2 h-10 rounded-sm font-medium">
-                  Right Message
-                </div>
-                <div className="w-0 h-0   border-l-[5px] border-l-transparent  border-r-[5px] border-r-transparent border-t-[10px] transform -rotate-90 -translate-x-0 translate-y-1 border-white "></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* This is the messages left and right block */}
+        <div className="messages-block" id="messages-block"></div>
 
         <button
           onClick={() => {
