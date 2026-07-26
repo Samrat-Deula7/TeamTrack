@@ -74,24 +74,39 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    socket.on("connect", () => {
-      // setSocketId(socket.id);
-      console.log(socket.id);
-    });
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     // setSocketId(socket.id);
+  //     console.log(socket.id);
+  //   });
 
-    return () => {
-      socket.off("connect");
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("connect");
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    if (ChatDiv.team !== "") {
+      socket.emit("join-team", ChatDiv.team);
+    }
+  }, [ChatDiv.team]);
 
   const handleSend = async (e: any) => {
     e.preventDefault();
     populateConversation();
     sendMessage = mess;
+    socket.emit("send-message", {
+      teamName: ChatDiv.team,
+      message: sendMessage,
+    });
     createMessages(sendMessage, "right");
     setMess("");
   };
+
+  socket.on("receive-message", (data) => {
+    createMessages(data.message, "left");
+    console.log("this is the received dataa client " + data.message);
+  });
 
   return (
     <>

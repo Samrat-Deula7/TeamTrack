@@ -44,8 +44,21 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", async (socket) => {
+io.on("connection", (socket) => {
   console.log("a user connected : " + socket.id);
+
+  // Join a room
+  socket.on("join-team", (teamName) => {
+    socket.join(teamName);
+    console.log(`${socket.id} joined team ${teamName}`);
+  });
+
+  // Send message to everyone in the room except the sender
+  socket.on("send-message", ({ teamName, message }) => {
+    socket.to(teamName).emit("receive-message", {
+      message,
+    });
+  });
 });
 
 server.listen(PORT, () => {
