@@ -58,6 +58,7 @@ io.on("connection", (socket) => {
     socket.to(teamName).emit("receive-message", {
       message,
     });
+    console.log(message)
   });
 });
 
