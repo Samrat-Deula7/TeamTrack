@@ -103,10 +103,17 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     setMess("");
   };
 
-  socket.on("receive-message", (data) => {
-    createMessages(data.message, "left");
-    console.log("this is the received dataa client " + data.message);
-  });
+  useEffect(() => {
+    const handler = (data: { message: string }) => {
+      createMessages(data.message, "left");
+    };
+
+    socket.on("receive-message", handler);
+
+    return () => {
+      socket.off("receive-message", handler); // ✅ cleanup
+    };
+  }, []);
 
   return (
     <>
