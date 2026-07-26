@@ -9,12 +9,6 @@ const SocketUserAuth = async (auth: string) => {
       user: { id: string };
     };
     const userId = parseInt(data.user.id);
-    let userQuery = `
-      SELECT name from user_table WHERE user_id = $1;
-    `;
-    let userIdValue = [userId];
-
-    const userName = await pool.query(userQuery, userIdValue);
 
     let insertQuery = `
       SELECT team_id from team_table WHERE user_id = $1;
@@ -23,11 +17,11 @@ const SocketUserAuth = async (auth: string) => {
 
     const teamId = await pool.query(insertQuery, value);
 
-    console.log("From socket")
-    console.log(teamId.rows[0].team_id, userName.rows[0].name);
+    console.log("From socket");
+    console.log(teamId.rows[0].team_id, userId);
     let team_id = teamId.rows[0].team_id;
-    let user_name = userName.rows[0].name;
-    return {team_id,user_name};
+    let user_id = userId;
+    return { team_id, user_id };
 
     // const userName = await pool.query(
     //   "Select name from user_table where user_id = $1",

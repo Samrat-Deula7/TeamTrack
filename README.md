@@ -40,8 +40,10 @@ FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 create table team_conversation (
   conv_id serial primary key,
   team_id int4 not null,
+  user_id int4 not null,
   conversation varchar(1000),
-  foreign key(team_id) references team_table(team_id)
+  foreign key(team_id) references team_table(team_id),
+  foreign key(user_id) references user_table(user_id)
 )
 
 select * from User_Tasks
