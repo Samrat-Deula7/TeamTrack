@@ -37,6 +37,8 @@ ConversationRouter.post(
 
       let user_name = userName.rows[0].name;
 
+      console.log(user_name + "from backkend")
+
       res.status(200).json({ success: user_name });
     } catch (error) {
       console.log(error);

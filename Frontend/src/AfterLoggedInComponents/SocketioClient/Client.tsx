@@ -70,7 +70,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       const result = await response.json();
       if (result[0].success) {
         setLoading(false);
+        console.log(result[0].success + "frontend direct");
         user = result[0].success;
+        console.log(user + "frontend INdirect");
       }
     } catch (error) {
       setLoading(false);
@@ -99,7 +101,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     sendMessage = mess;
     socket.emit("send-message", {
       teamName: ChatDiv.team,
-      message: user +": " + sendMessage,
+      message: user + ": " + sendMessage,
     });
     createMessages(user + ": " + sendMessage, "right");
     setMess("");
