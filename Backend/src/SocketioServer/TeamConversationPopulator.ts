@@ -28,7 +28,16 @@ ConversationRouter.post(
       const values = [authData?.team_id, authData?.user_id, mess];
       await pool.query(insertQuery, values);
 
-      res.status(200).json({ success: "conversation populated successfully" });
+      let userNameQuery = `
+      SELECT name FROM user_table WHERE user_id = $1
+    `;
+      let userNameValue = [authData?.user_id];
+
+      const userName = await pool.query(userNameQuery, userNameValue);
+
+      let user_name = userName.rows[0].name;
+
+      res.status(200).json({ success: user_name });
     } catch (error) {
       console.log(error);
       res.status(400).json({

@@ -23,6 +23,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [mess, setMess] = useState("");
 
   let sendMessage: any;
+  let user: any;
 
   const createMessages = (message: string, position: string) => {
     const messContainer = document.getElementById("messages-block");
@@ -69,6 +70,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       const result = await response.json();
       if (result[0].success) {
         setLoading(false);
+        user = result[0].success;
       }
     } catch (error) {
       setLoading(false);
@@ -97,9 +99,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     sendMessage = mess;
     socket.emit("send-message", {
       teamName: ChatDiv.team,
-      message: sendMessage,
+      message: user +": " + sendMessage,
     });
-    createMessages(sendMessage, "right");
+    createMessages(user + ": " + sendMessage, "right");
     setMess("");
   };
 
