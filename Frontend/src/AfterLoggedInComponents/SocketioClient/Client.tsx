@@ -7,9 +7,11 @@ import mic from "../../assets/microphone.png";
 import { type Chat } from "../Collaboration";
 
 // Need to add live backend link before deployment.
+const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
 
-const socket = io("https://teamtrack-yeze.onrender.com", {
+const socket = io("http://localhost:3000", {
   withCredentials: true, // important if you enabled credentials in backend CORS
+  auth: { token: FlowTrackAuthtoken },
 });
 type ClientType = {
   ChatDiv: Chat;
@@ -18,12 +20,13 @@ type ClientType = {
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
-  const host = "https://teamtrack-yeze.onrender.com";
+  const host = "http://localhost:3000";
 
   const [mess, setMess] = useState("");
+  // const [user, setUser] = useState("");
 
   let sendMessage: any;
-  let user: any;
+  let userName = "";
 
   const createMessages = (message: string, position: string) => {
     const messContainer = document.getElementById("messages-block");
@@ -67,15 +70,14 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         body: JSON.stringify({ mess }),
       });
 
-      const result = await response.json();
-      if (result[0].success) {
+      const result: { success: string } = await response.json();
+      if (result.success != "") {
         setLoading(false);
-        console.log(result[0].success + "frontend direct");
-        user = result[0].success;
-        console.log(user + "frontend INdirect");
+        userName = result.success;
       }
     } catch (error) {
       setLoading(false);
+      console.log("why not working is it going to error.");
     }
   };
   // useEffect(() => {
@@ -101,15 +103,16 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     sendMessage = mess;
     socket.emit("send-message", {
       teamName: ChatDiv.team,
-      message: user + ": " + sendMessage,
+      message: userName + ": " + sendMessage,
     });
-    createMessages(user + ": " + sendMessage, "right");
+
+    createMessages(userName + "You: " + sendMessage, "right");
     setMess("");
   };
 
   useEffect(() => {
-    const handler = (data: { message: string }) => {
-      createMessages(data.message, "left");
+    const handler = (data: { message: string; userName: object }) => {
+      createMessages(`${data.userName}${data.message}`, "left");
     };
 
     socket.on("receive-message", handler);

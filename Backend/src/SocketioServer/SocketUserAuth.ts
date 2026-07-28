@@ -40,7 +40,16 @@ const SocketUserAuth = async (auth: string) => {
 
     // return { team_id, user_id, team_name, user_name };
 
-    return { team_id, user_id };
+    let userNameQuery = `
+      SELECT name FROM user_table WHERE user_id = $1
+    `;
+    let userNameValue = [user_id];
+
+    const userName = await pool.query(userNameQuery, userNameValue);
+
+    let user_name = userName.rows[0].name;
+
+    return { team_id, user_id, user_name };
 
     // const userName = await pool.query(
     //   "Select name from user_table where user_id = $1",

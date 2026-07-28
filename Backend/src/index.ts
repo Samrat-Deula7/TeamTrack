@@ -5,6 +5,7 @@ import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import teamConversation from "./SocketioServer/TeamConversationPopulator";
+import SocketUserAuth from "./SocketioServer/SocketUserAuth";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -44,8 +45,11 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("a user connected : " + socket.id);
+  const token = socket.handshake.auth.token;
+  let userName = await SocketUserAuth(token);
+  let name = userName?.user_name;
 
   // Join a room
   socket.on("join-team", (teamName) => {
@@ -56,9 +60,10 @@ io.on("connection", (socket) => {
   // Send message to everyone in the room except the sender
   socket.on("send-message", ({ teamName, message }) => {
     socket.to(teamName).emit("receive-message", {
-      message,
+      message: message,
+      userName: name,
     });
-    console.log(message)
+    console.log(message);
   });
 });
 
