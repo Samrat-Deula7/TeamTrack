@@ -17,9 +17,9 @@ ConversationRouter.post(
     }
     try {
       const token = req.header("FlowTrackAuthtoken");
-      let authData = await SocketUserAuth(token!);
+      const { mess, teamName } = req.body;
 
-      const { mess } = req.body;
+      let authData = await SocketUserAuth(token!, teamName);
 
       const insertQuery = `
       INSERT INTO team_conversation (team_id,user_id,conversation)
@@ -27,8 +27,6 @@ ConversationRouter.post(
     `;
       const values = [authData?.team_id, authData?.user_id, mess];
       await pool.query(insertQuery, values);
-
-       
 
       res.status(200).json({ success: "conversation saved" });
     } catch (error) {
