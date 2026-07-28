@@ -101,6 +101,13 @@ body {
   overflow-wrap: anywhere; /* breaks long words/URLs only when needed, keeps normal words intact otherwise */
   hyphens: auto;
 }
+.user {
+
+  font-weight: 800;
+  color: greenyellow;
+  overflow-wrap: anywhere; /* breaks long words/URLs only when needed, keeps normal words intact otherwise */
+  hyphens: auto;
+}
 
 /* Tail — shared base, direction set via .left/.right on the parent row */
 .tail {

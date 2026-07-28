@@ -26,9 +26,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   // const [user, setUser] = useState("");
 
   let sendMessage: any;
-  let userName = "";
 
-  const createMessages = (message: string, position: string) => {
+  const createMessages = (
+    message: string,
+    position: string,
+    user_name?: string,
+  ) => {
     const messContainer = document.getElementById("messages-block");
     const messTail = document.createElement("div");
     messTail.classList.add(
@@ -43,12 +46,19 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     bubble.classList.add("bubble");
     bubble.innerText = message;
 
+    const user = document.createElement("div");
+    user.classList.add("user");
+    user.innerText = user_name!;
+
     const tail = document.createElement("div");
     tail.classList.add("tail");
 
     messContainer?.append(messTail);
     messTail.append(bubbleWrap);
     bubbleWrap.append(bubble);
+    if (user_name != undefined) {
+      bubble.prepend(user);
+    }
     bubbleWrap.append(tail);
   };
 
@@ -73,7 +83,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       const result: { success: string } = await response.json();
       if (result.success != "") {
         setLoading(false);
-        userName = result.success;
       }
     } catch (error) {
       setLoading(false);
@@ -103,16 +112,16 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     sendMessage = mess;
     socket.emit("send-message", {
       teamName: ChatDiv.team,
-      message: userName + ": " + sendMessage,
+      message: sendMessage,
     });
 
-    createMessages(userName + "You: " + sendMessage, "right");
+    createMessages("You: " + sendMessage, "right");
     setMess("");
   };
 
   useEffect(() => {
-    const handler = (data: { message: string; userName: object }) => {
-      createMessages(`${data.userName}${data.message}`, "left");
+    const handler = (data: { message: string; userName: string }) => {
+      createMessages(data.message, "left", data.userName);
     };
 
     socket.on("receive-message", handler);
