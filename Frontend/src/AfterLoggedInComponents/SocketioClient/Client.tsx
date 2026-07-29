@@ -46,7 +46,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     position: string,
     user_name?: string,
   ) => {
-    const messContainer = document.getElementById("messages-block");
+    const messContainer = document.getElementById("main");
     const messTail = document.createElement("div");
     messTail.classList.add(
       "msg-row",
@@ -175,7 +175,10 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
         {/* This is the messages left and right block */}
         <div className="messages-block " id="messages-block">
-          <div className="max-h-full pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden">
+          <div
+            className="max-h-full pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
+            id="main"
+          >
             {DataDump.map((talk: DumpDataType) => (
               <div
                 className={`msg-row ${id == talk.user_id ? "right" : "left"}`}
