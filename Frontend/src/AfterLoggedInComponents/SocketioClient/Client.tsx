@@ -9,7 +9,7 @@ import { type Chat } from "../Collaboration";
 // Need to add live backend link before deployment.
 const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
 
-const socket = io("https://teamtrack-yeze.onrender.com", {
+const socket = io("http://localhost:3000", {
   withCredentials: true, // important if you enabled credentials in backend CORS
   auth: { token: FlowTrackAuthtoken },
 });
@@ -20,7 +20,7 @@ type ClientType = {
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
-  const host = "https://teamtrack-yeze.onrender.com";
+  const host = "http://localhost:3000";
 
   const [mess, setMess] = useState("");
   // const [user, setUser] = useState("");

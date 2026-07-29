@@ -20,8 +20,8 @@ const SocketUserAuth = async (auth: string, teamName: string) => {
     let team_id = teamId.rows[0].team_id;
     let user_id = userId;
 
-   
-
+    console.log(team_id)
+    console.log(user_id)
 
     return { team_id, user_id };
   } catch (error) {}
