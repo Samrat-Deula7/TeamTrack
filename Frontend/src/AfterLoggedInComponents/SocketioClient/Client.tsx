@@ -19,6 +19,14 @@ type ClientType = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type DumpDataType = {
+  conv_id: number;
+  team_id: number;
+  user_id: number;
+  conversation: string;
+  date: string;
+};
+
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const host = "http://localhost:3000";
 
@@ -26,6 +34,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   // const [user, setUser] = useState("");
 
   let sendMessage: any;
+
+  let chatDump: any = [];
+  let userid: any;
+  const [DataDump, setDataDump] = useState([]);
+  const [id, setId] = useState(0);
+  const [usern, serUser] = useState("");
 
   const createMessages = (
     message: string,
@@ -89,16 +103,29 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       console.log("why not working is it going to error.");
     }
   };
-  // useEffect(() => {
-  //   socket.on("connect", () => {
-  //     // setSocketId(socket.id);
-  //     console.log(socket.id);
-  //   });
 
-  //   return () => {
-  //     socket.off("connect");
-  //   };
-  // }, []);
+  const renderData = async () => {
+    const url = `${host}/api/conversation/getalltalk/?teamName=${ChatDiv.team}`;
+    const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        FlowTrackAuthtoken: FlowTrackAuthtoken || "",
+      },
+    });
+
+    const result = await response.json();
+    userid = result.userId;
+    chatDump = [...result.success];
+    setId(userid);
+    setDataDump(chatDump);
+  };
+
+  useEffect(() => {
+    renderData();
+  }, [ChatDiv.team]);
 
   useEffect(() => {
     if (ChatDiv.team !== "") {
@@ -121,6 +148,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
   useEffect(() => {
     const handler = (data: { message: string; userName: string }) => {
+      serUser(data.userName);
       createMessages(data.message, "left", data.userName);
     };
 
@@ -136,7 +164,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       {" "}
       {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
       <div
-        className={`lg:flex items-center justify-center w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
+        className={`lg:flex items-center justify-center  w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
       >
         {/* This is the top bar */}
         <div className="w-full  px-3 py-2 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
@@ -146,7 +174,26 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         </div>
 
         {/* This is the messages left and right block */}
-        <div className="messages-block" id="messages-block"></div>
+        <div className="messages-block " id="messages-block">
+          <div className="max-h-full pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden">
+            {DataDump.map((talk: DumpDataType) => (
+              <div
+                className={`msg-row ${id == talk.user_id ? "right" : "left"}`}
+                key={talk.conv_id}
+              >
+                <div className="bubble-wrap">
+                  <div className="bubble">
+                    <div className="user">
+                      {id == talk.user_id ? "You: " : usern}
+                    </div>
+                    {talk.conversation}
+                  </div>
+                  <div className="tail"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <button
           onClick={() => {

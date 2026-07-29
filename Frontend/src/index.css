@@ -56,7 +56,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  overflow: hidden;
+
 }
 
 @media (min-width: 1280px) {

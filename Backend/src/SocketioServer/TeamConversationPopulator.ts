@@ -41,26 +41,24 @@ ConversationRouter.post(
 ConversationRouter.get("/getalltalk", async (req: Request, res: Response) => {
   try {
     const token = req.header("FlowTrackAuthtoken");
-    const  teamName  = req.query.teamName as string;
+    const teamName = req.query.teamName as string;
 
     let data = await SocketUserAuth(token!, teamName);
 
     const getQuery = `
-        SELECT * from team_conversation WHERE team_id = $1 and user_id =$2;
+        SELECT * from team_conversation WHERE team_id = $1 ;
       `;
-    const values = [data?.team_id, data?.user_id];
+    const values = [data?.team_id];
     console.log(data?.team_id);
     console.log(data?.user_id);
 
     let allConv = await pool.query(getQuery, values);
 
-    console.log(data?.team_id);
-    console.log(data?.user_id);
-    console.log(allConv.rows);
-    console.log(allConv.rowCount);
+    
 
     res.status(200).json({
       success: allConv.rows,
+      userId:data?.user_id as number
     });
   } catch (error) {
     console.log(error);
