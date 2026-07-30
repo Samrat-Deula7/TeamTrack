@@ -6,6 +6,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import teamConversation from "./SocketioServer/TeamConversationPopulator";
 import UserName from "./SocketioServer/UserName";
+import { Socket } from "dgram";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -63,6 +64,12 @@ io.on("connection", async (socket) => {
       userName: userName,
     });
     console.log(message);
+  });
+
+  socket.on("typing", ({ teamName }) => {
+    socket.to(teamName).emit("sendingText", {
+      userName: teamName,
+    });
   });
 });
 

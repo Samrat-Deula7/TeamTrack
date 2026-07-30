@@ -9,7 +9,7 @@ import { type Chat } from "../Collaboration";
 // Need to add live backend link before deployment.
 const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
 
-const socket = io("https://teamtrack-yeze.onrender.com", {
+const socket = io("http://localhost:3000", {
   withCredentials: true, // important if you enabled credentials in backend CORS
   auth: { token: FlowTrackAuthtoken },
 });
@@ -29,7 +29,7 @@ type DumpDataType = {
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
-  const host = "https://teamtrack-yeze.onrender.com";
+  const host = "http://localhost:3000";
 
   const [mess, setMess] = useState("");
   // const [user, setUser] = useState("");
@@ -41,6 +41,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [DataDump, setDataDump] = useState([]);
   const [id, setId] = useState(0);
   const [newMess, SetNewMess] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
 
   const createMessages = (
     message: string,
@@ -82,6 +83,46 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     }
 
     messContainer?.append(messRow);
+  };
+
+  const createTypingAni = (userN: string) => {
+    const messContainer = document.getElementById("main");
+
+    const messRow = document.createElement("div");
+    messRow.classList.add("msg-row", "left");
+    messRow.id = "DelRow";
+
+    const bubbleWrap = document.createElement("div");
+    bubbleWrap.classList.add("bubble-wrap");
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("bubble");
+    bubble.innerText = "typing";
+
+    if (userN != undefined) {
+      const user = document.createElement("div");
+      user.classList.add("user");
+      user.innerText = userN;
+      bubble.prepend(user);
+    }
+
+    const tail = document.createElement("div");
+    tail.classList.add("tail", "tail-left");
+
+    bubbleWrap.append(bubble);
+
+    // order flips depending on direction
+    messRow.append(tail, bubbleWrap);
+
+    messContainer?.append(messRow);
+  };
+
+  const deleteTypingAni = () => {
+    const messContainer = document.getElementById("DelRow") as HTMLElement;
+    if (messContainer) {
+      messContainer.innerHTML = "";
+      console.log("Deleted");
+    }
   };
 
   const onChange = (e: any) => {
@@ -163,8 +204,24 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
     socket.on("receive-message", handler);
 
+    const typeAnimate = (data: { userName: string }) => {
+      createTypingAni(data.userName);
+      SetNewMess(newMess + 1);
+
+      const timeout = setTimeout(() => {
+        deleteTypingAni();
+      }, 4000);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    };
+
+    socket.on("sendingText", typeAnimate);
+
     return () => {
-      socket.off("receive-message", handler); // ✅ cleanup
+      socket.off("receive-message", handler);
+      socket.off("sendingText", typeAnimate); // ✅ cleanup
     };
   }, []);
 
@@ -173,6 +230,23 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [id, newMess]);
+
+  useEffect(() => {
+    if (mess) {
+      setIsTyping(true);
+    }
+  }, [mess]);
+
+  useEffect(() => {
+    if (isTyping) {
+      socket.emit("typing", {
+        teamName: ChatDiv.team,
+      });
+      setTimeout(() => {
+        setIsTyping(false);
+      }, 4000);
+    }
+  }, [isTyping]);
 
   return (
     <>
@@ -233,6 +307,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             })}
             <div ref={bottomRef} /> {/* invisible anchor */}
           </div>
+
+          {/* This is the main div for animate typing
+          <div
+            className="pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
+            id="TypeAniMain"
+          ></div> */}
         </div>
 
         <button
