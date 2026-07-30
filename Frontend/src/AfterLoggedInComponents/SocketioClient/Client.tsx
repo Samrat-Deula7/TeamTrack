@@ -40,6 +40,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   let userid: any;
   const [DataDump, setDataDump] = useState([]);
   const [id, setId] = useState(0);
+  const [newMess, SetNewMess] = useState(0);
 
   const createMessages = (
     message: string,
@@ -150,12 +151,14 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     });
 
     createMessages("You: " + sendMessage, "right");
+    SetNewMess(newMess + 1);
     setMess("");
   };
 
   useEffect(() => {
     const handler = (data: { message: string; userName: string }) => {
       createMessages(data.message, "left", data.userName);
+      SetNewMess(newMess + 1);
     };
 
     socket.on("receive-message", handler);
@@ -169,7 +172,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [id]);
+  }, [id, newMess]);
 
   return (
     <>
