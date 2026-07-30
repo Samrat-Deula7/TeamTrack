@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import arrow from "../../assets/arrow.png";
 import plus from "../../assets/plus.png";
@@ -165,6 +165,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     };
   }, []);
 
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [id]);
+
   return (
     <>
       {" "}
@@ -222,6 +228,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
                 </div>
               );
             })}
+            <div ref={bottomRef} /> {/* invisible anchor */}
           </div>
         </div>
 
