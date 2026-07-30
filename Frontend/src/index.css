@@ -50,7 +50,7 @@ body {
 /* These are the CSS for chat */
 .messages-block {
   width: 100%;
-  height: 400px;
+  height: 87%;
   padding: 0 16px;
   box-sizing: border-box;
   display: flex;

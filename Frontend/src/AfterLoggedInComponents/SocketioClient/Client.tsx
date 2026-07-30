@@ -179,7 +179,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       {" "}
       {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
       <div
-        className={`lg:flex items-center justify-center  w-full h-[500px] xl:h-[600px] 2xl:h-[800px] bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
+        className={`lg:flex items-center justify-center  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
       >
         {/* This is the top bar */}
         <div className="w-full  px-3 py-2 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
@@ -189,9 +189,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         </div>
 
         {/* This is the messages left and right block */}
-        <div className="messages-block " id="messages-block">
+        <div className="messages-block" id="messages-block">
           <div
-            className="max-h-full pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
+            className="pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
             id="main"
           >
             {DataDump.map((talk: DumpDataType) => {

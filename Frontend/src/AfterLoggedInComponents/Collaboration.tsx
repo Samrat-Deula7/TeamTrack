@@ -60,7 +60,7 @@ const Collaboration: React.FC<CollaborationType> = ({
       <div className="flex flex-col md:flex-row justify-center items-start gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
         {/* Left Panel - Search Section */}
         <div
-          className={`lg:flex flex-col space-y-8 justify-start items-center w-full  lg:w-[25%] h-screen  lg:h-[500px] xl:h-[600px] 2xl:h-[800px]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6 ${ChatDiv.on ? "hidden" : "flex"}`}
+          className={`lg:flex flex-col space-y-8 justify-start items-center w-full  lg:w-[25%]    h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 p-4 sm:p-6 ${ChatDiv.on ? "hidden" : "flex"}`}
         >
           {/* Input Bar */}
           <div className="flex items-center bg-white rounded-full shadow-lg h-14 px-2 py-2 w-full mt-2">
@@ -129,7 +129,11 @@ const Collaboration: React.FC<CollaborationType> = ({
         </div>
 
         {/* The right pannel in now inside Client */}
-        <Client ChatDiv={ChatDiv} setChatDiv={setChatDiv} setLoading={setLoading}/>
+        <Client
+          ChatDiv={ChatDiv}
+          setChatDiv={setChatDiv}
+          setLoading={setLoading}
+        />
       </div>
     </>
   );
