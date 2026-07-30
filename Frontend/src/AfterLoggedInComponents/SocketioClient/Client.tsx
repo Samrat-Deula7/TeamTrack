@@ -47,11 +47,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     user_name?: string,
   ) => {
     const messContainer = document.getElementById("main");
-    const messTail = document.createElement("div");
-    messTail.classList.add(
-      "msg-row",
-      `${position == "left" ? "left" : "right"}`,
-    );
+
+    const messRow = document.createElement("div");
+    messRow.classList.add("msg-row", position === "left" ? "left" : "right");
 
     const bubbleWrap = document.createElement("div");
     bubbleWrap.classList.add("bubble-wrap");
@@ -60,20 +58,29 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     bubble.classList.add("bubble");
     bubble.innerText = message;
 
-    const user = document.createElement("div");
-    user.classList.add("user");
-    user.innerText = user_name!;
-
-    const tail = document.createElement("div");
-    tail.classList.add("tail");
-
-    messContainer?.append(messTail);
-    messTail.append(bubbleWrap);
-    bubbleWrap.append(bubble);
     if (user_name != undefined) {
+      const user = document.createElement("div");
+      user.classList.add("user");
+      user.innerText = user_name;
       bubble.prepend(user);
     }
-    bubbleWrap.append(tail);
+
+    const tail = document.createElement("div");
+    tail.classList.add(
+      "tail",
+      position === "left" ? "tail-left" : "tail-right",
+    );
+
+    bubbleWrap.append(bubble);
+
+    // order flips depending on direction
+    if (position === "left") {
+      messRow.append(tail, bubbleWrap);
+    } else {
+      messRow.append(bubbleWrap, tail);
+    }
+
+    messContainer?.append(messRow);
   };
 
   const onChange = (e: any) => {
@@ -178,22 +185,43 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             className="max-h-full pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
             id="main"
           >
-            {DataDump.map((talk: DumpDataType) => (
-              <div
-                className={`msg-row ${id == talk.user_id ? "right" : "left"}`}
-                key={talk.conv_id}
-              >
+            {DataDump.map((talk: DumpDataType) => {
+              const isRight = id == talk.user_id;
+
+              const tailEl = (
+                <div
+                  className={`tail ${isRight ? "tail-right" : "tail-left"}`}
+                />
+              );
+
+              const bubbleEl = (
                 <div className="bubble-wrap">
                   <div className="bubble">
-                    <div className="user">
-                      {id == talk.user_id ? "You: " : talk.name}
-                    </div>
+                    <div className="user">{isRight ? "You: " : talk.name}</div>
                     {talk.conversation}
                   </div>
-                  <div className="tail"></div>
                 </div>
-              </div>
-            ))}
+              );
+
+              return (
+                <div
+                  className={`msg-row ${isRight ? "right" : "left"}`}
+                  key={talk.conv_id}
+                >
+                  {isRight ? (
+                    <>
+                      {bubbleEl}
+                      {tailEl}
+                    </>
+                  ) : (
+                    <>
+                      {tailEl}
+                      {bubbleEl}
+                    </>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
