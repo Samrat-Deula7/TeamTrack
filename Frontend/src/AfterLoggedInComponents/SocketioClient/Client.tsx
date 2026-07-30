@@ -150,7 +150,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       message: sendMessage,
     });
 
-    createMessages("You: " + sendMessage, "right");
+    createMessages(sendMessage, "right");
     SetNewMess(newMess + 1);
     setMess("");
   };
