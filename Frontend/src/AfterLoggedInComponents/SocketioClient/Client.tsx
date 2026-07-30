@@ -20,6 +20,7 @@ type ClientType = {
 };
 
 type DumpDataType = {
+  name: string;
   conv_id: number;
   team_id: number;
   user_id: number;
@@ -39,7 +40,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   let userid: any;
   const [DataDump, setDataDump] = useState([]);
   const [id, setId] = useState(0);
-  const [usern, serUser] = useState("");
 
   const createMessages = (
     message: string,
@@ -148,7 +148,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
   useEffect(() => {
     const handler = (data: { message: string; userName: string }) => {
-      serUser(data.userName);
       createMessages(data.message, "left", data.userName);
     };
 
@@ -187,7 +186,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
                 <div className="bubble-wrap">
                   <div className="bubble">
                     <div className="user">
-                      {id == talk.user_id ? "You: " : usern}
+                      {id == talk.user_id ? "You: " : talk.name}
                     </div>
                     {talk.conversation}
                   </div>

@@ -46,7 +46,17 @@ ConversationRouter.get("/getalltalk", async (req: Request, res: Response) => {
     let data = await SocketUserAuth(token!, teamName);
 
     const getQuery = `
-        SELECT * from team_conversation WHERE team_id = $1 ;
+      SELECT 
+          u.name,
+          t.conv_id,
+          t.team_id,
+          t.user_id,
+          t.conversation,
+          t.date
+      FROM user_table u
+      JOIN team_conversation t 
+          ON u.user_id = t.user_id
+      WHERE t.team_id = $1;     
       `;
     const values = [data?.team_id];
     console.log(data?.team_id);
@@ -54,11 +64,9 @@ ConversationRouter.get("/getalltalk", async (req: Request, res: Response) => {
 
     let allConv = await pool.query(getQuery, values);
 
-    
-
     res.status(200).json({
       success: allConv.rows,
-      userId:data?.user_id as number
+      userId: data?.user_id as number,
     });
   } catch (error) {
     console.log(error);
