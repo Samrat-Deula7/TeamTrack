@@ -8,6 +8,7 @@ import typing from "../../assets/typing.gif";
 import sendSound from "../../assets/SendMess.mp4";
 import ReceiveSound from "../../assets/ReceiveMess.mp4";
 import { type Chat } from "../Collaboration";
+import EmojiBox from "./EmojiBox";
 
 // Need to add live backend link before deployment.
 const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
@@ -33,6 +34,9 @@ type DumpDataType = {
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const host = "https://teamtrack-yeze.onrender.com";
+
+  const [openEmoji, setOpenEmoji] = useState(false);
+  const [selectEmoji, setSelectEmoji] = useState("");
 
   const [mess, setMess] = useState("");
   // const [user, setUser] = useState("");
@@ -261,9 +265,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     }
   }, [isTyping]);
 
+  useEffect(() => {
+    setMess(mess + selectEmoji);
+  }, [selectEmoji]);
+
   return (
     <>
-      {" "}
       {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
       <div
         className={`lg:flex items-center justify-center  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
@@ -320,12 +327,11 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             })}
             <div ref={bottomRef} /> {/* invisible anchor */}
           </div>
-
-          {/* This is the main div for animate typing
-          <div
-            className="pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
-            id="TypeAniMain"
-          ></div> */}
+          <EmojiBox
+            openEmoji={openEmoji}
+            setOpenEmoji={setOpenEmoji}
+            setSelectEmoji={setSelectEmoji}
+          />
         </div>
 
         <button
@@ -337,6 +343,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         >
           <img src={arrow} alt="back" className="w-5" />
         </button>
+
         <form
           onSubmit={handleSend}
           className="absolute bottom-1  flex items-center  bg-white rounded-full shadow-lg w-[95%] h-10 px-3 py-2 mt-2 mb-1 m-auto"
@@ -348,6 +355,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           />
           <img
             src={addEmoji}
+            onClick={() => {
+              setOpenEmoji(true);
+            }}
             alt="search"
             className="w-4 h-4 sm:w-5 sm:h-5  shrink-0 mr-5 cursor-pointer"
           />
