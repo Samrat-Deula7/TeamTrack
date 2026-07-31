@@ -67,8 +67,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       const send = document.createElement("video");
       send.src = sendSound;
       send.setAttribute("autoplay", "");
-      send.setAttribute("width", "0");
-      send.setAttribute("height", "0");
+      send.classList.add("sound");
       send.volume = 0.1;
       bubble.append(send);
     }
@@ -76,8 +75,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       const receive = document.createElement("video");
       receive.src = ReceiveSound;
       receive.setAttribute("autoplay", "");
-      receive.setAttribute("width", "0");
-      receive.setAttribute("height", "0");
+      receive.classList.add("sound");
       receive.volume = 0.1;
       bubble.append(receive);
     }
