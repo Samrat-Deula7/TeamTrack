@@ -4,12 +4,13 @@ import arrow from "../../assets/arrow.png";
 import plus from "../../assets/plus.png";
 import addEmoji from "../../assets/smile-plus.png";
 import mic from "../../assets/microphone.png";
+import typing from "../../assets/typing.gif";
 import { type Chat } from "../Collaboration";
 
 // Need to add live backend link before deployment.
 const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
 
-const socket = io("http://localhost:3000", {
+const socket = io("https://teamtrack-yeze.onrender.com", {
   withCredentials: true, // important if you enabled credentials in backend CORS
   auth: { token: FlowTrackAuthtoken },
 });
@@ -29,7 +30,7 @@ type DumpDataType = {
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
-  const host = "http://localhost:3000";
+  const host = "https://teamtrack-yeze.onrender.com";
 
   const [mess, setMess] = useState("");
   // const [user, setUser] = useState("");
@@ -89,38 +90,46 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     const messContainer = document.getElementById("main");
 
     const messRow = document.createElement("div");
-    messRow.classList.add("msg-row", "left");
-    messRow.id = "DelRow";
+    messRow.classList.add("msg-row", "left", "DelRow");
 
-    const bubbleWrap = document.createElement("div");
-    bubbleWrap.classList.add("bubble-wrap");
+    // const bubbleWrap = document.createElement("div");
+    // bubbleWrap.classList.add("bubble-wrap");
 
-    const bubble = document.createElement("div");
-    bubble.classList.add("bubble");
-    bubble.innerText = "typing";
+    // const bubble = document.createElement("div");
+    // bubble.classList.add("bubble");
 
+    const typingEff = document.createElement("img");
+    typingEff.classList.add("typing-eff");
+    typingEff.src = typing;
+
+    messRow.append(typingEff);
     if (userN != undefined) {
       const user = document.createElement("div");
       user.classList.add("user");
       user.innerText = userN;
-      bubble.prepend(user);
+      messRow.prepend(user);
     }
 
-    const tail = document.createElement("div");
-    tail.classList.add("tail", "tail-left");
+    // const tail = document.createElement("div");
+    // tail.classList.add("tail", "tail-left");
 
-    bubbleWrap.append(bubble);
+    // bubbleWrap.append(bubble);
 
     // order flips depending on direction
-    messRow.append(tail, bubbleWrap);
+    // messRow.append(tail, bubbleWrap);
 
     messContainer?.append(messRow);
   };
 
   const deleteTypingAni = () => {
-    const messContainer = document.getElementById("DelRow") as HTMLElement;
-    if (messContainer) {
-      messContainer.innerHTML = "";
+    // const messContainer = document.getElementById("DelRow") as HTMLElement;
+    const messContainers = document.getElementsByClassName(
+      "DelRow",
+    ) as HTMLCollectionOf<Element>;
+    if (messContainers.length > 0) {
+      for (let i = 0; i < messContainers.length; i++) {
+        messContainers[i].innerHTML = "";
+      }
       console.log("Deleted");
     }
   };

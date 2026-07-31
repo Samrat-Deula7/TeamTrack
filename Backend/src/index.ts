@@ -68,7 +68,7 @@ io.on("connection", async (socket) => {
 
   socket.on("typing", ({ teamName }) => {
     socket.to(teamName).emit("sendingText", {
-      userName: teamName,
+      userName: userName,
     });
   });
 });
