@@ -68,16 +68,18 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       send.src = sendSound;
       send.setAttribute("autoplay", "");
       send.setAttribute("width", "0");
+      send.setAttribute("height", "0");
       send.volume = 0.1;
       bubble.append(send);
     }
     if (position == "left") {
-      const send = document.createElement("video");
-      send.src = ReceiveSound;
-      send.setAttribute("autoplay", "");
-      send.setAttribute("width", "0");
-      send.volume = 0.1;
-      bubble.append(send);
+      const receive = document.createElement("video");
+      receive.src = ReceiveSound;
+      receive.setAttribute("autoplay", "");
+      receive.setAttribute("width", "0");
+      receive.setAttribute("height", "0");
+      receive.volume = 0.1;
+      bubble.append(receive);
     }
 
     if (user_name != undefined) {
