@@ -92,12 +92,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     const messRow = document.createElement("div");
     messRow.classList.add("msg-row", "left", "DelRow");
 
-    // const bubbleWrap = document.createElement("div");
-    // bubbleWrap.classList.add("bubble-wrap");
-
-    // const bubble = document.createElement("div");
-    // bubble.classList.add("bubble");
-
     const typingEff = document.createElement("img");
     typingEff.classList.add("typing-eff");
     typingEff.src = typing;
@@ -110,19 +104,10 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       messRow.prepend(user);
     }
 
-    // const tail = document.createElement("div");
-    // tail.classList.add("tail", "tail-left");
-
-    // bubbleWrap.append(bubble);
-
-    // order flips depending on direction
-    // messRow.append(tail, bubbleWrap);
-
     messContainer?.append(messRow);
   };
 
   const deleteTypingAni = () => {
-    // const messContainer = document.getElementById("DelRow") as HTMLElement;
     const messContainers = document.getElementsByClassName(
       "DelRow",
     ) as HTMLCollectionOf<Element>;
