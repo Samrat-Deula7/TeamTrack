@@ -5,6 +5,8 @@ import plus from "../../assets/plus.png";
 import addEmoji from "../../assets/smile-plus.png";
 import mic from "../../assets/microphone.png";
 import typing from "../../assets/typing.gif";
+import sendSound from "../../assets/SendMess.mp4";
+import ReceiveSound from "../../assets/ReceiveMess.mp4";
 import { type Chat } from "../Collaboration";
 
 // Need to add live backend link before deployment.
@@ -60,6 +62,23 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     const bubble = document.createElement("div");
     bubble.classList.add("bubble");
     bubble.innerText = message;
+
+    if (position == "right") {
+      const send = document.createElement("video");
+      send.src = sendSound;
+      send.setAttribute("autoplay", "");
+      send.setAttribute("width", "0");
+      send.volume = 0.1;
+      bubble.append(send);
+    }
+    if (position == "left") {
+      const send = document.createElement("video");
+      send.src = ReceiveSound;
+      send.setAttribute("autoplay", "");
+      send.setAttribute("width", "0");
+      send.volume = 0.1;
+      bubble.append(send);
+    }
 
     if (user_name != undefined) {
       const user = document.createElement("div");
@@ -204,7 +223,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
       const timeout = setTimeout(() => {
         deleteTypingAni();
-      }, 4000);
+      }, 2000);
 
       return () => {
         clearTimeout(timeout);
