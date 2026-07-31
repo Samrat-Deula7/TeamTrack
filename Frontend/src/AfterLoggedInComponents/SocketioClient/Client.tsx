@@ -267,6 +267,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
   useEffect(() => {
     setMess(mess + selectEmoji);
+    setSelectEmoji("");
   }, [selectEmoji]);
 
   return (
