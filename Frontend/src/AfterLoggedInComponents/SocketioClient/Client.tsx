@@ -8,6 +8,7 @@ import typing from "../../assets/typing.gif";
 import sendSound from "../../assets/SendMess.mp4";
 import ReceiveSound from "../../assets/ReceiveMess.mp4";
 import More from "../../assets/more.png";
+import Send from "../../assets/send.png";
 import { type Chat } from "../Collaboration";
 import EmojiBox from "./EmojiBox";
 import FileBox from "./FileBox";
@@ -448,13 +449,17 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
               onChange={onChange}
               onKeyDown={handleKeyDown}
               rows={1}
-              className="flex-1 outline-none resize-none overflow-y-auto whitespace-pre-wrap break-words text-gray-700 placeholder-gray-400 text-xs sm:text-base min-w-0 py-1 leading-5"
+              className="flex-1 min-h-[24px] outline-none resize-none overflow-y-auto whitespace-pre-wrap break-words text-gray-700 placeholder-gray-400 text-xs sm:text-base min-w-0 py-1 leading-5"
             />
             <img
               src={mic}
               alt="search"
-              className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 ml-2 mb-1 cursor-pointer"
+              className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 ml-2 mb-1 mr-2 cursor-pointer"
             />
+
+            <button className="  bg-green-400 w-7 h-7 p-1 rounded-full  duration-300 hover:text-green-500 hover:bg-transparent cursor-pointer">
+              <img src={Send} alt="Send the message" />
+            </button>
           </div>
         </form>
       </div>
