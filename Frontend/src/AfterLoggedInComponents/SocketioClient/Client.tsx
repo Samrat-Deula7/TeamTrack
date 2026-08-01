@@ -303,7 +303,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         {/* This is the messages left and right block */}
         <div className="messages-block" id="messages-block">
           <div
-            className="pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
+            className="pr-2  scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
             id="main"
           >
             {DataDump.map((talk: DumpDataType) => {

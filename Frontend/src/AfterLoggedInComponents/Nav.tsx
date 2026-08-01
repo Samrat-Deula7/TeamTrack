@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
-import Alert ,{ type AlertType } from "../Alert";
+import Alert, { type AlertType } from "../Alert";
 import Loading from "../Loading";
 
 type NavProps = {
@@ -10,7 +10,7 @@ type NavProps = {
   AlertPopUp: AlertType;
   setmenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   menuOpen: boolean;
-  loading:boolean;
+  loading: boolean;
 };
 
 const NavBar: React.FC<NavProps> = ({
@@ -55,7 +55,6 @@ const NavBar: React.FC<NavProps> = ({
           <button
             className="text-[#000000] font-bold text-[13px] border border-2 border-green-500 text-green-500 w-30 h-7 rounded-xl duration-300 hover:border-none hover:bg-transparent cursor-pointer"
             onClick={() => {
-              
               setAlertPopUp({
                 ...AlertPopUp,
                 alert: true,
@@ -124,33 +123,6 @@ const NavBar: React.FC<NavProps> = ({
               }}
             >
               Collaboration
-            </Link>
-            <Link
-              to="/visualization"
-              className={` md:text-110  text-gray-400 cursor-pointer hover:text-green-500 hover:font-mono`}
-              onClick={() => {
-                setmenuOpen(false);
-              }}
-            >
-              Visualization
-            </Link>
-            <Link
-              to="/history"
-              className={` md:text-110 text-gray-400 cursor-pointer hover:text-green-500 hover:font-mono`}
-              onClick={() => {
-                setmenuOpen(false);
-              }}
-            >
-              History
-            </Link>
-            <Link
-              to="/iteration"
-              className={` md:text-110  text-gray-400 cursor-pointer hover:text-green-500 hover:font-mono`}
-              onClick={() => {
-                setmenuOpen(false);
-              }}
-            >
-              Iteration
             </Link>
           </div>
         </div>

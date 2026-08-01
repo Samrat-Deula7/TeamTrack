@@ -12,9 +12,6 @@ import Nav from "./AfterLoggedInComponents/Nav";
 import Tasks from "./AfterLoggedInComponents/Tasks/Tasks";
 import TeamSetting from "./AfterLoggedInComponents/Tasks/TeamSetting";
 import Collaboration from "./AfterLoggedInComponents/Collaboration";
-import Visualization from "./AfterLoggedInComponents/Visualization";
-import History from "./AfterLoggedInComponents/History";
-import Iteration from "./AfterLoggedInComponents/Iteration";
 import AddTeam from "./AfterLoggedInComponents/Tasks/AddTeam";
 
 import Alert, { type AlertType } from "./Alert";
@@ -46,7 +43,6 @@ function App() {
     });
   const [AllTeamData, setAllTeamData] = useState<TeamData[]>([]);
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     Loggedin ? navigate("/") : navigate("/landing");
@@ -193,54 +189,6 @@ function App() {
                   setAllTeamData={setAllTeamData}
                   setLoading={setLoading}
                 />
-              </>
-            }
-          />
-          <Route
-            path="/visualization"
-            element={
-              <>
-                <Nav
-                  setLoggedin={setLoggedin}
-                  setAlertPopUp={setAlertPopUp}
-                  AlertPopUp={AlertPopUp}
-                  setmenuOpen={setmenuOpen}
-                  menuOpen={menuOpen}
-                  loading={loading}
-                />
-                <Visualization />
-              </>
-            }
-          />
-          <Route
-            path="/history"
-            element={
-              <>
-                <Nav
-                  setLoggedin={setLoggedin}
-                  setAlertPopUp={setAlertPopUp}
-                  AlertPopUp={AlertPopUp}
-                  setmenuOpen={setmenuOpen}
-                  menuOpen={menuOpen}
-                  loading={loading}
-                />
-                <History />
-              </>
-            }
-          />
-          <Route
-            path="/iteration"
-            element={
-              <>
-                <Nav
-                  setLoggedin={setLoggedin}
-                  setAlertPopUp={setAlertPopUp}
-                  AlertPopUp={AlertPopUp}
-                  setmenuOpen={setmenuOpen}
-                  menuOpen={menuOpen}
-                  loading={loading}
-                />
-                <Iteration />
               </>
             }
           />
