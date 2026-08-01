@@ -415,7 +415,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
         <form
           onSubmit={handleSend}
-          className={`absolute bottom-1 flex items-end bg-white rounded-3xl shadow-lg w-[95%] min-h-10 max-h-40 px-3 py-2 mt-2 mb-1 m-auto ${ChatDiv.team == "" ? "hidden" : "flex"}`}
+          className={`absolute bottom-1 z-5 flex items-end bg-white rounded-3xl shadow-lg w-[95%] min-h-10 max-h-40 px-3 py-2 mt-2 mb-1 m-auto ${ChatDiv.team == "" ? "hidden" : "flex"}`}
         >
           <img
             src={plus}

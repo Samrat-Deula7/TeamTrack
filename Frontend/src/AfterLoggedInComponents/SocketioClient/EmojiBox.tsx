@@ -177,7 +177,7 @@ const EmojiBox: React.FC<EmojiBoxProp> = ({
   return (
     <>
       <div
-        className={`absolute bottom-15 md:left-13 items-center justify-center w-auto  md:w-130 h-80 md:h-[]  bg-[#101820] backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${openEmoji ? "flex" : "hidden"}`}
+        className={`absolute bottom-15 md:left-13 z-6 items-center justify-center w-auto  md:w-130 h-80 md:h-[]  bg-[#101820] backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${openEmoji ? "flex" : "hidden"}`}
       >
         <button
           onClick={() => {
