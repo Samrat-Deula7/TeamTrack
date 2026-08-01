@@ -211,9 +211,10 @@ const EmojiBox: React.FC<EmojiBoxProp> = ({
         <div
           className={`flex h-70 w-70 md:w-130 flex-wrap justify-around items-center p-2 pt-4 ${showFirst ? "flex" : "hidden"}`}
         >
-          {emojiList1.map((emoji) => (
+          {emojiList1.map((emoji, i) => (
             <div
               className={`text-xl md:text-3xl cursor-pointer hover:transform hover:-translate-0.5 hover:duration-200 md:hover:text-[31px] ${showFirst ? "flex" : "hidden"}`}
+              key={i}
               onClick={() => setSelectEmoji(emoji.emoji)}
             >
               {emoji.emoji}
@@ -224,9 +225,10 @@ const EmojiBox: React.FC<EmojiBoxProp> = ({
         <div
           className={`flex h-70 w-70 md:w-130 flex-wrap justify-around items-center p-2 pt-4 ${showFirst ? "hidden" : "flex"}`}
         >
-          {emojiList2.map((emoji) => (
+          {emojiList2.map((emoji, i) => (
             <div
               className={`text-xl md:text-3xl cursor-pointer hover:transform hover:-translate-0.5 hover:duration-200 md:hover:text-[31px] ${showFirst ? "hidden" : "flex"}`}
+              key={i}
               onClick={() => setSelectEmoji(emoji.emoji)}
             >
               {emoji.emoji}

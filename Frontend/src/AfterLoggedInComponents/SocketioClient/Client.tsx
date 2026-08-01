@@ -9,6 +9,7 @@ import sendSound from "../../assets/SendMess.mp4";
 import ReceiveSound from "../../assets/ReceiveMess.mp4";
 import { type Chat } from "../Collaboration";
 import EmojiBox from "./EmojiBox";
+import FileBox from "./FileBox";
 
 // Need to add live backend link before deployment.
 const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
@@ -37,6 +38,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
   const [openEmoji, setOpenEmoji] = useState(false);
   const [selectEmoji, setSelectEmoji] = useState("");
+
+  const [openFile, setOpenFile] = useState(false);
 
   const [mess, setMess] = useState("");
   // const [user, setUser] = useState("");
@@ -350,6 +353,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             setOpenEmoji={setOpenEmoji}
             setSelectEmoji={setSelectEmoji}
           />
+          <FileBox openFile={openFile} setOpenFile={setOpenFile} />
         </div>
 
         <button
@@ -368,6 +372,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         >
           <img
             src={plus}
+            onClick={() => setOpenFile(true)}
             alt="search"
             className="w-3 h-3 sm:w-4 sm:h-4 shrink-0 mr-3 mb-1 cursor-pointer"
           />
