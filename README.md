@@ -2,29 +2,23 @@
 
 SQL commands for the database schema
 
-
 Data Base: Project_Team_Track
 
-
-
 CREATE TABLE User_Table (
-    User_Id SERIAL PRIMARY KEY,
-    Name VARCHAR(20),
-    Password VARCHAR(80),
-    Email VARCHAR(30) UNIQUE,
-    Phone_No VARCHAR(80)
+User_Id SERIAL PRIMARY KEY,
+Name VARCHAR(20),
+Password VARCHAR(80),
+Email VARCHAR(30) UNIQUE,
+Phone_No VARCHAR(80)
 );
-
-
 
 CREATE TABLE User_Tasks (
-    Task_Id SERIAL PRIMARY KEY,
-    User_Id INT NOT NULL,
-    Task VARCHAR(150) NOT NULL,
-    Completed BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
+Task_Id SERIAL PRIMARY KEY,
+User_Id INT NOT NULL,
+Task VARCHAR(150) NOT NULL,
+Completed BOOLEAN NOT NULL DEFAULT FALSE,
+FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
-
 
 Create table Team_Table(
 Team_Id serial primary key,
@@ -38,20 +32,36 @@ FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
 );
 
 create table team_conversation (
-  conv_id serial primary key,
-  team_id int4 not null,
-  user_id int4 not null,
-  conversation varchar(1000),
-  foreign key(team_id) references team_table(team_id),
-  foreign key(user_id) references user_table(user_id)
+conv_id serial primary key,
+team_id int4 not null,
+user_id int4 not null,
+conversation varchar(1000),
+foreign key(team_id) references team_table(team_id),
+foreign key(user_id) references user_table(user_id)
 )
 
-select * from User_Tasks
-select * from User_Table
-select * from Team_Table
+CREATE TABLE send_media (
+media_id SERIAL PRIMARY KEY,
+media_name VARCHAR(255) NOT NULL,
+media_type VARCHAR(50),
+media_size BIGINT,
+media_path VARCHAR(500) NOT NULL,
+uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+user_id INT NOT NULL,
+conv_id INT NOT NULL,
+
+FOREIGN KEY (user_id)
+REFERENCES user_table(user_id) ON DELETE CASCADE,
+
+FOREIGN KEY (conv_id)
+REFERENCES team_conversation(conv_id) ON DELETE CASCADE
+);
+
+select _ from User_Tasks
+select _ from User*Table
+select * from Team*Table
 select * from team_conversation
-
-
+select \* from send_media
 
 Issues That I have faced while building this project
 
@@ -72,9 +82,7 @@ The old zombie process was from a point in time when your code only had routes u
 The fix
 Killing PID 14376 destroyed the old zombie process, freeing up port 3000. Your new server finally started successfully and picked up all 7 routes including /DeleteTeamTask.
 
-
 All of that happend because I forgot to update my dist file using npm run build before running npm run dev
-
 
 Solution of Problem number 1
 
@@ -82,9 +90,9 @@ Step 1 — Open Windows Command Prompt (NOT WSL). Press Windows Key + R, type cm
 Step 2 — Paste this and press Enter:
 cmdnetstat -ano | findstr :3000
 Step 3 — You'll see something like this, copy the last number (that's the PID):
-TCP    0.0.0.0:3000    0.0.0.0:0    LISTENING    12345
-                                                  ^^^^^
-                                              copy this number
+TCP 0.0.0.0:3000 0.0.0.0:0 LISTENING 12345
+^^^^^
+copy this number
 Step 4 — Paste this replacing 12345 with your actual number, press Enter:
 cmdtaskkill /PID 12345 /F
 You should see:
@@ -96,26 +104,19 @@ Server is running on http://localhost:3000
 ← cursor just hangs here, no "clean exit" message
 Step 7 — Now test your DELETE request in Postman again.
 
-
 How was problem number 1 discovered ?
 
 nodemon src/index.ts
 [nodemon] 3.1.11
 [nodemon] to restart at any time, enter rs
-[nodemon] watching path(s): *.*
+[nodemon] watching path(s): _._
 [nodemon] watching extensions: ts,json
 [nodemon] starting ts-node src/index.ts
-[dotenv@17.3.1] injecting env (4) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.3.1] injecting env (4) from .env -- tip: ⚙️ suppress all logs with { quiet: true }
 [dotenv@17.3.1] injecting env (0) from .env -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
 
 Server is running on http://localhost:3000
-[nodemon] clean exit - waiting for changes before restart   // This line means the server experienced an client crash which let to me finding the problem
-
-
-
-
-
-
+[nodemon] clean exit - waiting for changes before restart // This line means the server experienced an client crash which let to me finding the problem
 
 📌 Problem number 2: ENOENT error for ca.pem
 Problem:
@@ -130,17 +131,12 @@ Result: ENOENT: no such file or directory crash.
 
 Solution:
 
-Use __dirname to resolve paths dynamically:
+Use \_\_dirname to resolve paths dynamically:
 
 ts
-const caPath = path.join(__dirname, "ca.pem");
+const caPath = path.join(\_\_dirname, "ca.pem");
 const caCert = fs.readFileSync(caPath).toString();
 This makes the path relative to the compiled file’s directory (dist/routes/), not hard‑coded to src/.
-
-
-
-
-
 
 📌 Problem number 3: File missing in dist/
 Problem:
@@ -155,12 +151,9 @@ Update the build script to copy the file:
 
 json
 "scripts": {
-  "build": "tsc && cp src/routes/ca.pem dist/routes/"
+"build": "tsc && cp src/routes/ca.pem dist/routes/"
 }
 This ensures ca.pem is always present in dist/routes/ after build, so the runtime can find it.
-
-
-
 
 📌 Problem number 4: Using app.listen on Vercel
 Problem:
@@ -187,11 +180,6 @@ import app from "./app";
 export default app; // no app.listen
 This way, local dev works with app.listen, and Vercel works with export default app.
 
-
-
-
-
-
 📌 Problem number 5:
 
 When deploying the project to Vercel, the build completed successfully but the platform returned the error:
@@ -216,13 +204,10 @@ Add a configuration file in the project root:
 
 json
 {
-  "version": 2,
-  "routes": [{ "src": "/api/(.*)", "dest": "dist/index.js" }]
+"version": 2,
+"routes": [{ "src": "/api/(.*)", "dest": "dist/index.js" }]
 }
 This ensures Vercel routes API requests correctly and serves files from the dist/ folder.
-
-
-
 
 Frontend Problem
 
@@ -235,12 +220,12 @@ We added a vercel.json file with a rewrite rule:
 
 json
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+"rewrites": [
+{
+"source": "/(.*)",
+"destination": "/index.html"
+}
+]
 }
 This tells Vercel:
 
