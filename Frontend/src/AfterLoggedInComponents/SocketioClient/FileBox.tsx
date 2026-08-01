@@ -1,8 +1,15 @@
 type FileBoxProp = {
   openFile: boolean;
   setOpenFile: React.Dispatch<React.SetStateAction<boolean>>;
+  selectFile: object[];
+  setSelectFile: React.Dispatch<React.SetStateAction<object[]>>;
 };
-const FileBox: React.FC<FileBoxProp> = ({ openFile, setOpenFile }) => {
+const FileBox: React.FC<FileBoxProp> = ({
+  openFile,
+  setOpenFile,
+  selectFile,
+  setSelectFile,
+}) => {
   return (
     <>
       <div
@@ -23,7 +30,19 @@ const FileBox: React.FC<FileBoxProp> = ({ openFile, setOpenFile }) => {
         >
           Upload File
         </label>
-        <input id="FileUpload" type="file" className="hidden" />
+        <input
+          id="FileUpload"
+          type="file"
+          className="hidden"
+          onChange={(e: any) => {
+            const files = e.target.files;
+            const fileArray = Array.from(files) as object[];
+            if (fileArray) {
+              setSelectFile([...selectFile, ...fileArray!]);
+              setOpenFile(false);
+            }
+          }}
+        />
       </div>
     </>
   );

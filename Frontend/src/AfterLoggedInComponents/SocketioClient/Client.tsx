@@ -10,7 +10,7 @@ import ReceiveSound from "../../assets/ReceiveMess.mp4";
 import { type Chat } from "../Collaboration";
 import EmojiBox from "./EmojiBox";
 import FileBox from "./FileBox";
-
+import SelectedFilePopUp from "./SelectedFilePopUp";
 // Need to add live backend link before deployment.
 const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
 
@@ -40,9 +40,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [selectEmoji, setSelectEmoji] = useState("");
 
   const [openFile, setOpenFile] = useState(false);
+  const [selectFile, setSelectFile] = useState<object[]>([]);
 
   const [mess, setMess] = useState("");
-  // const [user, setUser] = useState("");
 
   let sendMessage: any;
 
@@ -211,6 +211,13 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       message: sendMessage,
     });
 
+    // const handleUpload = async () => {
+    //   const dataToUpload = new FormData();
+
+    //   // Data to send in the body of request.
+    //   dataToUpload.append("file", selectFile!);
+    // };
+
     createMessages("You: " + sendMessage, "right");
     SetNewMess(newMess + 1);
     setMess("");
@@ -302,7 +309,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             {ChatDiv.team}
           </span>
         </div>
-
         {/* This is the messages left and right block */}
         <div className="messages-block" id="messages-block">
           <div
@@ -353,9 +359,13 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             setOpenEmoji={setOpenEmoji}
             setSelectEmoji={setSelectEmoji}
           />
-          <FileBox openFile={openFile} setOpenFile={setOpenFile} />
+          <FileBox
+            openFile={openFile}
+            setOpenFile={setOpenFile}
+            selectFile={selectFile}
+            setSelectFile={setSelectFile}
+          />
         </div>
-
         <button
           onClick={() => {
             setChatDiv({ ...ChatDiv, on: false, team: "" });
@@ -365,6 +375,18 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         >
           <img src={arrow} alt="back" className="w-5" />
         </button>
+        {/* This is the div showing selected file */}
+        <div className="absolute bottom-13 left-5 md:left-13 flex justify-start items-center gap-x-2 w-150 ">
+          {selectFile?.map((eachFile: any, i) => (
+            <SelectedFilePopUp
+              key={i}
+              eachFile={eachFile}
+              selectFile={selectFile}
+              id={i}
+              setSelectFile={setSelectFile}
+            />
+          ))}
+        </div>
 
         <form
           onSubmit={handleSend}
