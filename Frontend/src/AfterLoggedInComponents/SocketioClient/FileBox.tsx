@@ -1,14 +1,14 @@
 type FileBoxProp = {
   openFile: boolean;
   setOpenFile: React.Dispatch<React.SetStateAction<boolean>>;
-  selectFile: object[];
-  setSelectFile: React.Dispatch<React.SetStateAction<object[]>>;
+  selectFiles: object[];
+  setSelectFiles: React.Dispatch<React.SetStateAction<object[]>>;
 };
 const FileBox: React.FC<FileBoxProp> = ({
   openFile,
   setOpenFile,
-  selectFile,
-  setSelectFile,
+  selectFiles,
+  setSelectFiles,
 }) => {
   return (
     <>
@@ -38,7 +38,7 @@ const FileBox: React.FC<FileBoxProp> = ({
             const files = e.target.files;
             const fileArray = Array.from(files) as object[];
             if (fileArray) {
-              setSelectFile([...selectFile, ...fileArray!]);
+              setSelectFiles([...selectFiles, ...fileArray!]);
               setOpenFile(false);
             }
           }}

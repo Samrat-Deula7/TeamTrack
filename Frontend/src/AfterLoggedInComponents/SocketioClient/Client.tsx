@@ -7,6 +7,7 @@ import mic from "../../assets/microphone.png";
 import typing from "../../assets/typing.gif";
 import sendSound from "../../assets/SendMess.mp4";
 import ReceiveSound from "../../assets/ReceiveMess.mp4";
+import More from "../../assets/more.png";
 import { type Chat } from "../Collaboration";
 import EmojiBox from "./EmojiBox";
 import FileBox from "./FileBox";
@@ -40,7 +41,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [selectEmoji, setSelectEmoji] = useState("");
 
   const [openFile, setOpenFile] = useState(false);
-  const [selectFile, setSelectFile] = useState<object[]>([]);
+  const [selectFiles, setSelectFiles] = useState<object[]>([]);
 
   const [mess, setMess] = useState("");
 
@@ -304,7 +305,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         className={`lg:flex items-center justify-center  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
       >
         {/* This is the top bar */}
-        <div className="w-full  px-3 py-2 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl">
+        <div
+          className={`w-full  px-3 py-2 bg-transparent backdrop-blur-md shadow-lg absolute top-0 rounded-t-xl ${ChatDiv.team == "" ? "hidden" : "flex"}`}
+        >
           <span className="font-bold text-xs md:text-xl text-green-500 mx-7">
             {ChatDiv.team}
           </span>
@@ -362,8 +365,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           <FileBox
             openFile={openFile}
             setOpenFile={setOpenFile}
-            selectFile={selectFile}
-            setSelectFile={setSelectFile}
+            selectFiles={selectFiles}
+            setSelectFiles={setSelectFiles}
           />
         </div>
         <button
@@ -376,21 +379,53 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           <img src={arrow} alt="back" className="w-5" />
         </button>
         {/* This is the div showing selected file */}
-        <div className="absolute bottom-13 left-5 md:left-13 flex justify-start items-center gap-x-2 w-150 ">
-          {selectFile?.map((eachFile: any, i) => (
+
+        {/* <div className="absolute bottom-13 left-5 md:left-13 flex justify-start items-center gap-x-2 w-150 ">
+          {selectFiles?.map((eachFile: any, i) => (
             <SelectedFilePopUp
               key={i}
               eachFile={eachFile}
-              selectFile={selectFile}
+              selectFiles={selectFiles}
               id={i}
-              setSelectFile={setSelectFile}
+              setSelectFiles={setSelectFiles}
             />
           ))}
+        </div> */}
+
+        <div className="absolute bottom-13 left-5 md:left-13 flex justify-start items-center gap-x-2 w-150 ">
+          {selectFiles.length > 2 ? (
+            <>
+              {selectFiles.slice(0, 2)?.map((eachFile: any, i) => (
+                <SelectedFilePopUp
+                  key={i}
+                  eachFile={eachFile}
+                  selectFiles={selectFiles}
+                  id={i}
+                  setSelectFiles={setSelectFiles}
+                />
+              ))}
+              <div className="flex justify-center items-center  p-3 w-10 h-10 bg-white  rounded-full">
+                <img src={More} alt="more" />
+              </div>
+            </>
+          ) : (
+            <>
+              {selectFiles?.map((eachFile: any, i) => (
+                <SelectedFilePopUp
+                  key={i}
+                  eachFile={eachFile}
+                  selectFiles={selectFiles}
+                  id={i}
+                  setSelectFiles={setSelectFiles}
+                />
+              ))}
+            </>
+          )}
         </div>
 
         <form
           onSubmit={handleSend}
-          className="absolute bottom-1 flex items-end bg-white rounded-3xl shadow-lg w-[95%] min-h-10 max-h-40 px-3 py-2 mt-2 mb-1 m-auto"
+          className={`absolute bottom-1 flex items-end bg-white rounded-3xl shadow-lg w-[95%] min-h-10 max-h-40 px-3 py-2 mt-2 mb-1 m-auto ${ChatDiv.team == "" ? "hidden" : "flex"}`}
         >
           <img
             src={plus}

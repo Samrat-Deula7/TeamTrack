@@ -1,15 +1,15 @@
 type SelectedFileProps = {
   eachFile: any;
   id: number;
-  selectFile: object[];
-  setSelectFile: React.Dispatch<React.SetStateAction<object[]>>;
+  selectFiles: object[];
+  setSelectFiles: React.Dispatch<React.SetStateAction<object[]>>;
 };
 
 const SelectedFilePopUp: React.FC<SelectedFileProps> = ({
   eachFile,
-  selectFile,
+  selectFiles,
   id,
-  setSelectFile,
+  setSelectFiles,
 }) => {
   return (
     <>
@@ -18,8 +18,8 @@ const SelectedFilePopUp: React.FC<SelectedFileProps> = ({
       >
         <button
           onClick={() => {
-            const filteredFile = selectFile.filter((_, i) => i !== id);
-            setSelectFile(filteredFile);
+            const filteredFile = selectFiles.filter((_, i) => i !== id);
+            setSelectFiles(filteredFile);
           }}
           className="absolute -top-1 right-2 text-xl lg:text-3xl focus:outline-none cursor-pointer text-white pointer-events-auto"
           aria-label="Close button"
