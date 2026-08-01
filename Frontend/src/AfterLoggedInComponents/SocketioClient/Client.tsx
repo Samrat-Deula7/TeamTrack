@@ -270,6 +270,23 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     setSelectEmoji("");
   }, [selectEmoji]);
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = `${Math.min(el.scrollHeight, 128)}px`; // cap growth at 128px
+    }
+  }, [mess]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend(e as unknown as any);
+    }
+  };
+
   return (
     <>
       {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
@@ -347,37 +364,34 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
         <form
           onSubmit={handleSend}
-          className="absolute bottom-1  flex items-center  bg-white rounded-full shadow-lg w-[95%] h-10 px-3 py-2 mt-2 mb-1 m-auto"
+          className="absolute bottom-1 flex items-end bg-white rounded-3xl shadow-lg w-[95%] min-h-10 max-h-40 px-3 py-2 mt-2 mb-1 m-auto"
         >
           <img
             src={plus}
             alt="search"
-            className="w-3 h-3 sm:w-4 sm:h-4  shrink-0 mr-3 cursor-pointer"
+            className="w-3 h-3 sm:w-4 sm:h-4 shrink-0 mr-3 mb-1 cursor-pointer"
           />
           <img
             src={addEmoji}
-            onClick={() => {
-              setOpenEmoji(true);
-            }}
+            onClick={() => setOpenEmoji(true)}
             alt="search"
-            className="w-4 h-4 sm:w-5 sm:h-5  shrink-0 mr-5 cursor-pointer"
+            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mr-5 mb-1 cursor-pointer"
           />
 
-          <div className="flex items-center justify-between w-full ">
-            <input
-              type="text"
+          <div className="flex items-end justify-between w-full">
+            <textarea
+              ref={textareaRef}
               placeholder="Send Message ..."
-              //  value={searchQuery}
-              //  onChange={(e) => setSearchQuery(e.target.value)}
-              //  onKeyPress={handleKeyPress}
               value={mess}
               onChange={onChange}
-              className="flex-1 outline-none text-gray-700 placeholder-gray-400 text-xs sm:text-base min-w-0"
+              onKeyDown={handleKeyDown}
+              rows={1}
+              className="flex-1 outline-none resize-none overflow-y-auto whitespace-pre-wrap break-words text-gray-700 placeholder-gray-400 text-xs sm:text-base min-w-0 py-1 leading-5"
             />
             <img
               src={mic}
               alt="search"
-              className="w-4 h-4 sm:w-5 sm:h-5  shrink-0 cursor-pointer"
+              className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 ml-2 mb-1 cursor-pointer"
             />
           </div>
         </form>
