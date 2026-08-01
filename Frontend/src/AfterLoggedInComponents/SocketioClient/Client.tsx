@@ -419,13 +419,19 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         >
           <img
             src={plus}
-            onClick={() => setOpenFile(true)}
+            onClick={() => {
+              setOpenFile(true);
+              setOpenEmoji(false);
+            }}
             alt="search"
             className="w-3 h-3 sm:w-4 sm:h-4 shrink-0 mr-3 mb-1 cursor-pointer"
           />
           <img
             src={addEmoji}
-            onClick={() => setOpenEmoji(true)}
+            onClick={() => {
+              setOpenEmoji(true);
+              setOpenFile(false);
+            }}
             alt="search"
             className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mr-5 mb-1 cursor-pointer"
           />
