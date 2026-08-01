@@ -379,19 +379,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         >
           <img src={arrow} alt="back" className="w-5" />
         </button>
-        {/* This is the div showing selected file */}
 
-        {/* <div className="absolute bottom-13 left-5 md:left-13 flex justify-start items-center gap-x-2 w-150 ">
-          {selectFiles?.map((eachFile: any, i) => (
-            <SelectedFilePopUp
-              key={i}
-              eachFile={eachFile}
-              selectFiles={selectFiles}
-              id={i}
-              setSelectFiles={setSelectFiles}
-            />
-          ))}
-        </div> */}
+        {/* This is the div showing selected file */}
 
         <div className="absolute bottom-13 left-5 md:left-13 flex justify-start items-center gap-x-2 w-150 ">
           {selectFiles.length > 2 ? (

@@ -13,7 +13,7 @@ const FileBox: React.FC<FileBoxProp> = ({
   return (
     <>
       <div
-        className={`absolute bottom-15 md:left-13 items-center justify-center  w-50 h-30 md:w-80 md:h-40 md:h-[]  bg-[#101820] backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${openFile ? "flex" : "hidden"}`}
+        className={`absolute z-6 bottom-15 md:left-13 items-center justify-center  w-50 h-30 md:w-80 md:h-40 md:h-[]  bg-[#101820] backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${openFile ? "flex" : "hidden"}`}
       >
         <button
           onClick={() => {
