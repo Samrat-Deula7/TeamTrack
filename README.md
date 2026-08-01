@@ -17,51 +17,41 @@ Task_Id SERIAL PRIMARY KEY,
 User_Id INT NOT NULL,
 Task VARCHAR(150) NOT NULL,
 Completed BOOLEAN NOT NULL DEFAULT FALSE,
-FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
+FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id) ON DELETE CASCADE
 );
 
-Create table Team_Table(
-Team_Id serial primary key,
-User_Id INT not null,
-Team_Name varchar(70) not null,
-Team_Tasks varchar(150) not null,
-Completed Boolean not null default FALSE,
-Team_code Text,
-Type varchar(10) default 'member',
-FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id)
+CREATE TABLE Team_Table (
+Team_Id SERIAL PRIMARY KEY,
+User_Id INT NOT NULL,
+Team_Name VARCHAR(70) NOT NULL,
+Team_Tasks VARCHAR(150) NOT NULL,
+Completed BOOLEAN NOT NULL DEFAULT FALSE,
+Team_code TEXT,
+Type VARCHAR(10) DEFAULT 'member',
+FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id) ON DELETE CASCADE
 );
 
-create table team_conversation (
-conv_id serial primary key,
-team_id int4 not null,
-user_id int4 not null,
-conversation varchar(1000),
-foreign key(team_id) references team_table(team_id),
-foreign key(user_id) references user_table(user_id)
-)
-
-CREATE TABLE send_media (
-media_id SERIAL PRIMARY KEY,
-media_name VARCHAR(255) NOT NULL,
-media_type VARCHAR(50),
-media_size BIGINT,
-media_path VARCHAR(500) NOT NULL,
-uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-user_id INT NOT NULL,
-conv_id INT NOT NULL,
-
-FOREIGN KEY (user_id)
-REFERENCES user_table(user_id) ON DELETE CASCADE,
-
-FOREIGN KEY (conv_id)
-REFERENCES team_conversation(conv_id) ON DELETE CASCADE
+CREATE TABLE Team_Conversation (
+Conv_Id SERIAL PRIMARY KEY,
+Team_Id INT NOT NULL,
+User_Id INT NOT NULL,
+Conversation VARCHAR(1000),
+FOREIGN KEY (Team_Id) REFERENCES Team_Table(Team_Id) ON DELETE CASCADE,
+FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id) ON DELETE CASCADE
 );
 
-select _ from User_Tasks
-select _ from User*Table
-select * from Team*Table
-select * from team_conversation
-select \* from send_media
+CREATE TABLE Send_Media (
+Media_Id SERIAL PRIMARY KEY,
+Media_Name VARCHAR(255) NOT NULL,
+Media_Type VARCHAR(50),
+Media_Size BIGINT,
+Media_Path VARCHAR(500) NOT NULL,
+Uploaded_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+User_Id INT NOT NULL,
+Conv_Id INT NOT NULL,
+FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id) ON DELETE CASCADE,
+FOREIGN KEY (Conv_Id) REFERENCES Team_Conversation(Conv_Id) ON DELETE CASCADE
+);
 
 Issues That I have faced while building this project
 

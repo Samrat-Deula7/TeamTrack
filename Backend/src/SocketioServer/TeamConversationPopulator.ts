@@ -52,7 +52,6 @@ ConversationRouter.get("/getalltalk", async (req: Request, res: Response) => {
           t.team_id,
           t.user_id,
           t.conversation,
-          t.date
       FROM user_table u
       JOIN team_conversation t 
           ON u.user_id = t.user_id
