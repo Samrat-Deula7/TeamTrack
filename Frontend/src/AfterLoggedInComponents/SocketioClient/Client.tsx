@@ -394,7 +394,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
                   setSelectFiles={setSelectFiles}
                 />
               ))}
-              <div className="flex justify-center items-center  p-3 w-10 h-10 bg-white  rounded-full">
+              <div className="flex justify-center items-center  p-3 w-10 h-10 bg-green-500  rounded-full">
                 <img src={More} alt="more" />
               </div>
             </>
