@@ -4,8 +4,8 @@ import FileMedia from "../../assets/file-media.png";
 type SelectedFileProps = {
   eachFile: any;
   id: number;
-  selectFiles: object[];
-  setSelectFiles: React.Dispatch<React.SetStateAction<object[]>>;
+  selectFiles: File[];
+  setSelectFiles: React.Dispatch<React.SetStateAction<File[]>>;
 };
 
 const SelectedFilePopUp: React.FC<SelectedFileProps> = ({

@@ -42,7 +42,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [selectEmoji, setSelectEmoji] = useState("");
 
   const [openFile, setOpenFile] = useState(false);
-  const [selectFiles, setSelectFiles] = useState<object[]>([]);
+  const [selectFiles, setSelectFiles] = useState<File[]>([]);
 
   const [mess, setMess] = useState("");
 
@@ -50,7 +50,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
   let chatDump: any = [];
   let userid: any;
-  const [DataDump, setDataDump] = useState([]);
+  const [DataDump, setDataDump] = useState<DumpDataType[]>([]);
   const [id, setId] = useState(0);
   const [newMess, SetNewMess] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
@@ -150,11 +150,19 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const onChange = (e: any) => {
     setMess(e.target.value);
   };
-  const populateConversation = async () => {
+  const populateConversation = async (mediaId?: number) => {
     try {
       setLoading(true);
       const url = `${host}/api/conversation/talk`;
       const FlowTrackAuthtoken = localStorage.getItem("FlowTrackToken");
+
+      let message;
+
+      if (mediaId! > 0) {
+        message = "\u200B";
+      } else {
+        message = mess;
+      }
 
       const response = await fetch(url, {
         method: "POST",
@@ -162,7 +170,11 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           "Content-Type": "application/json",
           FlowTrackAuthtoken: FlowTrackAuthtoken || "",
         },
-        body: JSON.stringify({ mess: mess, teamName: ChatDiv.team }),
+        body: JSON.stringify({
+          mess: message,
+          teamName: ChatDiv.team,
+          mediaId: mediaId,
+        }),
       });
 
       const result: { success: string } = await response.json();
@@ -172,6 +184,28 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     } catch (error) {
       setLoading(false);
       console.log("why not working is it going to error.");
+    }
+  };
+
+  const populateMedia = async (dataToUpload: any) => {
+    try {
+      const url = `${host}/api/upload/media`;
+
+      let response = await fetch(url, {
+        method: "POST",
+        body: dataToUpload,
+      });
+
+      let result: { mediaId: number } = await response.json();
+
+      console.log("media id" + result.mediaId);
+
+      if (result.mediaId > 0) {
+        populateConversation(result.mediaId);
+        setSelectFiles([]);
+      }
+    } catch (error) {
+      console.log("Uploading didn't work");
     }
   };
 
@@ -208,21 +242,29 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     e.preventDefault();
     populateConversation();
     sendMessage = mess;
-    socket.emit("send-message", {
-      teamName: ChatDiv.team,
-      message: sendMessage,
-    });
+    if (mess != "") {
+      socket.emit("send-message", {
+        teamName: ChatDiv.team,
+        message: sendMessage,
+      });
+    }
 
-    // const handleUpload = async () => {
-    //   const dataToUpload = new FormData();
+    const dataToUpload = new FormData();
 
-    //   // Data to send in the body of request.
-    //   dataToUpload.append("file", selectFile!);
-    // };
+    // Data to send in the body of request.
+    for (const file of selectFiles) {
+      dataToUpload.append("file", file!);
+    }
+    // sendMessage = mess;
+    // dataToUpload.append("mess", mess);
+    // dataToUpload.append("teamName", chatDump.team);
+    populateMedia(dataToUpload);
 
-    createMessages("You: " + sendMessage, "right");
-    SetNewMess(newMess + 1);
-    setMess("");
+    if (mess != "") {
+      createMessages("You: " + sendMessage, "right");
+      SetNewMess(newMess + 1);
+      setMess("");
+    }
   };
 
   useEffect(() => {
@@ -303,7 +345,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     <>
       {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
       <div
-        className={`lg:flex items-center justify-center  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
+        className={`lg:flex items-center justify-center xl:pb-33  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
       >
         {/* This is the top bar */}
         <div
@@ -320,6 +362,9 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             id="main"
           >
             {DataDump.map((talk: DumpDataType) => {
+              if (talk.conversation.includes("\u200B")) {
+                return null;
+              }
               const isRight = id == talk.user_id;
 
               const tailEl = (

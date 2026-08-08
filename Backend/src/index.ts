@@ -5,6 +5,7 @@ import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import teamConversation from "./SocketioServer/TeamConversationPopulator";
+import MediaRouter from "./SocketioServer/MediaPopulator";
 import UserName from "./SocketioServer/UserName";
 import { Socket } from "dgram";
 
@@ -23,14 +24,15 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json());
+// app.use(express.json());
 
 // app.use(cors())
-app.use("/api/tasks", tasksRouter);
-app.use("/api/teamtasks", teamtaskRouter);
+app.use("/api/tasks", express.json(), tasksRouter);
+app.use("/api/teamtasks", express.json(), teamtaskRouter);
 
 // route for socket api
-app.use("/api/conversation", teamConversation);
+app.use("/api/conversation", express.json(), teamConversation);
+app.use("/api/upload", MediaRouter);
 // This is the socket server
 
 const server = createServer(app);

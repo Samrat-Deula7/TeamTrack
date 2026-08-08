@@ -1,8 +1,8 @@
 type FileBoxProp = {
   openFile: boolean;
   setOpenFile: React.Dispatch<React.SetStateAction<boolean>>;
-  selectFiles: object[];
-  setSelectFiles: React.Dispatch<React.SetStateAction<object[]>>;
+  selectFiles: File[];
+  setSelectFiles: React.Dispatch<React.SetStateAction<File[]>>;
 };
 const FileBox: React.FC<FileBoxProp> = ({
   openFile,
@@ -36,7 +36,7 @@ const FileBox: React.FC<FileBoxProp> = ({
           className="hidden"
           onChange={(e: any) => {
             const files = e.target.files;
-            const fileArray = Array.from(files) as object[];
+            const fileArray = Array.from(files) as File[];
             if (fileArray) {
               setSelectFiles([...selectFiles, ...fileArray!]);
               setOpenFile(false);
