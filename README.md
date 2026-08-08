@@ -35,8 +35,10 @@ CREATE TABLE Team_Conversation (
 Conv_Id SERIAL PRIMARY KEY,
 Team_Id INT NOT NULL,
 User_Id INT NOT NULL,
+Media_Id INT,
 Conversation VARCHAR(1000),
 FOREIGN KEY (Team_Id) REFERENCES Team_Table(Team_Id) ON DELETE CASCADE,
+FOREIGN KEY (Media_Id) REFERENCES Send_Media(Media_Id) ON DELETE CASCADE,
 FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id) ON DELETE CASCADE
 );
 
@@ -46,11 +48,8 @@ Media_Name VARCHAR(255) NOT NULL,
 Media_Type VARCHAR(50),
 Media_Size BIGINT,
 Media_Path VARCHAR(500) NOT NULL,
+media_data bytea,
 Uploaded_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-User_Id INT NOT NULL,
-Conv_Id INT NOT NULL,
-FOREIGN KEY (User_Id) REFERENCES User_Table(User_Id) ON DELETE CASCADE,
-FOREIGN KEY (Conv_Id) REFERENCES Team_Conversation(Conv_Id) ON DELETE CASCADE
 );
 
 Issues That I have faced while building this project
