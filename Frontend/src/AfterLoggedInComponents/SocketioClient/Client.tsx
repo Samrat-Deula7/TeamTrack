@@ -34,6 +34,12 @@ type DumpDataType = {
   conversation: string;
   date: string;
 };
+type MessageOptions = {
+  message: string;
+  position: string;
+  user_name?: string;
+  media?: File;
+};
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const host = "https://teamtrack-yeze.onrender.com";
@@ -55,11 +61,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [newMess, SetNewMess] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
 
-  const createMessages = (
-    message: string,
-    position: string,
-    user_name?: string,
-  ) => {
+  const createMessages = ({
+    message,
+    position,
+    user_name,
+    media,
+  }: MessageOptions) => {
     const messContainer = document.getElementById("main");
 
     const messRow = document.createElement("div");
@@ -94,6 +101,13 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       user.classList.add("user");
       user.innerText = user_name;
       bubble.prepend(user);
+    }
+
+    if (media != undefined) {
+      const mediaBox = document.createElement("img");
+      mediaBox.src = URL.createObjectURL(media);
+      mediaBox.classList.add("w-40", "md:w-60");
+      bubble.append(mediaBox);
     }
 
     const tail = document.createElement("div");
@@ -202,7 +216,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
       if (result.mediaId > 0) {
         populateConversation(result.mediaId);
-        setSelectFiles([]);
       }
     } catch (error) {
       console.log("Uploading didn't work");
@@ -255,21 +268,32 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     for (const file of selectFiles) {
       dataToUpload.append("file", file!);
     }
-    // sendMessage = mess;
-    // dataToUpload.append("mess", mess);
-    // dataToUpload.append("teamName", chatDump.team);
+
     populateMedia(dataToUpload);
 
     if (mess != "") {
-      createMessages("You: " + sendMessage, "right");
+      createMessages({ message: "You: " + sendMessage, position: "right" });
       SetNewMess(newMess + 1);
       setMess("");
+    }
+
+    if (selectFiles.length > 0) {
+      selectFiles.map((file: File) => {
+        createMessages({ message: "You: ", position: "right", media: file });
+        SetNewMess(newMess + 1);
+      });
+
+      setSelectFiles([]);
     }
   };
 
   useEffect(() => {
     const handler = (data: { message: string; userName: string }) => {
-      createMessages(data.message, "left", data.userName);
+      createMessages({
+        message: data.message,
+        position: "left",
+        user_name: data.userName,
+      });
       SetNewMess(newMess + 1);
     };
 
@@ -345,7 +369,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     <>
       {/* Right Panel - Content Section - Hidden on mobile and tablet, visible on laptop+ */}
       <div
-        className={`lg:flex items-center justify-center xl:pb-33  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
+        className={`lg:flex items-center justify-center xl:pb-5  w-full h-[calc(100vh-110px)] md:h-[calc(100vh-140px)]  bg-white/20 backdrop-blur-md shadow-lg rounded-xl border border-white/10 ${ChatDiv.on ? "flex" : "hidden"}`}
       >
         {/* This is the top bar */}
         <div
@@ -356,9 +380,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           </span>
         </div>
         {/* This is the messages left and right block */}
-        <div className="messages-block" id="messages-block">
+        <div
+          className="messages-block xl:max-h-[calc(100vh-250px)]"
+          id="messages-block"
+        >
           <div
-            className="pr-2  scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden"
+            className="pr-2  scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent overflow-y-auto overflow-x-hidden "
             id="main"
           >
             {DataDump.map((talk: DumpDataType) => {
