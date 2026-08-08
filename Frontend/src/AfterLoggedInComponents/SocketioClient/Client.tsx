@@ -9,6 +9,8 @@ import sendSound from "../../assets/SendMess.mp4";
 import ReceiveSound from "../../assets/ReceiveMess.mp4";
 import More from "../../assets/more.png";
 import Send from "../../assets/send.png";
+import Document from "../../assets/document.png";
+import FileMedia from "../../assets/file-media.png";
 import { type Chat } from "../Collaboration";
 import EmojiBox from "./EmojiBox";
 import FileBox from "./FileBox";
@@ -39,6 +41,7 @@ type MessageOptions = {
   position: string;
   user_name?: string;
   media?: File;
+  mediaName?: string;
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
@@ -66,6 +69,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     position,
     user_name,
     media,
+    mediaName,
   }: MessageOptions) => {
     const messContainer = document.getElementById("main");
 
@@ -104,10 +108,68 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     }
 
     if (media != undefined) {
-      const mediaBox = document.createElement("img");
-      mediaBox.src = URL.createObjectURL(media);
-      mediaBox.classList.add("w-40", "md:w-60");
-      bubble.append(mediaBox);
+      let type = media.type;
+      if (
+        type === "image/jpeg" ||
+        type === "image/png" ||
+        type === "image/gif" ||
+        type === "image/webp" ||
+        type === "image/bmp" ||
+        type === "image/tiff" ||
+        type === "image/svg+xml"
+      ) {
+        const mediaBox = document.createElement("img");
+        mediaBox.src = URL.createObjectURL(media);
+        mediaBox.classList.add("w-40", "md:w-60");
+        bubble.append(mediaBox);
+      } else if (
+        type === "video/mp4" ||
+        type === "video/mp3" ||
+        type === "video/webm" ||
+        type === "video/ogg" ||
+        type === "video/mpeg" ||
+        type === "video/quicktime" ||
+        type === "video/x-msvideo" ||
+        type === "video/x-ms-wmv" ||
+        type === "video/x-flv" ||
+        type === "video/3gpp" ||
+        type === "video/3gpp2" ||
+        type === "video/x-matroska"
+      ) {
+        const mediaBox = document.createElement("img");
+        mediaBox.src = FileMedia;
+        mediaBox.classList.add("w-30");
+        bubble.append(mediaBox);
+      } else {
+        const mediaBox = document.createElement("img");
+        mediaBox.src = Document;
+        mediaBox.classList.add("w-30");
+        bubble.append(mediaBox);
+      }
+    }
+
+    if (mediaName != "") {
+      let type = media!.type;
+
+      if (
+        type === "image/jpeg" ||
+        type === "image/png" ||
+        type === "image/gif" ||
+        type === "image/webp" ||
+        type === "image/bmp" ||
+        type === "image/tiff" ||
+        type === "image/svg+xml"
+      ) {
+        const mName = document.createElement("p");
+        mName.innerText = mediaName as string;
+        mName.classList.add("w-40", "md:w-60", "break-words");
+        bubble.append(mName);
+      } else {
+        const mName = document.createElement("p");
+        mName.innerText = mediaName as string;
+        mName.classList.add("w-30");
+        bubble.append(mName);
+      }
     }
 
     const tail = document.createElement("div");
@@ -279,7 +341,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
     if (selectFiles.length > 0) {
       selectFiles.map((file: File) => {
-        createMessages({ message: "You: ", position: "right", media: file });
+        createMessages({
+          message: "You: ",
+          position: "right",
+          media: file,
+          mediaName: file.name,
+        });
         SetNewMess(newMess + 1);
       });
 
