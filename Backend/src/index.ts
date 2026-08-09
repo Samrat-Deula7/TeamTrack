@@ -60,11 +60,12 @@ io.on("connection", async (socket) => {
   });
 
   // Send message to everyone in the room except the sender
-  socket.on("send-message", ({ teamName, message, MediaData }) => {
+  socket.on("send-message", ({ teamName, message, MediaData, MediaType }) => {
     socket.to(teamName).emit("receive-message", {
       message: message,
       userName: userName,
       MediaData: MediaData,
+      MediaType: MediaType,
     });
     console.log(message);
   });

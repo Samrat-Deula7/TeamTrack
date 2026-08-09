@@ -43,6 +43,7 @@ type MessageOptions = {
   user_name?: string;
   media?: File;
   mediaName?: string;
+  type?: string;
 };
 type currentSendMedia = {
   fileName: string;
@@ -59,7 +60,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [selectFiles, setSelectFiles] = useState<File[]>([]);
 
   const [mess, setMess] = useState("");
-  const currentMedia: currentSendMedia[] = [];
+  let currentMedia: currentSendMedia[] = [];
+  let media_type = "";
 
   let sendMessage: any;
 
@@ -76,6 +78,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     user_name,
     media,
     mediaName,
+    type,
   }: MessageOptions) => {
     const messContainer = document.getElementById("main");
 
@@ -114,7 +117,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     }
 
     if (media != undefined) {
-      let type = media.type;
       if (
         type === "image/jpeg" ||
         type === "image/png" ||
@@ -314,11 +316,17 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       })),
     ];
 
+    if (selectFiles.length > 0) {
+      console.log(newMedia[0].file.type);
+      media_type = newMedia[0].file.type;
+    }
+
     if (mess.trim() !== "" || selectFiles.length > 0) {
       socket.emit("send-message", {
         teamName: ChatDiv.team,
         message: sendMessage,
         MediaData: newMedia,
+        MediaType: media_type,
       });
     }
     const dataToUpload = new FormData();
@@ -343,6 +351,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           position: "right",
           media: file,
           mediaName: file.name,
+          type: file.type,
         });
         SetNewMess(newMess + 1);
       });
@@ -356,6 +365,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       message: string;
       userName: string;
       MediaData: currentSendMedia[];
+      MediaType: string;
     }) => {
       if (!data.MediaData || data.message != "") {
         createMessages({
@@ -366,8 +376,8 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
         SetNewMess(newMess + 1);
       } else {
         console.log("media data below");
-        console.log(data.MediaData.length);
-        console.log(data.MediaData[0].file);
+        console.log(data.MediaType);
+        console.log(data.MediaData[0]!.file);
         if (data.MediaData.length == 1) {
           createMessages({
             message: "",
@@ -375,6 +385,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             user_name: data.userName,
             media: data.MediaData[0].file,
             mediaName: data.MediaData[0].fileName,
+            type: data.MediaType,
           });
           SetNewMess(newMess + 1);
         } else {
