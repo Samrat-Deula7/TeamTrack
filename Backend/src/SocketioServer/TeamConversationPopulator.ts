@@ -54,15 +54,18 @@ ConversationRouter.get("/getalltalk", async (req: Request, res: Response) => {
           t.conv_id,
           t.team_id,
           t.user_id,
-          t.conversation
+          t.conversation,
+          m.media_type,
+          m.media_data
       FROM user_table u
-      JOIN team_conversation t 
+      FULL JOIN team_conversation t 
           ON u.user_id = t.user_id
+      FULL JOIN send_media m 
+          ON t.media_id = m.media_id
       WHERE t.team_id = $1;     
       `;
     const values = [data?.team_id];
-    console.log(data?.team_id);
-    console.log(data?.user_id);
+ 
 
     let allConv = await pool.query(getQuery, values);
 

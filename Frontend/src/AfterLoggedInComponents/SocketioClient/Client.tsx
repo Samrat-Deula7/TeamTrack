@@ -34,7 +34,8 @@ type DumpDataType = {
   team_id: number;
   user_id: number;
   conversation: string;
-  date: string;
+  media_type: string;
+  media_data: Uint8Array;
 };
 type MessageOptions = {
   message: string;
@@ -42,6 +43,10 @@ type MessageOptions = {
   user_name?: string;
   media?: File;
   mediaName?: string;
+};
+type currentSendMedia = {
+  fileName: string;
+  file: File;
 };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
@@ -54,6 +59,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [selectFiles, setSelectFiles] = useState<File[]>([]);
 
   const [mess, setMess] = useState("");
+  const currentMedia: currentSendMedia[] = [];
 
   let sendMessage: any;
 
@@ -148,28 +154,11 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       }
     }
 
-    if (mediaName != "") {
-      let type = media!.type;
-
-      if (
-        type === "image/jpeg" ||
-        type === "image/png" ||
-        type === "image/gif" ||
-        type === "image/webp" ||
-        type === "image/bmp" ||
-        type === "image/tiff" ||
-        type === "image/svg+xml"
-      ) {
-        const mName = document.createElement("p");
-        mName.innerText = mediaName as string;
-        mName.classList.add("w-40", "md:w-60", "break-words");
-        bubble.append(mName);
-      } else {
-        const mName = document.createElement("p");
-        mName.innerText = mediaName as string;
-        mName.classList.add("w-30");
-        bubble.append(mName);
-      }
+    if (mediaName != undefined) {
+      const mName = document.createElement("p");
+      mName.innerText = mediaName as string;
+      mName.classList.add("w-auto", "text-center");
+      bubble.append(mName);
     }
 
     const tail = document.createElement("div");
@@ -219,7 +208,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       for (let i = 0; i < messContainers.length; i++) {
         messContainers[i].innerHTML = "";
       }
-      console.log("Deleted");
     }
   };
 
@@ -317,13 +305,22 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     e.preventDefault();
     populateConversation();
     sendMessage = mess;
-    if (mess != "") {
+
+    const newMedia = [
+      ...currentMedia,
+      ...Array.from(selectFiles).map((file) => ({
+        fileName: file.name,
+        file,
+      })),
+    ];
+
+    if (mess.trim() !== "" || selectFiles.length > 0) {
       socket.emit("send-message", {
         teamName: ChatDiv.team,
         message: sendMessage,
+        MediaData: newMedia,
       });
     }
-
     const dataToUpload = new FormData();
 
     // Data to send in the body of request.
@@ -333,7 +330,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
 
     populateMedia(dataToUpload);
 
-    if (mess != "") {
+    if (mess.trim() !== "") {
       createMessages({ message: "You: " + sendMessage, position: "right" });
       SetNewMess(newMess + 1);
       setMess("");
@@ -355,13 +352,44 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   };
 
   useEffect(() => {
-    const handler = (data: { message: string; userName: string }) => {
-      createMessages({
-        message: data.message,
-        position: "left",
-        user_name: data.userName,
-      });
-      SetNewMess(newMess + 1);
+    const handler = (data: {
+      message: string;
+      userName: string;
+      MediaData: currentSendMedia[];
+    }) => {
+      if (!data.MediaData || data.message != "") {
+        createMessages({
+          message: data.message,
+          position: "left",
+          user_name: data.userName,
+        });
+        SetNewMess(newMess + 1);
+      } else {
+        console.log("media data below");
+        console.log(data.MediaData.length);
+        console.log(data.MediaData[0].file);
+        if (data.MediaData.length == 1) {
+          createMessages({
+            message: "",
+            position: "left",
+            user_name: data.userName,
+            media: data.MediaData[0].file,
+            mediaName: data.MediaData[0].fileName,
+          });
+          SetNewMess(newMess + 1);
+        } else {
+          data.MediaData.map((file: currentSendMedia) => {
+            createMessages({
+              message: "",
+              position: "left",
+              user_name: data.userName,
+              media: file.file,
+              mediaName: file.fileName,
+            });
+            SetNewMess(newMess + 1);
+          });
+        }
+      }
     };
 
     socket.on("receive-message", handler);
@@ -456,9 +484,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             id="main"
           >
             {DataDump.map((talk: DumpDataType) => {
-              if (talk.conversation.includes("\u200B")) {
-                return null;
-              }
+              // if (talk.conversation.includes("\u200B")) {
+              //   return null;
+              // }
+              // console.log(talk.media_data.length);
+              // console.log(talk.media_type);
+
               const isRight = id == talk.user_id;
 
               const tailEl = (
