@@ -46,6 +46,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
+  maxHttpBufferSize: 1e7,
 });
 
 io.on("connection", async (socket) => {
@@ -60,15 +61,19 @@ io.on("connection", async (socket) => {
   });
 
   // Send message to everyone in the room except the sender
-  socket.on("send-message", ({ teamName, message, MediaData, MediaType }) => {
-    socket.to(teamName).emit("receive-message", {
-      message: message,
-      userName: userName,
-      MediaData: MediaData,
-      MediaType: MediaType,
-    });
-    console.log(message);
-  });
+  socket.on(
+    "send-message",
+    ({ teamName, message, MediaData, MediaType, MediaName }) => {
+      socket.to(teamName).emit("receive-message", {
+        message: message,
+        userName: userName,
+        MediaData: MediaData,
+        MediaType: MediaType,
+        MediaName: MediaName,
+      });
+      console.log(message);
+    },
+  );
 
   socket.on("typing", ({ teamName }) => {
     socket.to(teamName).emit("sendingText", {

@@ -45,10 +45,10 @@ type MessageOptions = {
   mediaName?: string;
   type?: string;
 };
-type currentSendMedia = {
-  fileName: string;
-  file: File;
-};
+// type currentSendMedia = {
+//   fileName: string;
+//   file: File;
+// };
 
 const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const host = "https://teamtrack-yeze.onrender.com";
@@ -60,8 +60,12 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
   const [selectFiles, setSelectFiles] = useState<File[]>([]);
 
   const [mess, setMess] = useState("");
-  let currentMedia: currentSendMedia[] = [];
-  let media_type = "";
+  // let currentMedia: currentSendMedia[] = [];
+  // let media_type = "";
+
+  let sendFiles: File[] = [];
+  let sendFileType: string[] = [];
+  let sendFileName: string[] = [];
 
   let sendMessage: any;
 
@@ -159,7 +163,7 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     if (mediaName != undefined) {
       const mName = document.createElement("p");
       mName.innerText = mediaName as string;
-      mName.classList.add("w-auto", "text-center");
+      mName.classList.add("w-50");
       bubble.append(mName);
     }
 
@@ -308,27 +312,145 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     populateConversation();
     sendMessage = mess;
 
-    const newMedia = [
-      ...currentMedia,
-      ...Array.from(selectFiles).map((file) => ({
-        fileName: file.name,
-        file,
-      })),
-    ];
+    selectFiles.map((file: File) => {
+      sendFiles.push(file);
+      sendFileType.push(file.type);
+      sendFileName.push(file.name);
+    });
 
-    if (selectFiles.length > 0) {
-      console.log(newMedia[0].file.type);
-      media_type = newMedia[0].file.type;
+    console.log(selectFiles.length);
+
+    if (mess.trim() !== "" || selectFiles.length == 1) {
+      let type = sendFileType[0];
+      if (
+        type === "image/jpeg" ||
+        type === "image/png" ||
+        type === "image/gif" ||
+        type === "image/webp" ||
+        type === "image/bmp" ||
+        type === "image/tiff" ||
+        type === "image/svg+xml"
+      ) {
+        console.log("file type: " + type);
+        socket.emit("send-message", {
+          teamName: ChatDiv.team,
+          message: sendMessage,
+          MediaData: sendFiles[0] as File,
+          MediaType: sendFileType[0],
+          MediaName: sendFileName[0],
+        });
+      } else if (
+        type === "video/mp4" ||
+        type === "video/mp3" ||
+        type === "video/webm" ||
+        type === "video/ogg" ||
+        type === "video/mpeg" ||
+        type === "video/quicktime" ||
+        type === "video/x-msvideo" ||
+        type === "video/x-ms-wmv" ||
+        type === "video/x-flv" ||
+        type === "video/3gpp" ||
+        type === "video/3gpp2" ||
+        type === "video/x-matroska"
+      ) {
+        console.log("file type: " + type);
+        const file = sendFiles[0];
+        const buffer = await file.arrayBuffer();
+
+        socket.emit("send-message", {
+          teamName: ChatDiv.team,
+          message: sendMessage,
+          MediaData: {
+            fileName: sendFiles[0].name,
+            type: sendFiles[0].type,
+            data: buffer,
+          },
+          MediaType: sendFileType[0],
+          MediaName: sendFileName[0],
+        });
+      } else {
+        console.log("file type: " + type);
+        const file = sendFiles[0];
+        const buffer = await file.arrayBuffer();
+
+        socket.emit("send-message", {
+          teamName: ChatDiv.team,
+          message: sendMessage,
+          MediaData: {
+            fileName: sendFiles[0].name,
+            type: sendFiles[0].type,
+            data: buffer,
+          },
+          MediaType: sendFileType[0],
+          MediaName: sendFileName[0],
+        });
+      }
+    } else if (selectFiles.length > 1) {
+      console.log("length is greater than 1 been hit");
+
+      for (let i = 0; i < sendFiles.length; i++) {
+        let type = sendFileType[i];
+        if (
+          type === "image/jpeg" ||
+          type === "image/png" ||
+          type === "image/gif" ||
+          type === "image/webp" ||
+          type === "image/bmp" ||
+          type === "image/tiff" ||
+          type === "image/svg+xml"
+        ) {
+          socket.emit("send-message", {
+            teamName: ChatDiv.team,
+            message: sendMessage,
+            MediaData: sendFiles[i] as File,
+            MediaType: sendFileType[i],
+            MediaName: sendFileName[i],
+          });
+        } else if (
+          type === "video/mp4" ||
+          type === "video/mp3" ||
+          type === "video/webm" ||
+          type === "video/ogg" ||
+          type === "video/mpeg" ||
+          type === "video/quicktime" ||
+          type === "video/x-msvideo" ||
+          type === "video/x-ms-wmv" ||
+          type === "video/x-flv" ||
+          type === "video/3gpp" ||
+          type === "video/3gpp2" ||
+          type === "video/x-matroska"
+        ) {
+          const file = sendFiles[i];
+          const buffer = await file.arrayBuffer();
+          socket.emit("send-message", {
+            teamName: ChatDiv.team,
+            message: sendMessage,
+            MediaData: {
+              fileName: sendFiles[i].name,
+              type: sendFiles[i].type,
+              data: buffer,
+            },
+            MediaType: sendFileType[i],
+            MediaName: sendFileName[i],
+          });
+        } else {
+          const file = sendFiles[i];
+          const buffer = await file.arrayBuffer();
+          socket.emit("send-message", {
+            teamName: ChatDiv.team,
+            message: sendMessage,
+            MediaData: {
+              fileName: sendFiles[i].name,
+              type: sendFiles[i].type,
+              data: buffer,
+            },
+            MediaType: sendFileType[i],
+            MediaName: sendFileName[i],
+          });
+        }
+      }
     }
 
-    if (mess.trim() !== "" || selectFiles.length > 0) {
-      socket.emit("send-message", {
-        teamName: ChatDiv.team,
-        message: sendMessage,
-        MediaData: newMedia,
-        MediaType: media_type,
-      });
-    }
     const dataToUpload = new FormData();
 
     // Data to send in the body of request.
@@ -364,9 +486,13 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
     const handler = (data: {
       message: string;
       userName: string;
-      MediaData: currentSendMedia[];
+      MediaData: File;
       MediaType: string;
+      MediaName: string;
     }) => {
+      console.log("Receiving client has been hit");
+      console.log("old name retrive way: " + data.MediaData.name);
+      console.log("new name retrive way: " + data.MediaName);
       if (!data.MediaData || data.message != "") {
         createMessages({
           message: data.message,
@@ -377,29 +503,19 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       } else {
         console.log("media data below");
         console.log(data.MediaType);
-        console.log(data.MediaData[0]!.file);
-        if (data.MediaData.length == 1) {
-          createMessages({
-            message: "",
-            position: "left",
-            user_name: data.userName,
-            media: data.MediaData[0].file,
-            mediaName: data.MediaData[0].fileName,
-            type: data.MediaType,
-          });
-          SetNewMess(newMess + 1);
-        } else {
-          data.MediaData.map((file: currentSendMedia) => {
-            createMessages({
-              message: "",
-              position: "left",
-              user_name: data.userName,
-              media: file.file,
-              mediaName: file.fileName,
-            });
-            SetNewMess(newMess + 1);
-          });
-        }
+        console.log(data.MediaData);
+        let fileName = data.MediaData.name;
+        let fileType = data.MediaType;
+        let file = new File([data.MediaData], fileName, { type: fileType });
+        createMessages({
+          message: "",
+          position: "left",
+          user_name: data.userName,
+          media: file,
+          mediaName: data.MediaName,
+          type: data.MediaType,
+        });
+        SetNewMess(newMess + 1);
       }
     };
 
