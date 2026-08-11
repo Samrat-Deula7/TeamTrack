@@ -369,7 +369,45 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
           MediaType: sendFileType[0],
           MediaName: sendFileName[0],
         });
-      } else {
+      } else if (
+        // PDF
+        type === "application/pdf" ||
+        // Word
+        type === "application/msword" || // .doc
+        type ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // .docx
+        type ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.template" || // .dotx
+        type === "application/vnd.ms-word.document.macroEnabled.12" || // .docm
+        type === "application/vnd.ms-word.template.macroEnabled.12" || // .dotm
+        // Excel
+        type === "application/vnd.ms-excel" || // .xls
+        type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || // .xlsx
+        type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.template" || // .xltx
+        type === "application/vnd.ms-excel.sheet.macroEnabled.12" || // .xlsm
+        type === "application/vnd.ms-excel.template.macroEnabled.12" || // .xltm
+        // PowerPoint
+        type === "application/vnd.ms-powerpoint" || // .ppt
+        type ===
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation" || // .pptx
+        type ===
+          "application/vnd.openxmlformats-officedocument.presentationml.template" || // .potx
+        type ===
+          "application/vnd.openxmlformats-officedocument.presentationml.slideshow" || // .ppsx
+        type === "application/vnd.ms-powerpoint.presentation.macroEnabled.12" || // .pptm
+        // OpenDocument
+        type === "application/vnd.oasis.opendocument.text" || // .odt
+        type === "application/vnd.oasis.opendocument.spreadsheet" || // .ods
+        type === "application/vnd.oasis.opendocument.presentation" || // .odp
+        // Rich text / plain text / CSV
+        type === "application/rtf" ||
+        type === "text/rtf" ||
+        type === "text/plain" || // .txt
+        type === "text/csv" || // .csv
+        type === "application/csv"
+      ) {
         console.log("file type: " + type);
         const file = sendFiles[0];
         const buffer = await file.arrayBuffer();
@@ -382,6 +420,14 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
             type: sendFiles[0].type,
             data: buffer,
           },
+          MediaType: sendFileType[0],
+          MediaName: sendFileName[0],
+        });
+      } else {
+        socket.emit("send-message", {
+          teamName: ChatDiv.team,
+          message: sendMessage,
+          MediaData: sendFiles[0] as File,
           MediaType: sendFileType[0],
           MediaName: sendFileName[0],
         });
@@ -491,9 +537,6 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
       MediaType: string;
       MediaName: string;
     }) => {
-      console.log("Receiving client has been hit");
-      console.log("old name retrive way: " + data.MediaData.name);
-      console.log("new name retrive way: " + data.MediaName);
       if (!data.MediaData || data.message != "") {
         createMessages({
           message: data.message,
