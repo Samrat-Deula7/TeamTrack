@@ -56,7 +56,8 @@ ConversationRouter.get("/getalltalk", async (req: Request, res: Response) => {
           t.user_id,
           t.conversation,
           m.media_type,
-          m.media_data
+          m.media_data,
+          m.media_name
       FROM user_table u
       FULL JOIN team_conversation t 
           ON u.user_id = t.user_id

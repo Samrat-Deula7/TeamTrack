@@ -36,6 +36,7 @@ type DumpDataType = {
   conversation: string;
   media_type: string;
   media_data: Uint8Array;
+  media_name: string;
 };
 type MessageOptions = {
   message: string;
@@ -618,21 +619,45 @@ const Client: React.FC<ClientType> = ({ ChatDiv, setChatDiv, setLoading }) => {
               // console.log(talk.media_type);
 
               const isRight = id == talk.user_id;
+              let bubbleEl;
 
               const tailEl = (
                 <div
                   className={`tail ${isRight ? "tail-right" : "tail-left"}`}
                 />
               );
-
-              const bubbleEl = (
-                <div className="bubble-wrap">
-                  <div className="bubble">
-                    <div className="user">{isRight ? "You: " : talk.name}</div>
-                    {talk.conversation}
+              if (!talk.conversation.includes("\u200B")) {
+                bubbleEl = (
+                  <div className="bubble-wrap">
+                    <div className="bubble">
+                      <div className="user">
+                        {isRight ? "You: " : talk.name}
+                      </div>
+                      {talk.conversation}
+                    </div>
                   </div>
-                </div>
-              );
+                );
+              } else {
+                // since json.stringify was used the raw is an object containing binary so we need to get actual binary code form it so butes is there
+                const raw = talk.media_data as any;
+                const bytes = new Uint8Array(
+                  Array.isArray(raw) ? raw : raw.data,
+                );
+                const blob = new Blob([bytes], { type: talk.media_type });
+                const imgUrl = URL.createObjectURL(blob);
+
+                bubbleEl = (
+                  <div className="bubble-wrap">
+                    <div className="bubble">
+                      <div className="user">
+                        {isRight ? "You: " : talk.name}
+                      </div>
+                      <img src={imgUrl} alt="file" />
+                      <div>{talk.media_name}</div>
+                    </div>
+                  </div>
+                );
+              }
 
               return (
                 <div
